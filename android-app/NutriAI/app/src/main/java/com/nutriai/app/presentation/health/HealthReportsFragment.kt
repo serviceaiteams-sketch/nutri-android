@@ -10,6 +10,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nutriai.app.data.repository.HealthReportsRepository
 import com.nutriai.app.databinding.FragmentHealthReportsBinding
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 
 class HealthReportsFragment : Fragment() {
     
@@ -18,6 +20,7 @@ class HealthReportsFragment : Fragment() {
     
     private lateinit var viewModel: HealthReportsViewModel
     private lateinit var pagerAdapter: HealthReportsPagerAdapter
+    private lateinit var networkChangeReceiver: NetworkChangeReceiver
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +39,11 @@ class HealthReportsFragment : Fragment() {
         val factory = HealthReportsViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[HealthReportsViewModel::class.java]
         
+        // Initialize ViewModel with context for dynamic network detection
+        viewModel.initialize(requireContext())
+        
         setupViewPager()
+        setupNetworkChangeListener()
     }
     
     private fun setupViewPager() {
@@ -66,8 +73,23 @@ class HealthReportsFragment : Fragment() {
         }
     }
     
+    private fun setupNetworkChangeListener() {
+        networkChangeReceiver = NetworkChangeReceiver {
+            // Reset network configuration when network changes
+            viewModel.resetNetwork(requireContext())
+        }
+        
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        requireContext().registerReceiver(networkChangeReceiver, filter)
+    }
+    
     override fun onDestroyView() {
         super.onDestroyView()
+        try {
+            requireContext().unregisterReceiver(networkChangeReceiver)
+        } catch (e: Exception) {
+            // Receiver might not be registered
+        }
         _binding = null
     }
 }

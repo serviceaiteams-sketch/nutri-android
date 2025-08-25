@@ -167,7 +167,13 @@ data class FoodRecommendationsResponse(
     val recommendations: List<FoodRecommendation>? = null,
     
     @SerializedName("mealPlan")
-    val mealPlan: MealPlanRecommendation? = null
+    val mealPlan: MealPlanRecommendation? = null,
+    
+    @SerializedName("weeklyNutrition")
+    val weeklyNutrition: WeeklyNutrition? = null,
+    
+    @SerializedName("shoppingList")
+    val shoppingList: List<String>? = null
 )
 
 // Food Recommendation
@@ -178,29 +184,98 @@ data class FoodRecommendation(
     @SerializedName("reason")
     val reason: String,
     
+    @SerializedName("category")
+    val category: String? = null,
+    
+    @SerializedName("priority")
+    val priority: String? = null,
+    
+    @SerializedName("calories")
+    val calories: Float? = null,
+    
+    @SerializedName("protein")
+    val protein: Float? = null,
+    
+    @SerializedName("carbs")
+    val carbs: Float? = null,
+    
+    @SerializedName("fat")
+    val fat: Float? = null,
+    
     @SerializedName("nutrients")
     val nutrients: List<String>? = null,
     
     @SerializedName("servingSize")
     val servingSize: String? = null,
     
+    @SerializedName("bestTime")
+    val bestTime: String? = null,
+    
+    @SerializedName("preparationTips")
+    val preparationTips: String? = null,
+    
+    @SerializedName("alternatives")
+    val alternatives: String? = null,
+    
     @SerializedName("frequency")
-    val frequency: String? = null
+    val frequency: String? = null,
+    
+    @SerializedName("notes")
+    val notes: String? = null
 )
 
 // Meal Plan Recommendation
 data class MealPlanRecommendation(
     @SerializedName("breakfast")
-    val breakfast: List<String>? = null,
+    val breakfast: List<MealPlanItem>? = null,
     
     @SerializedName("lunch")
-    val lunch: List<String>? = null,
+    val lunch: List<MealPlanItem>? = null,
     
     @SerializedName("dinner")
-    val dinner: List<String>? = null,
+    val dinner: List<MealPlanItem>? = null,
     
     @SerializedName("snacks")
-    val snacks: List<String>? = null
+    val snacks: List<MealPlanItem>? = null
+)
+
+// Meal Plan Item
+data class MealPlanItem(
+    @SerializedName("day")
+    val day: String? = null,
+    
+    @SerializedName("meal")
+    val meal: String? = null,
+    
+    @SerializedName("nutrition")
+    val nutrition: String? = null,
+    
+    @SerializedName("calories")
+    val calories: Int? = null,
+    
+    @SerializedName("protein")
+    val protein: String? = null,
+    
+    @SerializedName("carbs")
+    val carbs: String? = null,
+    
+    @SerializedName("fat")
+    val fat: String? = null
+)
+
+// Weekly Nutrition
+data class WeeklyNutrition(
+    @SerializedName("totalCalories")
+    val totalCalories: Int? = null,
+    
+    @SerializedName("averageProtein")
+    val averageProtein: String? = null,
+    
+    @SerializedName("averageCarbs")
+    val averageCarbs: String? = null,
+    
+    @SerializedName("averageFat")
+    val averageFat: String? = null
 )
 
 // Health Metric

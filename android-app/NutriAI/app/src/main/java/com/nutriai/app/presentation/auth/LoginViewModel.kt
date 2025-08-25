@@ -18,6 +18,13 @@ class LoginViewModel : ViewModel() {
     private val _loginState = MutableStateFlow<Resource<LoginResponse>?>(null)
     val loginState: StateFlow<Resource<LoginResponse>?> = _loginState
     
+    /**
+     * Initialize the ViewModel with context for network detection
+     */
+    fun initialize(context: android.content.Context) {
+        authRepository.initialize(context)
+    }
+    
     fun login(email: String, password: String) {
         viewModelScope.launch {
             authRepository.login(email, password)

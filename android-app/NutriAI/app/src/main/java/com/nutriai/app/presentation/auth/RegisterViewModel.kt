@@ -18,6 +18,13 @@ class RegisterViewModel : ViewModel() {
     private val _registerState = MutableStateFlow<Resource<RegisterResponse>?>(null)
     val registerState: StateFlow<Resource<RegisterResponse>?> = _registerState
     
+    /**
+     * Initialize the ViewModel with context for network detection
+     */
+    fun initialize(context: android.content.Context) {
+        authRepository.initialize(context)
+    }
+    
     fun register(email: String, password: String, name: String) {
         viewModelScope.launch {
             authRepository.register(email, password, name)

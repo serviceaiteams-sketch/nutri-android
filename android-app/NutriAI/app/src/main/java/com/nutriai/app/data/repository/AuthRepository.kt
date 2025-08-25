@@ -6,7 +6,7 @@ import com.nutriai.app.data.models.LoginResponse
 import com.nutriai.app.data.models.RegisterRequest
 import com.nutriai.app.data.models.RegisterResponse
 import com.nutriai.app.data.remote.ApiService
-import com.nutriai.app.data.remote.RetrofitClient
+import com.nutriai.app.di.NetworkModule
 import com.nutriai.app.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,8 +15,17 @@ import java.io.IOException
 
 class AuthRepository {
     
-    private val apiService: ApiService = RetrofitClient.apiService
+    private lateinit var apiService: ApiService
     private val dataStoreManager = DataStoreManager()
+    
+    /**
+     * Initialize the repository with context for dynamic network detection
+     */
+    fun initialize(context: android.content.Context) {
+        if (!::apiService.isInitialized) {
+            apiService = NetworkModule.getApiService(context)
+        }
+    }
     
     // Login
     fun login(email: String, password: String): Flow<Resource<LoginResponse>> = flow {

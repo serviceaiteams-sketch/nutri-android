@@ -18,6 +18,7 @@ import com.nutriai.app.presentation.auth.LoginActivity
 import com.nutriai.app.presentation.food.FoodRecognitionFragment
 import com.nutriai.app.presentation.meals.MealHistoryFragment
 import com.nutriai.app.presentation.health.HealthReportsFragment
+import com.nutriai.app.utils.NetworkUtils
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        // Initialize repositories with context for dynamic network detection
+        authRepository.initialize(this)
+        
         checkAuthentication()
         setupToolbar()
         setupNavigationDrawer()
@@ -45,6 +49,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, DashboardFragment())
                 .commit()
+        }
+        
+        // Debug: Test network detection
+        testNetworkDetection()
+    }
+    
+    private fun testNetworkDetection() {
+        lifecycleScope.launch {
+            try {
+                val deviceIP = NetworkUtils.getCurrentDeviceIP()
+                val networkType = NetworkUtils.getNetworkType(this@MainActivity)
+                val wifiSSID = NetworkUtils.getWifiSSID(this@MainActivity)
+                
+                android.util.Log.d("MainActivity", "🔍 Network Debug Info:")
+                android.util.Log.d("MainActivity", "📱 Device IP: $deviceIP")
+                android.util.Log.d("MainActivity", "🌐 Network Type: $networkType")
+                android.util.Log.d("MainActivity", "📶 WiFi SSID: $wifiSSID")
+                
+                // Test some common server URLs
+                val testUrls = listOf(
+                    "http://192.168.29.100:5001/api/",  // Your current network
+                    "http://192.168.29.1:5001/api/",    // Your current network router
+                    "http://192.168.29.50:5001/api/",   // Your current network alternative
+                    "http://192.168.1.100:5001/api/",
+                    "http://192.168.1.1:5001/api/",
+                    "http://10.129.157.148:5001/api/",
+                    "http://localhost:5001/api/",
+                    "http://127.0.0.1:5001/api/"
+                )
+                
+                for (url in testUrls) {
+                    val isReachable = NetworkUtils.testServerConnection(url)
+                    android.util.Log.d("MainActivity", "🔍 Testing $url - Reachable: $isReachable")
+                }
+                
+            } catch (e: Exception) {
+                android.util.Log.e("MainActivity", "❌ Network test error: ${e.message}")
+            }
         }
     }
     
@@ -125,7 +167,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Toast.makeText(this, "Profile coming soon!", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_settings -> {
-                Toast.makeText(this, "Settings coming soon!", Toast.LENGTH_SHORT).show()
+                showNetworkSettingsDialog()
             }
             R.id.nav_logout -> {
                 logout()
@@ -141,6 +183,60 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             authRepository.logout()
             navigateToLogin()
         }
+    }
+    
+    private fun showNetworkSettingsDialog() {
+        val deviceIP = NetworkUtils.getCurrentDeviceIP()
+        val networkType = NetworkUtils.getNetworkType(this)
+        val wifiSSID = NetworkUtils.getWifiSSID(this)
+        
+        val message = """
+            Network Information:
+            Device IP: $deviceIP
+            Network Type: $networkType
+            WiFi SSID: $wifiSSID
+            
+            If you're having connection issues, try setting a manual server IP.
+        """.trimIndent()
+        
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Network Settings")
+            .setMessage(message)
+            .setPositiveButton("Set Manual IP") { _, _ ->
+                showManualIPDialog()
+            }
+            .setNegativeButton("Test Connection") { _, _ ->
+                testNetworkDetection()
+                Toast.makeText(this, "Check logcat for network test results", Toast.LENGTH_LONG).show()
+            }
+            .setNeutralButton("Cancel", null)
+            .show()
+    }
+    
+    private fun showManualIPDialog() {
+        val input = android.widget.EditText(this)
+        input.hint = "Enter server IP (e.g., 192.168.1.100)"
+        
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Set Manual Server IP")
+            .setView(input)
+            .setPositiveButton("Set") { _, _ ->
+                val ip = input.text.toString().trim()
+                if (ip.isNotEmpty()) {
+                    NetworkUtils.setManualServerIP(ip, this@MainActivity)
+                    Toast.makeText(this, "Manual IP set to: $ip", Toast.LENGTH_SHORT).show()
+                    // Reset network configuration
+                    com.nutriai.app.di.NetworkModule.resetNetwork()
+                }
+            }
+            .setNegativeButton("Clear Manual IP") { _, _ ->
+                NetworkUtils.clearManualServerIP(this@MainActivity)
+                Toast.makeText(this, "Manual IP cleared", Toast.LENGTH_SHORT).show()
+                // Reset network configuration
+                com.nutriai.app.di.NetworkModule.resetNetwork()
+            }
+            .setNeutralButton("Cancel", null)
+            .show()
     }
     
     private fun navigateToLogin() {

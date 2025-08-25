@@ -1,49 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardElevation="1dp"
-    app:cardCornerRadius="8dp">
+    android:layout_marginBottom="12dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:background="@drawable/card_background"
+    android:elevation="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_food"
-            app:tint="@color/success"
-            android:layout_gravity="center_vertical" />
-
+        <!-- Header Section with Food Icon and Name -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="12dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_food"
+                android:tint="@color/success"
+                android:background="@drawable/circle_background_success"
+                android:padding="8dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:id="@+id/tvFoodName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Spinach and Feta Omelette"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Protein-Rich Breakfast"
+                    android:textSize="12sp"
+                    android:textColor="@color/primary"
+                    android:background="@drawable/category_pill_background"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp" />
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tvFoodName"
+                android:id="@+id/tvPriority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Leafy Greens"
-                android:textSize="16sp"
+                android:text="HIGH"
+                android:textSize="10sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="@color/white"
+                android:background="@drawable/priority_high_background"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
+
+        </LinearLayout>
+
+        <!-- Health Benefits Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✨ Health Benefits"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/success" />
 
             <TextView
                 android:id="@+id/tvReason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Helps lower blood pressure and improves heart health"
+                android:layout_marginTop="6dp"
+                android:text="High in magnesium, which may help alleviate migraines. Rich in protein and healthy fats for sustained energy."
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                android:lineSpacingExtra="2dp" />
+
+        </LinearLayout>
+
+        <!-- Nutritional Information -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📊 Nutritional Profile"
                 android:textSize="14sp"
-                android:textColor="@color/text_secondary" />
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,36 +125,283 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
+                <!-- Calories -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/nutrition_pill_background"
+                    android:padding="8dp"
+                    android:layout_marginEnd="4dp">
+
+                    <TextView
+                        android:id="@+id/tvCalories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="320"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calories"
+                        android:textSize="10sp"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <!-- Protein -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/nutrition_pill_background"
+                    android:padding="8dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp">
+
+                    <TextView
+                        android:id="@+id/tvProtein"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="22g"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Protein"
+                        android:textSize="10sp"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <!-- Carbs -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/nutrition_pill_background"
+                    android:padding="8dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp">
+
+                    <TextView
+                        android:id="@+id/tvCarbs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8g"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Carbs"
+                        android:textSize="10sp"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+                <!-- Fat -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/nutrition_pill_background"
+                    android:padding="8dp"
+                    android:layout_marginStart="4dp">
+
+                    <TextView
+                        android:id="@+id/tvFat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="24g"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fat"
+                        android:textSize="10sp"
+                        android:textColor="@color/text_secondary" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Serving and Timing -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/info_pill_background"
+                android:padding="12dp"
+                android:layout_marginEnd="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🍽️ Serving Size"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
                 <TextView
                     android:id="@+id/tvServingSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Serving: 2 cups"
-                    android:textSize="12sp"
-                    android:textColor="@color/primary"
-                    android:layout_marginEnd="16dp" />
-
-                <TextView
-                    android:id="@+id/tvFrequency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Frequency: Daily"
-                    android:textSize="12sp"
-                    android:textColor="@color/primary" />
+                    android:layout_marginTop="4dp"
+                    android:text="2 eggs, 1/2 cup spinach, 1/4 cup feta"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary" />
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/info_pill_background"
+                android:padding="12dp"
+                android:layout_marginStart="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏰ Best Time"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:id="@+id/tvBestTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Breakfast (7-9 AM)"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Preparation Tips -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
             <TextView
-                android:id="@+id/tvNutrients"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Rich in: Vitamin K, Folate, Iron"
+                android:text="👨‍🍳 Preparation Tips"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvPreparationTips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="• Use fresh spinach for best flavor\n• Cook eggs on medium heat for fluffy texture\n• Add feta just before serving to prevent melting"
                 android:textSize="12sp"
-                android:textColor="@color/text_disabled" />
+                android:textColor="@color/text_secondary"
+                android:lineSpacingExtra="2dp" />
+
+        </LinearLayout>
+
+        <!-- Alternative Options -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔄 Alternatives"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvAlternatives"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="• Replace feta with goat cheese\n• Use kale instead of spinach\n• Add mushrooms for extra nutrients"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:lineSpacingExtra="2dp" />
+
+        </LinearLayout>
+
+        <!-- Frequency and Notes -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/tvFrequency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Frequency: 3-4 times/week"
+                android:textSize="12sp"
+                android:textColor="@color/primary"
+                android:background="@drawable/frequency_pill_background"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvNotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Note: Avoid if allergic to eggs or dairy"
+                android:textSize="11sp"
+                android:textColor="@color/warning"
+                android:background="@drawable/warning_pill_background"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</com.google.android.material.card.MaterialCardView>
+</LinearLayout>

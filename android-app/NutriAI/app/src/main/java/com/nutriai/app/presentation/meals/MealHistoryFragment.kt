@@ -44,6 +44,9 @@ class MealHistoryFragment : Fragment() {
         val factory = MealHistoryViewModelFactory(mealRepository)
         viewModel = ViewModelProvider(this, factory)[MealHistoryViewModel::class.java]
         
+        // Initialize ViewModel with context for dynamic network detection
+        viewModel.initialize(requireContext())
+        
         setupRecyclerView()
         setupDateSelector()
         observeViewModel()

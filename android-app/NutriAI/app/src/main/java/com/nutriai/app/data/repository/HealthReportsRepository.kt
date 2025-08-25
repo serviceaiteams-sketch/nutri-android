@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.nutriai.app.data.local.DataStoreManager
 import com.nutriai.app.data.models.*
 import com.nutriai.app.data.remote.ApiService
-import com.nutriai.app.data.remote.RetrofitClient
+import com.nutriai.app.di.NetworkModule
 import com.nutriai.app.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,9 +21,26 @@ import java.io.IOException
 
 class HealthReportsRepository {
     
-    private val apiService: ApiService = RetrofitClient.apiService
+    private lateinit var apiService: ApiService
     private val dataStoreManager = DataStoreManager()
     private val gson = Gson()
+    
+    /**
+     * Initialize the repository with context for dynamic network detection
+     */
+    fun initialize(context: Context) {
+        if (!::apiService.isInitialized) {
+            apiService = NetworkModule.getApiService(context)
+        }
+    }
+    
+    /**
+     * Reset network configuration when network changes
+     */
+    fun resetNetwork(context: Context) {
+        NetworkModule.resetNetwork()
+        apiService = NetworkModule.getApiService(context)
+    }
     
     fun uploadHealthReports(
         fileUris: List<Uri>,

@@ -17,9 +17,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.io.File
 
-class FoodRecognitionViewModel(foodRepository1: FoodRepository) : ViewModel() {
+class FoodRecognitionViewModel(private val foodRepository: FoodRepository) : ViewModel() {
     
-    private val foodRepository = FoodRepository()
+    /**
+     * Initialize the ViewModel with context for network detection
+     */
+    fun initialize(context: android.content.Context) {
+        foodRepository.initialize(context)
+    }
     
     private val _recognitionState = MutableStateFlow<Resource<FoodRecognitionResponse>?>(null)
     val recognitionState: StateFlow<Resource<FoodRecognitionResponse>?> = _recognitionState

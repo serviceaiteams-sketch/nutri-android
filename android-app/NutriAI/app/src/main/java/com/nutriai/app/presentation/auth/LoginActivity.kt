@@ -24,6 +24,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        // Initialize ViewModel with context for dynamic network detection
+        viewModel.initialize(this)
+        
         setupClickListeners()
         observeLoginState()
     }

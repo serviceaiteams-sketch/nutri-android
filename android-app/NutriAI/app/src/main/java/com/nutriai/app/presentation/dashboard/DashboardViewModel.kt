@@ -11,14 +11,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class DashboardViewModel(dashboardRepository1: DashboardRepository) : ViewModel() {
-    
-    private val dashboardRepository = DashboardRepository()
+class DashboardViewModel(private val dashboardRepository: DashboardRepository) : ViewModel() {
     
     private val _dashboardState = MutableStateFlow<Resource<DashboardResponse>?>(null)
     val dashboardState: StateFlow<Resource<DashboardResponse>?> = _dashboardState
     
-    init {
+    /**
+     * Initialize the ViewModel with context for network detection
+     */
+    fun initialize(context: android.content.Context) {
+        dashboardRepository.initialize(context)
         fetchDashboardData()
     }
     

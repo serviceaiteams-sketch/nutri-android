@@ -32,8 +32,19 @@ class HealthReportsViewModel(
     private val _conditionsListState = MutableStateFlow<Resource<List<HealthConditionDetail>>?>(null)
     val conditionsListState: StateFlow<Resource<List<HealthConditionDetail>>?> = _conditionsListState.asStateFlow()
     
-    init {
+    /**
+     * Initialize the ViewModel with context for network detection
+     */
+    fun initialize(context: Context) {
+        healthReportsRepository.initialize(context)
         loadHealthConditions()
+    }
+    
+    /**
+     * Reset network configuration when network changes
+     */
+    fun resetNetwork(context: Context) {
+        healthReportsRepository.resetNetwork(context)
     }
     
     fun addSelectedFiles(uris: List<Uri>) {

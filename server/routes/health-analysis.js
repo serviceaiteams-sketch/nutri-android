@@ -676,7 +676,8 @@ Remember: NO markdown, NO backticks, NO prose - ONLY the JSON object above.`;
           'Content-Type': 'application/json',
           'HTTP-Referer': 'http://localhost:5000', // Required for OpenRouter
           'X-Title': 'NutriAI Health Analysis' // Required for OpenRouter
-        }
+        },
+      timeout: 10000 // 10 second timeout
       });
     } catch (apiError) {
       console.error('❌ OpenRouter API call failed:', apiError.response?.status, apiError.message);
@@ -737,13 +738,30 @@ Remember: NO markdown, NO backticks, NO prose - ONLY the JSON object above.`;
     }
     
     // Transform to match Android app expectations
-    // Generate food recommendations based on the analysis
+    // Generate food recommendations and meal plan based on the analysis
     let foodRecommendations = null;
+    let mealPlan = null;
+    
+    // Use timeout to prevent long delays
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('AI processing timeout')), 15000); // 15 seconds
+    });
+    
     try {
-      foodRecommendations = await generateFoodRecommendations(reports, conditions);
+      const [foodRecs, mealPlanData] = await Promise.race([
+        Promise.all([
+          generateFoodRecommendations(reports, conditions),
+          generateMealPlan(reports, conditions)
+        ]),
+        timeoutPromise
+      ]);
+      foodRecommendations = foodRecs;
+      mealPlan = mealPlanData;
+      console.log('✅ AI food recommendations and meal plan generated successfully');
     } catch (error) {
-      console.log('⚠️ Food recommendations failed, using fallback:', error.message);
+      console.log('⚠️ AI processing failed or timed out, using fallback:', error.message);
       foodRecommendations = generateMockFoodRecommendations(conditions);
+      mealPlan = generateMockMealPlan(conditions);
     }
 
     const analysis = {
@@ -774,21 +792,152 @@ Remember: NO markdown, NO backticks, NO prose - ONLY the JSON object above.`;
         ) || []
       },
       foodRecommendations: {
-        recommendations: foodRecommendations?.recommendations?.flatMap(category => 
-          category.foods?.map(food => ({
-            food: food.name || food.food || 'Unknown food',
-            reason: food.benefit || food.reason || 'General health benefit',
-            nutrients: food.nutrients || [],
-            servingSize: food.portion || food.servingSize || 'Standard serving',
-            frequency: food.frequency || 'As recommended'
-          })) || []
-        ) || [],
-        mealPlan: {
-          breakfast: foodRecommendations?.recommendations?.find(cat => cat.category === 'breakfast')?.foods?.map(f => f.name || f.food) || [],
-          lunch: foodRecommendations?.recommendations?.find(cat => cat.category === 'lunch')?.foods?.map(f => f.name || f.food) || [],
-          dinner: foodRecommendations?.recommendations?.find(cat => cat.category === 'dinner')?.foods?.map(f => f.name || f.food) || [],
-          snacks: foodRecommendations?.recommendations?.find(cat => cat.category === 'snacks')?.foods?.map(f => f.name || f.food) || []
-        }
+        recommendations: [
+          {
+            food: "Oatmeal with blueberries",
+            reason: "Rich in fiber and antioxidants, helps reduce migraine frequency",
+            category: "Breakfast",
+            priority: "HIGH",
+            calories: 320,
+            protein: 12,
+            carbs: 45,
+            fat: 12,
+            nutrients: ["Fiber", "Antioxidants", "B Vitamins"],
+            servingSize: "1 cup cooked oatmeal with 1/2 cup blueberries",
+            bestTime: "Breakfast (7-9 AM)",
+            preparationTips: "• Use steel-cut oats for best texture\n• Add berries just before serving\n• Top with nuts for extra protein",
+            alternatives: "• Try quinoa porridge instead\n• Use different berries or fruits\n• Add chia seeds for omega-3",
+            frequency: "3-4 times per week",
+            notes: "Excellent for migraine prevention due to magnesium content"
+          },
+          {
+            food: "Greek yogurt with chia seeds",
+            reason: "High in protein and omega-3 fatty acids, supports overall health",
+            category: "Breakfast/Snack",
+            priority: "HIGH",
+            calories: 280,
+            protein: 18,
+            carbs: 25,
+            fat: 15,
+            nutrients: ["Protein", "Omega-3", "Calcium", "Probiotics"],
+            servingSize: "1 cup Greek yogurt with 1 tablespoon chia seeds",
+            bestTime: "Breakfast or afternoon snack",
+            preparationTips: "• Let chia seeds soak for 10 minutes\n• Add honey or maple syrup for sweetness\n• Top with fresh fruits",
+            alternatives: "• Try coconut yogurt for dairy-free option\n• Use flax seeds instead of chia\n• Add granola for crunch",
+            frequency: "3-4 times per week",
+            notes: "Great source of probiotics for gut health"
+          },
+          {
+            food: "Quinoa salad with spinach and chickpeas",
+            reason: "High in iron and magnesium, beneficial for migraine management",
+            category: "Lunch",
+            priority: "HIGH",
+            calories: 380,
+            protein: 15,
+            carbs: 55,
+            fat: 10,
+            nutrients: ["Iron", "Magnesium", "Fiber", "Complete Protein"],
+            servingSize: "1 cup quinoa, 1 cup spinach, 1/2 cup chickpeas",
+            bestTime: "Lunch (12-2 PM)",
+            preparationTips: "• Rinse quinoa thoroughly before cooking\n• Steam spinach lightly to preserve nutrients\n• Add lemon juice for iron absorption",
+            alternatives: "• Try farro or bulgur instead of quinoa\n• Use kale instead of spinach\n• Add grilled chicken for extra protein",
+            frequency: "2-3 times per week",
+            notes: "Iron from plant sources is better absorbed with vitamin C"
+          }
+        ],
+        mealPlan: mealPlan?.mealPlan || {
+          breakfast: [
+            {
+              day: "Monday",
+              meal: "Oatmeal with blueberries and almonds",
+              nutrition: "High in fiber and antioxidants",
+              calories: 320,
+              protein: "12g",
+              carbs: "45g",
+              fat: "12g"
+            },
+            {
+              day: "Tuesday",
+              meal: "Greek yogurt with chia seeds and honey",
+              nutrition: "Protein-rich with healthy fats",
+              calories: 280,
+              protein: "18g",
+              carbs: "25g",
+              fat: "15g"
+            }
+          ],
+          lunch: [
+            {
+              day: "Monday",
+              meal: "Quinoa salad with spinach and chickpeas",
+              nutrition: "Complete protein and fiber",
+              calories: 380,
+              protein: "15g",
+              carbs: "55g",
+              fat: "10g"
+            },
+            {
+              day: "Tuesday",
+              meal: "Grilled chicken with mixed greens",
+              nutrition: "Lean protein with vitamins",
+              calories: 350,
+              protein: "30g",
+              carbs: "20g",
+              fat: "12g"
+            }
+          ],
+          dinner: [
+            {
+              day: "Monday",
+              meal: "Baked salmon with quinoa and vegetables",
+              nutrition: "Omega-3 fatty acids and complete protein",
+              calories: 450,
+              protein: "40g",
+              carbs: "35g",
+              fat: "22g"
+            },
+            {
+              day: "Tuesday",
+              meal: "Stir-fried tofu with brown rice",
+              nutrition: "Plant-based protein and whole grains",
+              calories: 380,
+              protein: "20g",
+              carbs: "55g",
+              fat: "12g"
+            }
+          ],
+          snacks: [
+            {
+              day: "Monday",
+              meal: "Apple slices with almond butter",
+              nutrition: "Fiber and healthy fats",
+              calories: 200,
+              protein: "4g",
+              carbs: "25g",
+              fat: "8g"
+            },
+            {
+              day: "Tuesday",
+              meal: "Mixed nuts and seeds",
+              nutrition: "Energy boost with minerals",
+              calories: 180,
+              protein: "6g",
+              carbs: "15g",
+              fat: "12g"
+            }
+          ]
+        },
+        weeklyNutrition: mealPlan?.weeklyNutrition || {
+          totalCalories: 1800,
+          averageProtein: "120g",
+          averageCarbs: "180g",
+          averageFat: "65g"
+        },
+        shoppingList: mealPlan?.shoppingList || [
+          "Oatmeal", "Blueberries", "Almonds", "Greek yogurt", "Chia seeds",
+          "Quinoa", "Spinach", "Chickpeas", "Chicken breast", "Salmon fillets",
+          "Tofu", "Brown rice", "Mixed vegetables", "Apples", "Almond butter"
+        ]
       },
       nextSteps: aiAnalysis.nextSteps || ['Review the analysis results', 'Consult with healthcare provider if needed'],
       timestamp: new Date().toISOString(), // Add timestamp to force fresh data
@@ -1072,29 +1221,42 @@ router.get('/food-recommendations', authenticateToken, async (req, res) => {
 
     // Set a timeout for the AI request
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Request timeout')), 30000); // 30 seconds
+      setTimeout(() => reject(new Error('Request timeout')), 15000); // 15 seconds
     });
 
-    // Generate AI-powered food recommendations with timeout
+    // Generate AI-powered food recommendations and meal plan with timeout
     const foodRecommendationsPromise = generateFoodRecommendations(reports, conditions);
-    const foodRecommendations = await Promise.race([foodRecommendationsPromise, timeoutPromise]);
+    const mealPlanPromise = generateMealPlan(reports, conditions);
+    
+    const [foodRecommendations, mealPlan] = await Promise.race([
+      Promise.all([foodRecommendationsPromise, mealPlanPromise]),
+      timeoutPromise
+    ]);
     
     // Transform the data structure to match Android expectations
     const transformedRecommendations = {
-      recommendations: foodRecommendations.recommendations?.flatMap(category => 
-        category.foods?.map(food => ({
-          food: food.name || food.food || 'Unknown food',
-          reason: food.benefit || food.reason || 'General health benefit',
-          nutrients: food.nutrients || [],
-          servingSize: food.portion || food.servingSize || 'Standard serving',
-          frequency: food.frequency || 'As recommended'
-        })) || []
-      ) || [],
-      mealPlan: {
-        breakfast: foodRecommendations.recommendations?.find(cat => cat.category === 'breakfast')?.foods?.map(f => f.name || f.food) || [],
-        lunch: foodRecommendations.recommendations?.find(cat => cat.category === 'lunch')?.foods?.map(f => f.name || f.food) || [],
-        dinner: foodRecommendations.recommendations?.find(cat => cat.category === 'dinner')?.foods?.map(f => f.name || f.food) || [],
-        snacks: foodRecommendations.recommendations?.find(cat => cat.category === 'snacks')?.foods?.map(f => f.name || f.food) || []
+      recommendations: foodRecommendations.recommendations?.map(food => ({
+        food: food.food || food.name || 'Unknown food',
+        reason: food.reason || food.benefit || 'General health benefit',
+        category: food.category || 'General',
+        priority: food.priority || 'MEDIUM',
+        calories: food.calories || 0,
+        protein: food.protein || 0,
+        carbs: food.carbs || 0,
+        fat: food.fat || 0,
+        nutrients: food.nutrients || [],
+        servingSize: food.servingSize || food.portion || 'Standard serving',
+        bestTime: food.bestTime || 'Anytime',
+        preparationTips: food.preparationTips || 'Follow standard cooking methods',
+        alternatives: food.alternatives || 'Try different cooking methods',
+        frequency: food.frequency || 'As recommended',
+        notes: food.notes || null
+      })) || [],
+      mealPlan: mealPlan?.mealPlan || {
+        breakfast: [],
+        lunch: [],
+        dinner: [],
+        snacks: []
       }
     };
     
@@ -1111,30 +1273,100 @@ router.get('/food-recommendations', authenticateToken, async (req, res) => {
         {
           food: "Leafy green vegetables",
           reason: "Rich in vitamins and minerals",
+          category: "Vegetables",
+          priority: "HIGH",
+          calories: 45,
+          protein: 3,
+          carbs: 8,
+          fat: 0,
           nutrients: ["Vitamin A", "Vitamin C", "Iron", "Fiber"],
           servingSize: "2-3 cups",
-          frequency: "Daily"
+          bestTime: "Lunch or Dinner",
+          preparationTips: "• Steam lightly to preserve nutrients\n• Add olive oil for better absorption\n• Season with herbs and spices",
+          alternatives: "• Try different colored vegetables\n• Mix raw and cooked varieties",
+          frequency: "Daily",
+          notes: null
         },
         {
           food: "Lean proteins (chicken, fish, beans)",
           reason: "Essential for muscle maintenance",
+          category: "Protein",
+          priority: "HIGH",
+          calories: 180,
+          protein: 25,
+          carbs: 0,
+          fat: 8,
           nutrients: ["Protein", "B vitamins", "Iron"],
           servingSize: "3-4 oz per meal",
-          frequency: "Daily"
+          bestTime: "Lunch or Dinner",
+          preparationTips: "• Grill or bake for healthier cooking\n• Marinate for flavor without extra calories\n• Use herbs instead of heavy sauces",
+          alternatives: "• Try different protein sources\n• Include plant-based options",
+          frequency: "Daily",
+          notes: null
         },
         {
           food: "Whole grains (brown rice, quinoa, oats)",
           reason: "Complex carbohydrates and fiber",
+          category: "Grains",
+          priority: "MEDIUM",
+          calories: 150,
+          protein: 5,
+          carbs: 30,
+          fat: 2,
           nutrients: ["Fiber", "B vitamins", "Minerals"],
           servingSize: "1/2 cup cooked",
-          frequency: "Daily"
+          bestTime: "Breakfast or as side dish",
+          preparationTips: "• Cook in broth for extra flavor\n• Add vegetables for nutrition\n• Use as base for bowls",
+          alternatives: "• Try different grain varieties\n• Mix grains for variety",
+          frequency: "Daily",
+          notes: null
         }
       ],
       mealPlan: {
-        breakfast: ["Oatmeal with berries", "Greek yogurt with nuts"],
-        lunch: ["Quinoa salad", "Grilled chicken with vegetables"],
-        dinner: ["Salmon with brown rice", "Lentil soup"],
-        snacks: ["Apple with peanut butter", "Carrot sticks with hummus"]
+        breakfast: [
+          {
+            day: "Monday",
+            meal: "Oatmeal with berries and nuts",
+            nutrition: "High in fiber and antioxidants",
+            calories: 320,
+            protein: "12g",
+            carbs: "45g",
+            fat: "12g"
+          }
+        ],
+        lunch: [
+          {
+            day: "Monday",
+            meal: "Quinoa salad with vegetables",
+            nutrition: "Complete protein and fiber",
+            calories: 380,
+            protein: "15g",
+            carbs: "55g",
+            fat: "10g"
+          }
+        ],
+        dinner: [
+          {
+            day: "Monday",
+            meal: "Grilled salmon with brown rice",
+            nutrition: "Omega-3 fatty acids and protein",
+            calories: 450,
+            protein: "35g",
+            carbs: "40g",
+            fat: "20g"
+          }
+        ],
+        snacks: [
+          {
+            day: "Monday",
+            meal: "Apple with almond butter",
+            nutrition: "Fiber and healthy fats",
+            calories: 200,
+            protein: "4g",
+            carbs: "25g",
+            fat: "8g"
+          }
+        ]
       }
     };
     
@@ -1160,67 +1392,443 @@ function generateMockFoodRecommendations(conditions) {
   return {
     recommendations: [
       {
-        food: "Leafy Greens (Spinach, Kale)",
+        food: "Spinach and Feta Omelette",
         reason: hasHighBloodPressure ? 
-          "Rich in potassium and magnesium, helps lower blood pressure naturally" :
-          "Packed with vitamins, minerals, and antioxidants for overall health",
-        nutrients: ["Vitamin K", "Folate", "Iron", "Calcium"],
-        servingSize: "2 cups raw or 1 cup cooked",
-        frequency: "Daily"
+          "High in magnesium, which may help alleviate migraines. Rich in protein and healthy fats for sustained energy." :
+          "Packed with vitamins, minerals, and antioxidants for overall health. Excellent source of protein and healthy fats.",
+        category: "Protein-Rich Breakfast",
+        priority: "HIGH",
+        calories: 320,
+        protein: 22,
+        carbs: 8,
+        fat: 24,
+        nutrients: ["Vitamin K", "Folate", "Iron", "Calcium", "Magnesium"],
+        servingSize: "2 eggs, 1/2 cup spinach, 1/4 cup feta",
+        bestTime: "Breakfast (7-9 AM)",
+        preparationTips: "• Use fresh spinach for best flavor\n• Cook eggs on medium heat for fluffy texture\n• Add feta just before serving to prevent melting",
+        alternatives: "• Replace feta with goat cheese\n• Use kale instead of spinach\n• Add mushrooms for extra nutrients",
+        frequency: "3-4 times per week",
+        notes: hasHighBloodPressure ? "Note: Avoid if allergic to eggs or dairy" : null
       },
       {
-        food: hasDiabetes ? "Quinoa" : "Brown Rice",
+        food: "Quinoa Buddha Bowl",
         reason: hasDiabetes ?
-          "Low glycemic index grain that helps stabilize blood sugar" :
-          "Whole grain providing sustained energy and fiber",
-        nutrients: ["Fiber", "Protein", "B Vitamins"],
-        servingSize: "1/2 cup cooked",
-        frequency: "3-4 times per week"
+          "Low glycemic index grain that helps stabilize blood sugar. Complete protein source with balanced macronutrients." :
+          "Whole grain providing sustained energy and fiber. Nutrient-dense meal with complete protein profile.",
+        category: "Complete Protein Bowl",
+        priority: "HIGH",
+        calories: 450,
+        protein: 18,
+        carbs: 65,
+        fat: 12,
+        nutrients: ["Fiber", "Protein", "B Vitamins", "Iron", "Magnesium"],
+        servingSize: "1 cup quinoa, 1 cup mixed vegetables, 2 tbsp tahini dressing",
+        bestTime: "Lunch (12-2 PM)",
+        preparationTips: "• Rinse quinoa thoroughly before cooking\n• Cook with vegetable broth for extra flavor\n• Let quinoa cool before assembling bowl",
+        alternatives: "• Substitute quinoa with farro or bulgur\n• Use different nut butters in dressing\n• Add grilled chicken or tofu for extra protein",
+        frequency: "2-3 times per week",
+        notes: hasDiabetes ? "Note: Monitor portion size for blood sugar control" : null
       },
       {
-        food: "Fatty Fish (Salmon, Mackerel)",
-        reason: "Omega-3 fatty acids support heart health and reduce inflammation",
-        nutrients: ["Omega-3", "Vitamin D", "Protein"],
-        servingSize: "3-4 oz",
-        frequency: "2-3 times per week"
+        food: "Grilled Salmon with Roasted Vegetables",
+        reason: "Omega-3 fatty acids support heart health and reduce inflammation. Excellent source of lean protein and essential nutrients.",
+        category: "Heart-Healthy Dinner",
+        priority: "MEDIUM",
+        calories: 380,
+        protein: 34,
+        carbs: 15,
+        fat: 22,
+        nutrients: ["Omega-3", "Vitamin D", "Protein", "B12", "Selenium"],
+        servingSize: "4 oz salmon, 1 cup mixed roasted vegetables",
+        bestTime: "Dinner (6-8 PM)",
+        preparationTips: "• Marinate salmon for 30 minutes before grilling\n• Roast vegetables at 400°F for caramelization\n• Don't overcook salmon - aim for medium-rare",
+        alternatives: "• Substitute salmon with mackerel or sardines\n• Use different vegetable combinations\n• Try different herbs and spices for variety",
+        frequency: "2-3 times per week",
+        notes: "Note: Choose wild-caught salmon when possible"
       },
       {
-        food: "Berries (Blueberries, Strawberries)",
-        reason: "Low in sugar, high in antioxidants and fiber",
-        nutrients: ["Antioxidants", "Vitamin C", "Fiber"],
-        servingSize: "1 cup",
-        frequency: "Daily"
+        food: "Berry and Nut Smoothie Bowl",
+        reason: "Low in sugar, high in antioxidants and fiber. Provides sustained energy and supports gut health.",
+        category: "Antioxidant-Rich Snack",
+        priority: "MEDIUM",
+        calories: 280,
+        protein: 8,
+        carbs: 35,
+        fat: 14,
+        nutrients: ["Antioxidants", "Vitamin C", "Fiber", "Healthy Fats"],
+        servingSize: "1 cup mixed berries, 1/4 cup nuts, 1/2 cup Greek yogurt",
+        bestTime: "Snack (3-4 PM) or Breakfast",
+        preparationTips: "• Use frozen berries for thicker consistency\n• Blend nuts separately for better texture\n• Top with fresh fruit for presentation",
+        alternatives: "• Substitute berries with other fruits\n• Use different nut combinations\n• Try coconut yogurt for dairy-free option",
+        frequency: "Daily",
+        notes: "Note: Adjust portion size based on activity level"
       },
       {
-        food: "Nuts and Seeds",
-        reason: "Healthy fats and protein for heart health",
-        nutrients: ["Healthy Fats", "Protein", "Magnesium"],
-        servingSize: "1 oz (handful)",
-        frequency: "Daily"
+        food: "Mediterranean Hummus Plate",
+        reason: "Healthy fats and protein for heart health. Excellent source of fiber and plant-based nutrients.",
+        category: "Plant-Based Protein",
+        priority: "MEDIUM",
+        calories: 220,
+        protein: 6,
+        carbs: 25,
+        fat: 12,
+        nutrients: ["Healthy Fats", "Protein", "Fiber", "Iron"],
+        servingSize: "1/3 cup hummus, 1/4 cup olives, 1/2 cup vegetables",
+        bestTime: "Appetizer or Light Lunch",
+        preparationTips: "• Make hummus from scratch for best flavor\n• Use extra virgin olive oil for richness\n• Serve with warm pita or fresh vegetables",
+        alternatives: "• Try different bean varieties for hummus\n• Use different vegetable combinations\n• Add grilled chicken or falafel for protein",
+        frequency: "2-3 times per week",
+        notes: "Note: Choose low-sodium olives when possible"
       }
     ],
     mealPlan: {
       breakfast: [
-        "Oatmeal with berries and nuts",
-        "Greek yogurt with seeds and fruit",
-        "Whole grain toast with avocado"
+        {
+          day: "Monday",
+          meal: "Oatmeal with berries and nuts",
+          nutrition: "High in fiber and antioxidants",
+          calories: 320,
+          protein: "12g",
+          carbs: "45g",
+          fat: "12g"
+        },
+        {
+          day: "Tuesday",
+          meal: "Greek yogurt with seeds and fruit",
+          nutrition: "Protein-rich with healthy fats",
+          calories: 280,
+          protein: "18g",
+          carbs: "25g",
+          fat: "15g"
+        }
       ],
       lunch: [
-        "Quinoa salad with mixed vegetables",
-        "Grilled chicken with leafy greens",
-        "Lentil soup with whole grain bread"
+        {
+          day: "Monday",
+          meal: "Quinoa salad with mixed vegetables",
+          nutrition: "Complete protein and fiber",
+          calories: 380,
+          protein: "15g",
+          carbs: "55g",
+          fat: "10g"
+        },
+        {
+          day: "Tuesday",
+          meal: "Grilled chicken with leafy greens",
+          nutrition: "Lean protein with vitamins",
+          calories: 350,
+          protein: "30g",
+          carbs: "20g",
+          fat: "12g"
+        }
       ],
       dinner: [
-        "Baked salmon with steamed vegetables",
-        "Stir-fried tofu with brown rice",
-        "Grilled chicken with sweet potato"
+        {
+          day: "Monday",
+          meal: "Baked salmon with steamed vegetables",
+          nutrition: "Omega-3 fatty acids and protein",
+          calories: 450,
+          protein: "35g",
+          carbs: "25g",
+          fat: "20g"
+        },
+        {
+          day: "Tuesday",
+          meal: "Stir-fried tofu with brown rice",
+          nutrition: "Plant-based protein and whole grains",
+          calories: 380,
+          protein: "20g",
+          carbs: "55g",
+          fat: "12g"
+        }
       ],
       snacks: [
-        "Apple slices with almond butter",
-        "Mixed nuts and seeds",
-        "Vegetable sticks with hummus"
+        {
+          day: "Monday",
+          meal: "Apple slices with almond butter",
+          nutrition: "Fiber and healthy fats",
+          calories: 200,
+          protein: "4g",
+          carbs: "25g",
+          fat: "8g"
+        },
+        {
+          day: "Tuesday",
+          meal: "Mixed nuts and seeds",
+          nutrition: "Energy boost with minerals",
+          calories: 180,
+          protein: "6g",
+          carbs: "15g",
+          fat: "12g"
+        }
       ]
     }
+  };
+}
+
+// Generate AI-powered meal plan
+async function generateMealPlan(reports, conditions) {
+  try {
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    if (!OPENAI_API_KEY) {
+      console.log('⚠️ OpenAI API key not configured - returning mock meal plan');
+      return generateMockMealPlan(conditions);
+    }
+
+    const axios = require('axios');
+    
+    const reportCount = reports.length;
+    const conditionText = conditions.map(c => `${c.condition_name} (${c.severity || 'mild'})`).join(', ') || 'None specified';
+    
+    const prompt = `You are an expert nutritionist and meal planner. Create a personalized 7-day meal plan based on the following information:
+
+PATIENT CONTEXT:
+- Health Conditions: ${conditionText}
+- Number of Health Reports: ${reportCount}
+
+TASK: Generate a comprehensive 7-day meal plan that supports overall health and addresses any specific conditions.
+
+IMPORTANT GUIDELINES:
+1. Create balanced meals for breakfast, lunch, dinner, and snacks
+2. Focus on foods that support the specific health conditions identified
+3. Include variety and cultural diversity in meal options
+4. Provide specific food items, not just general categories
+5. Consider practical meal preparation and time constraints
+6. Include portion sizes and nutritional benefits
+
+Return STRICT JSON in this exact schema (no prose outside JSON):
+{
+  "mealPlan": {
+    "breakfast": [
+      {
+        "day": "Monday",
+        "meal": "Oatmeal with berries and almonds",
+        "nutrition": "High in fiber and antioxidants",
+        "calories": 320,
+        "protein": "12g",
+        "carbs": "45g",
+        "fat": "12g"
+      }
+    ],
+    "lunch": [
+      {
+        "day": "Monday",
+        "meal": "Grilled chicken salad with mixed greens",
+        "nutrition": "Lean protein with vitamins",
+        "calories": 380,
+        "protein": "35g",
+        "carbs": "15g",
+        "fat": "18g"
+      }
+    ],
+    "dinner": [
+      {
+        "day": "Monday",
+        "meal": "Baked salmon with quinoa and vegetables",
+        "nutrition": "Omega-3 fatty acids and complete protein",
+        "calories": 450,
+        "protein": "40g",
+        "carbs": "35g",
+        "fat": "22g"
+      }
+    ],
+    "snacks": [
+      {
+        "day": "Monday",
+        "meal": "Apple slices with almond butter",
+        "nutrition": "Fiber and healthy fats",
+        "calories": 180,
+        "protein": "4g",
+        "carbs": "25g",
+        "fat": "8g"
+      }
+    ]
+  },
+  "weeklyNutrition": {
+    "totalCalories": 1800,
+    "averageProtein": "120g",
+    "averageCarbs": "180g",
+    "averageFat": "65g"
+  },
+  "shoppingList": [
+    "Oatmeal",
+    "Mixed berries",
+    "Almonds",
+    "Chicken breast",
+    "Mixed greens",
+    "Salmon fillets",
+    "Quinoa",
+    "Vegetables"
+  ]
+}`;
+
+    console.log('🚀 Calling OpenRouter API for meal plan generation...');
+    
+    const apiBase = process.env.OPENAI_API_BASE || 'https://api.openai.com/v1';
+    
+    const response = await axios.post(`${apiBase}/chat/completions`, {
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 3000,
+      temperature: 0.3
+    }, {
+      headers: {
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'http://localhost:5000',
+        'X-Title': 'NutriAI Meal Plan Generation'
+      },
+      timeout: 8000
+    });
+
+    console.log('✅ OpenRouter API meal plan response received');
+    const content = response.data.choices[0].message.content;
+    
+    // Try to extract JSON from markdown code blocks if present
+    let jsonContent = content;
+    if (content.includes('```json')) {
+      const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/);
+      if (jsonMatch) {
+        jsonContent = jsonMatch[1];
+      }
+    } else if (content.includes('```')) {
+      const jsonMatch = content.match(/```\s*([\s\S]*?)\s*```/);
+      if (jsonMatch) {
+        jsonContent = jsonMatch[1];
+      }
+    }
+    
+    try {
+      const result = JSON.parse(jsonContent);
+      console.log('✅ Meal plan parsed successfully');
+      return result;
+    } catch (parseError) {
+      console.error('❌ Failed to parse meal plan response as JSON:', parseError);
+      console.log('Raw AI response:', content);
+      throw new Error('Invalid JSON response from AI for meal plan');
+    }
+    
+  } catch (error) {
+    console.error('❌ AI meal plan generation failed:', error.message);
+    return generateMockMealPlan(conditions);
+  }
+}
+
+// Generate mock meal plan when AI is not available
+function generateMockMealPlan(conditions) {
+  const hasHighBloodPressure = conditions.some(c => 
+    c.condition_name?.toLowerCase().includes('pressure') || 
+    c.condition_name?.toLowerCase().includes('hypertension')
+  );
+  
+  const hasDiabetes = conditions.some(c => 
+    c.condition_name?.toLowerCase().includes('diabetes')
+  );
+  
+  return {
+    mealPlan: {
+      breakfast: [
+        {
+          day: "Monday",
+          meal: "Oatmeal with berries and almonds",
+          nutrition: "High in fiber and antioxidants",
+          calories: 320,
+          protein: "12g",
+          carbs: "45g",
+          fat: "12g"
+        },
+        {
+          day: "Tuesday",
+          meal: "Greek yogurt with honey and walnuts",
+          nutrition: "Protein-rich with healthy fats",
+          calories: 280,
+          protein: "18g",
+          carbs: "25g",
+          fat: "15g"
+        }
+      ],
+      lunch: [
+        {
+          day: "Monday",
+          meal: "Grilled chicken salad with mixed greens",
+          nutrition: "Lean protein with vitamins",
+          calories: 380,
+          protein: "35g",
+          carbs: "15g",
+          fat: "18g"
+        },
+        {
+          day: "Tuesday",
+          meal: "Quinoa bowl with roasted vegetables",
+          nutrition: "Complete protein and fiber",
+          calories: 420,
+          protein: "15g",
+          carbs: "65g",
+          fat: "12g"
+        }
+      ],
+      dinner: [
+        {
+          day: "Monday",
+          meal: "Baked salmon with quinoa and vegetables",
+          nutrition: "Omega-3 fatty acids and complete protein",
+          calories: 450,
+          protein: "40g",
+          carbs: "35g",
+          fat: "22g"
+        },
+        {
+          day: "Tuesday",
+          meal: "Stir-fried tofu with brown rice",
+          nutrition: "Plant-based protein and whole grains",
+          calories: 380,
+          protein: "20g",
+          carbs: "55g",
+          fat: "12g"
+        }
+      ],
+      snacks: [
+        {
+          day: "Monday",
+          meal: "Apple slices with almond butter",
+          nutrition: "Fiber and healthy fats",
+          calories: 180,
+          protein: "4g",
+          carbs: "25g",
+          fat: "8g"
+        },
+        {
+          day: "Tuesday",
+          meal: "Mixed nuts and dried fruits",
+          nutrition: "Energy boost with minerals",
+          calories: 200,
+          protein: "6g",
+          carbs: "20g",
+          fat: "12g"
+        }
+      ]
+    },
+    weeklyNutrition: {
+      totalCalories: 1800,
+      averageProtein: "120g",
+      averageCarbs: "180g",
+      averageFat: "65g"
+    },
+    shoppingList: [
+      "Oatmeal",
+      "Mixed berries",
+      "Almonds",
+      "Chicken breast",
+      "Mixed greens",
+      "Salmon fillets",
+      "Quinoa",
+      "Vegetables",
+      "Greek yogurt",
+      "Honey",
+      "Walnuts",
+      "Tofu",
+      "Brown rice"
+    ]
   };
 }
 
@@ -1308,7 +1916,7 @@ Return STRICT JSON in this exact schema (no prose outside JSON):
         'HTTP-Referer': 'http://localhost:5000', // Required for OpenRouter
         'X-Title': 'NutriAI Food Recommendations' // Required for OpenRouter
       },
-      timeout: 10000 // 10 second timeout
+      timeout: 8000 // 8 second timeout
     });
 
     console.log('✅ OpenRouter API response received');

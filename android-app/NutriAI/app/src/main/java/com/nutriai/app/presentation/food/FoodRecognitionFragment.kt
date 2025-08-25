@@ -103,6 +103,9 @@ class FoodRecognitionFragment : Fragment() {
         val factory = FoodRecognitionViewModelFactory(foodRepository)
         viewModel = ViewModelProvider(this, factory)[FoodRecognitionViewModel::class.java]
         
+        // Initialize ViewModel with context for dynamic network detection
+        viewModel.initialize(requireContext())
+        
         setupRecyclerView()
         setupClickListeners()
         observeViewModelStates()

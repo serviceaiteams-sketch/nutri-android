@@ -24,7 +24,11 @@ class MealHistoryViewModel(
     private val _deleteState = MutableStateFlow<Resource<GenericResponse>?>(null)
     val deleteState: StateFlow<Resource<GenericResponse>?> = _deleteState.asStateFlow()
     
-    init {
+    /**
+     * Initialize the ViewModel with context for network detection
+     */
+    fun initialize(context: android.content.Context) {
+        mealRepository.initialize(context)
         loadMealsForDate(_selectedDate.value)
     }
     

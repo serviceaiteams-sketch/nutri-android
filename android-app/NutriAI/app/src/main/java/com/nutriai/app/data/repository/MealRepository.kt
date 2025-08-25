@@ -5,7 +5,7 @@ import com.nutriai.app.data.models.MealHistoryResponse
 import com.nutriai.app.data.models.DailySummary
 import com.nutriai.app.data.models.GenericResponse
 import com.nutriai.app.data.remote.ApiService
-import com.nutriai.app.data.remote.RetrofitClient
+import com.nutriai.app.di.NetworkModule
 import com.nutriai.app.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,8 +15,17 @@ import java.io.IOException
 
 class MealRepository {
     
-    private val apiService: ApiService = RetrofitClient.apiService
+    private lateinit var apiService: ApiService
     private val dataStoreManager = DataStoreManager()
+    
+    /**
+     * Initialize the repository with context for dynamic network detection
+     */
+    fun initialize(context: android.content.Context) {
+        if (!::apiService.isInitialized) {
+            apiService = NetworkModule.getApiService(context)
+        }
+    }
     
     fun getMealsByDate(date: String): Flow<Resource<MealHistoryResponse>> = flow {
         emit(Resource.Loading())

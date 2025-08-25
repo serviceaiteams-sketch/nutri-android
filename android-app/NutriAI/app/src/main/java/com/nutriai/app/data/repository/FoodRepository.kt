@@ -8,7 +8,7 @@ import com.nutriai.app.data.models.FoodRecognitionResponse
 import com.nutriai.app.data.models.MealLogRequest
 import com.nutriai.app.data.models.MealLogResponse
 import com.nutriai.app.data.remote.ApiService
-import com.nutriai.app.data.remote.RetrofitClient
+import com.nutriai.app.di.NetworkModule
 import com.nutriai.app.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -23,8 +23,17 @@ import java.io.IOException
 
 class FoodRepository {
     
-    private val apiService: ApiService = RetrofitClient.apiService
+    private lateinit var apiService: ApiService
     private val dataStoreManager = DataStoreManager()
+    
+    /**
+     * Initialize the repository with context for dynamic network detection
+     */
+    fun initialize(context: Context) {
+        if (!::apiService.isInitialized) {
+            apiService = NetworkModule.getApiService(context)
+        }
+    }
     
     fun recognizeFood(imageFile: File): Flow<Resource<FoodRecognitionResponse>> = flow {
         emit(Resource.Loading())

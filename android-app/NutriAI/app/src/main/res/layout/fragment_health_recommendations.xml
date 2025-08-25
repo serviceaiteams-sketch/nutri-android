@@ -36,8 +36,9 @@
 
         </LinearLayout>
 
-        <!-- Recommended Foods -->
+        <!-- Food Recommendations -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/foodRecommendationsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -53,17 +54,36 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Foods to Include"
+                    android:text="🍎 Foods to Include"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/success" />
+                    android:textColor="@color/text_primary" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRecommendedFoods"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Swipe left/right to see more recommendations"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+
+                <!-- Swipeable Food Recommendations -->
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPagerFoodRecommendations"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="12dp"
-                    android:nestedScrollingEnabled="false" />
+                    android:layout_height="400dp"
+                    android:layout_marginTop="16dp" />
+
+                <!-- Page Indicator -->
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayoutFoodRecommendations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    app:tabBackground="@drawable/tab_selector"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
 
             </LinearLayout>
 
@@ -77,7 +97,7 @@
             android:layout_marginBottom="16dp"
             app:cardElevation="2dp"
             app:cardCornerRadius="12dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"

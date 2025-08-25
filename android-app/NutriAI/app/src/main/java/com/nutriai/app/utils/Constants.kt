@@ -1,8 +1,20 @@
 package com.nutriai.app.utils
 
 object Constants {
-    // API Configuration
-    const val BASE_URL = "http://192.168.1.28:5000/api/" // Using direct IP
+    // API Configuration - Will be set dynamically by NetworkUtils
+    private var _baseUrl: String? = null
+    
+    fun getBaseUrl(context: android.content.Context): String {
+        if (_baseUrl == null) {
+            _baseUrl = NetworkUtils.getBaseUrl(context)
+        }
+        return _baseUrl!!
+    }
+    
+    fun resetBaseUrl() {
+        _baseUrl = null
+    }
+    
     const val CONNECT_TIMEOUT = 60L
     const val READ_TIMEOUT = 60L
     const val WRITE_TIMEOUT = 60L

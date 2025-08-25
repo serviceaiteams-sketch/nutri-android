@@ -48,6 +48,9 @@ class DashboardFragment : Fragment() {
         val factory = DashboardViewModelFactory(dashboardRepository)
         viewModel = ViewModelProvider(this, factory)[DashboardViewModel::class.java]
         
+        // Initialize ViewModel with context for dynamic network detection
+        viewModel.initialize(requireContext())
+        
         setupUI()
         observeDashboardData()
         setupClickListeners()
