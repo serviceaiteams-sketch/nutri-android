@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 async function testHerokuDeployment() {
-  const herokuUrl = 'https://nutri-ai.herokuapp.com/api/health';
+  const herokuUrl = 'https://nutri-ai-5b9893ad4a00.herokuapp.com/api/health';
   
   try {
     console.log('🔍 Testing Heroku deployment...');

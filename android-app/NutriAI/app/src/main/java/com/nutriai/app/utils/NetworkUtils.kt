@@ -22,7 +22,7 @@ object NetworkUtils {
     
     // Production server URL (for Play Store release)
     // TODO: Replace with your actual production URL when deploying
-    private const val PRODUCTION_BASE_URL = "https://nutri-ai.herokuapp.com/api/"
+    private const val PRODUCTION_BASE_URL = "https://nutri-ai-5b9893ad4a00.herokuapp.com/api/"
     
     // Manual override for development (set this if automatic detection fails)
     private var MANUAL_SERVER_IP: String? = null
