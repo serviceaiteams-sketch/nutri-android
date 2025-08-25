@@ -3,9 +3,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const hpp = require('hpp');
+// These modules are commented out due to compatibility issues
+// const mongoSanitize = require('express-mongo-sanitize');
+// const xss = require('xss-clean');
+// const hpp = require('hpp');
 // Load environment variables from .env file if it exists (for local development)
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
