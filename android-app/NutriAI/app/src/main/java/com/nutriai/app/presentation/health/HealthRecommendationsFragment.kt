@@ -64,17 +64,37 @@ class HealthRecommendationsFragment : Fragment() {
     private fun setupViewPager() {
         try {
             android.util.Log.d("HealthRecommendationsFragment", "🔧 Setting up ViewPager...")
+            
+            // Check if binding is available
+            if (_binding == null) {
+                android.util.Log.e("HealthRecommendationsFragment", "❌ Binding is null")
+                return
+            }
+            
             foodRecommendationsViewPagerAdapter = FoodRecommendationsViewPagerAdapter()
+            
+            // Check if ViewPager exists
+            if (binding.viewPagerFoodRecommendations == null) {
+                android.util.Log.e("HealthRecommendationsFragment", "❌ ViewPager is null")
+                return
+            }
+            
             binding.viewPagerFoodRecommendations.apply {
                 adapter = foodRecommendationsViewPagerAdapter
                 orientation = ViewPager2.ORIENTATION_HORIZONTAL
                 android.util.Log.d("HealthRecommendationsFragment", "🔧 ViewPager adapter set: $adapter")
             }
             
-            // Setup page indicator
-            TabLayoutMediator(binding.tabLayoutFoodRecommendations, binding.viewPagerFoodRecommendations) { _, _ ->
-                // This lambda is called for each tab, but we don't need to do anything here
-            }.attach()
+            // Setup page indicator with null check
+            try {
+                if (binding.tabLayoutFoodRecommendations != null) {
+                    TabLayoutMediator(binding.tabLayoutFoodRecommendations, binding.viewPagerFoodRecommendations) { _, _ ->
+                        // This lambda is called for each tab, but we don't need to do anything here
+                    }.attach()
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("HealthRecommendationsFragment", "❌ Error setting up TabLayout: ${e.message}", e)
+            }
             
             android.util.Log.d("HealthRecommendationsFragment", "🔧 ViewPager setup complete. Adapter: $foodRecommendationsViewPagerAdapter")
         } catch (e: Exception) {

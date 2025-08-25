@@ -25,8 +25,16 @@ class FoodRecommendationsViewPagerAdapter : RecyclerView.Adapter<FoodRecommendat
     }
     
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
-        val item = recommendations[position]
-        holder.bind(item)
+        try {
+            if (position < recommendations.size) {
+                val item = recommendations[position]
+                holder.bind(item)
+            } else {
+                android.util.Log.e("FoodRecommendationsViewPagerAdapter", "❌ Position $position out of bounds for size ${recommendations.size}")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("FoodRecommendationsViewPagerAdapter", "❌ Error binding view holder at position $position: ${e.message}", e)
+        }
     }
     
     override fun getItemCount(): Int = recommendations.size
@@ -36,7 +44,8 @@ class FoodRecommendationsViewPagerAdapter : RecyclerView.Adapter<FoodRecommendat
     ) : RecyclerView.ViewHolder(binding.root) {
         
         fun bind(recommendation: FoodRecommendation) {
-            binding.apply {
+            try {
+                binding.apply {
                 // Basic food information
                 tvFoodName.text = recommendation.food
                 tvReason.text = recommendation.reason
@@ -103,6 +112,9 @@ class FoodRecommendationsViewPagerAdapter : RecyclerView.Adapter<FoodRecommendat
                     tvNotes.visibility = android.view.View.GONE
                 }
             }
+        } catch (e: Exception) {
+            android.util.Log.e("FoodRecommendationsViewPagerAdapter", "❌ Error binding recommendation: ${e.message}", e)
         }
+    }
     }
 }
