@@ -186,20 +186,31 @@ class HealthRecommendationsFragment : Fragment() {
                     
                     // Check if adapter is initialized
                     if (::foodRecommendationsViewPagerAdapter.isInitialized) {
-                        foodRecommendationsViewPagerAdapter.submitList(recommendations)
-                        
-                        // Check if ViewPager is visible
-                        android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager visible: ${binding.viewPagerFoodRecommendations.isVisible}")
-                        android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager adapter count: ${foodRecommendationsViewPagerAdapter.itemCount}")
-                        android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager current item: ${binding.viewPagerFoodRecommendations.currentItem}")
+                        // Run on main thread to avoid crashes
+                        binding.root.post {
+                            try {
+                                foodRecommendationsViewPagerAdapter.submitList(recommendations)
+                                
+                                // Check if ViewPager is visible
+                                android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager visible: ${binding.viewPagerFoodRecommendations.isVisible}")
+                                android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager adapter count: ${foodRecommendationsViewPagerAdapter.itemCount}")
+                                android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager current item: ${binding.viewPagerFoodRecommendations.currentItem}")
+                            } catch (e: Exception) {
+                                android.util.Log.e("HealthRecommendationsFragment", "❌ Error in ViewPager update: ${e.message}", e)
+                                showEmptyState(true)
+                            }
+                        }
                     } else {
                         android.util.Log.w("HealthRecommendationsFragment", "⚠️ ViewPager adapter not initialized")
+                        showEmptyState(true)
                     }
                 } catch (e: Exception) {
                     android.util.Log.e("HealthRecommendationsFragment", "❌ Error updating food recommendations: ${e.message}", e)
+                    showEmptyState(true)
                 }
             } ?: run {
                 android.util.Log.w("HealthRecommendationsFragment", "⚠️ No recommendations list in data")
+                showEmptyState(true)
             }
             
             // Update meal plan if available
