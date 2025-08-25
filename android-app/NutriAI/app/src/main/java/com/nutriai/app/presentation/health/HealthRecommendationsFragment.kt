@@ -47,7 +47,9 @@ class HealthRecommendationsFragment : Fragment() {
                 android.util.Log.d("HealthRecommendationsFragment", "✅ ViewModel obtained from parent fragment")
             } else {
                 android.util.Log.e("HealthRecommendationsFragment", "❌ Parent fragment is not HealthReportsFragment")
-                throw IllegalStateException("Parent fragment is not HealthReportsFragment")
+                // Try to get ViewModel from activity as fallback
+                viewModel = ViewModelProvider(requireActivity())[HealthReportsViewModel::class.java]
+                android.util.Log.d("HealthRecommendationsFragment", "✅ ViewModel obtained from activity as fallback")
             }
             
             setupViewPager()
@@ -91,6 +93,9 @@ class HealthRecommendationsFragment : Fragment() {
                     showEmptyState(true)
                     return@launch
                 }
+                
+                // Add a small delay to ensure ViewModel is ready
+                kotlinx.coroutines.delay(100)
                 
                 android.util.Log.d("HealthRecommendationsFragment", "🔍 Starting ViewModel observation...")
                 
