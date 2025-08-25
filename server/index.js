@@ -6,7 +6,10 @@ const path = require('path');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-require('dotenv').config();
+// Load environment variables from .env file if it exists (for local development)
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 // Import routes
 const authRoutes = require('./routes/auth');

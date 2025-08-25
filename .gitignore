@@ -75,6 +75,9 @@ Thumbs.db
 uploads/
 server/uploads/
 
+# Client directory (not needed for server deployment)
+client/
+
 # Android build files
 android-app/NutriAI/app/build/
 android-app/NutriAI/.gradle/
