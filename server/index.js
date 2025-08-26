@@ -28,6 +28,162 @@ const PORT = process.env.PORT || 5000;
 const uploadedReports = new Map();
 const userAnalysisResults = new Map();
 
+// Helper function to generate food recommendations based on health analysis
+async function generateFoodRecommendations(analysisResult) {
+  try {
+    console.log('🍎 Generating food recommendations from analysis...');
+    
+    // Extract health conditions from analysis
+    let conditions = ['diabetes', 'high_blood_pressure']; // Default fallback
+    
+    if (analysisResult.detectedConditions) {
+      conditions = analysisResult.detectedConditions.map(condition => {
+        if (typeof condition === 'string') {
+          return condition.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+        } else if (condition && condition.name) {
+          return condition.name.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+        }
+        return '';
+      }).filter(condition => condition.length > 0);
+      
+      if (conditions.length === 0 && analysisResult.riskFactors) {
+        conditions = analysisResult.riskFactors.map(risk => {
+          if (typeof risk === 'string') {
+            return risk.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+          } else if (risk && risk.factor) {
+            return risk.factor.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+          }
+          return '';
+        }).filter(risk => risk.length > 0);
+      }
+    }
+    
+    console.log('🔍 Extracted conditions for food recommendations:', conditions);
+    
+    const foodPrompt = `
+    Generate personalized food recommendations for a patient with the following health conditions: ${conditions.join(', ')}.
+    
+    Based on the patient's health analysis, provide specific food recommendations that address their conditions.
+    Include both USA and Indian food options that are beneficial for their specific health needs.
+    
+    Provide recommendations in JSON format with the following structure:
+    {
+      "recommendations": [
+        {
+          "food": "Food name",
+          "reason": "Why this food is recommended",
+          "category": "Breakfast/Lunch/Dinner/Snack",
+          "priority": "HIGH/MEDIUM/LOW",
+          "calories": 320,
+          "protein": 12,
+          "carbs": 45,
+          "fat": 12,
+          "nutrients": ["Fiber", "Antioxidants", "B Vitamins"],
+          "servingSize": "1 cup cooked oatmeal with 1/2 cup blueberries",
+          "bestTime": "Breakfast (7-9 AM)",
+          "preparationTips": "• Use steel-cut oats for best texture\\n• Add berries just before serving\\n• Top with nuts for extra protein",
+          "alternatives": "• Try quinoa porridge instead\\n• Use different berries or fruits\\n• Add chia seeds for omega-3",
+          "frequency": "3-4 times per week",
+          "notes": "Excellent for diabetes management due to low glycemic index",
+          "cuisine": "USA/Indian/Both"
+        }
+      ],
+      "mealPlan": {
+        "breakfast": [
+          {
+            "name": "Oatmeal with Berries",
+            "calories": 320,
+            "protein": 12,
+            "carbs": 45,
+            "fat": 12,
+            "benefits": "High fiber, low glycemic index",
+            "cuisine": "USA"
+          }
+        ],
+        "lunch": [
+          {
+            "name": "Grilled Chicken with Quinoa",
+            "calories": 450,
+            "protein": 35,
+            "carbs": 30,
+            "fat": 20,
+            "benefits": "Lean protein, complex carbs",
+            "cuisine": "USA"
+          }
+        ],
+        "dinner": [
+          {
+            "name": "Dal with Brown Rice",
+            "calories": 380,
+            "protein": 15,
+            "carbs": 60,
+            "fat": 8,
+            "benefits": "Plant protein, fiber-rich",
+            "cuisine": "Indian"
+          }
+        ]
+      }
+    }
+    
+    Include both USA and Indian food options. Focus on foods that are beneficial for the specific health conditions mentioned.
+    `;
+    
+    const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer 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',
+        'HTTP-Referer': 'https://nutri-ai-5b9893ad4a00.herokuapp.com',
+        'X-Title': 'NutriAI Food Recommendations'
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'user',
+            content: foodPrompt
+          }
+        ],
+        max_tokens: 2000,
+        temperature: 0.3
+      })
+    });
+    
+    if (!openRouterResponse.ok) {
+      throw new Error(`OpenRouter API failed: ${openRouterResponse.status}`);
+    }
+    
+    const openRouterData = await openRouterResponse.json();
+    const aiResponse = openRouterData.choices[0].message.content;
+    
+    console.log('✅ AI Food Recommendations received:', aiResponse);
+    
+    // Parse AI response
+    let foodRecommendations;
+    try {
+      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        foodRecommendations = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error('No JSON found in AI response');
+      }
+    } catch (parseError) {
+      console.error('❌ Failed to parse AI food recommendations:', parseError);
+      throw new Error('Failed to parse food recommendations');
+    }
+    
+    // Add timestamp
+    foodRecommendations.timestamp = new Date().toISOString();
+    
+    console.log('✅ Food recommendations generated successfully');
+    return foodRecommendations;
+    
+  } catch (error) {
+    console.error('❌ Error generating food recommendations:', error);
+    throw error;
+  }
+}
+
 // Basic middleware
 app.use(cors());
 app.use(express.json({ limit: '100mb' }));
@@ -311,23 +467,34 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
        });
      }
     
-    // Add timestamp and analysis ID
-    analysisResult.timestamp = new Date().toISOString();
-    analysisResult.analysisId = `analysis_${Date.now()}`;
-    
-    // Store the analysis result for later retrieval
-    const userId = req.headers.authorization || 'default_user';
-    userAnalysisResults.set(userId, analysisResult);
-    uploadedReports.set(userId, {
-      reportContent: reportContent,
-      patientInfo: patientInfo,
-      analysisResult: analysisResult,
-      uploadTime: new Date().toISOString()
-    });
-    
-    console.log('✅ Analysis completed successfully');
-    console.log('💾 Analysis result stored for user:', userId);
-    res.json(analysisResult);
+         // Add timestamp and analysis ID
+     analysisResult.timestamp = new Date().toISOString();
+     analysisResult.analysisId = `analysis_${Date.now()}`;
+     
+     // Generate food recommendations based on the analysis
+     console.log('🍎 Generating food recommendations based on analysis...');
+     try {
+       const foodRecommendations = await generateFoodRecommendations(analysisResult);
+       analysisResult.foodRecommendations = foodRecommendations;
+       console.log('✅ Food recommendations added to analysis');
+     } catch (foodError) {
+       console.error('❌ Error generating food recommendations:', foodError);
+       // Continue without food recommendations
+     }
+     
+     // Store the analysis result for later retrieval
+     const userId = req.headers.authorization || 'default_user';
+     userAnalysisResults.set(userId, analysisResult);
+     uploadedReports.set(userId, {
+       reportContent: reportContent,
+       patientInfo: patientInfo,
+       analysisResult: analysisResult,
+       uploadTime: new Date().toISOString()
+     });
+     
+     console.log('✅ Analysis completed successfully');
+     console.log('💾 Analysis result stored for user:', userId);
+     res.json(analysisResult);
     
   } catch (error) {
     console.error('❌ Error in health analysis:', error);
@@ -456,13 +623,57 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
   try {
     console.log('🍎 Received food recommendations request');
     
-    // Get health conditions from query params or use default
-    const conditions = req.query.conditions ? req.query.conditions.split(',') : ['diabetes', 'high_blood_pressure'];
+    // Get user ID from headers or use default
+    const userId = req.headers.authorization || 'default_user';
     
-    console.log('🤖 Generating personalized food recommendations with AI...');
+    // Get stored analysis for the user
+    const storedAnalysis = userAnalysisResults.get(userId);
+    const userInfo = uploadedReports.get(userId);
+    
+    console.log('🔍 Stored analysis found:', !!storedAnalysis);
+    console.log('🔍 User info found:', !!userInfo);
+    
+    // Extract health conditions from stored analysis
+    let conditions = ['diabetes', 'high_blood_pressure']; // Default fallback
+    
+    if (storedAnalysis && storedAnalysis.detectedConditions) {
+      // Extract condition names from detected conditions
+      conditions = storedAnalysis.detectedConditions.map(condition => {
+        if (typeof condition === 'string') {
+          // Handle string format
+          return condition.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+        } else if (condition && condition.name) {
+          // Handle object format
+          return condition.name.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+        }
+        return '';
+      }).filter(condition => condition.length > 0);
+      
+      // If no conditions found, use risk factors
+      if (conditions.length === 0 && storedAnalysis.riskFactors) {
+        conditions = storedAnalysis.riskFactors.map(risk => {
+          if (typeof risk === 'string') {
+            return risk.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+          } else if (risk && risk.factor) {
+            return risk.factor.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+          }
+          return '';
+        }).filter(risk => risk.length > 0);
+      }
+    }
+    
+    // If still no conditions, use query params as fallback
+    if (conditions.length === 0) {
+      conditions = req.query.conditions ? req.query.conditions.split(',') : ['diabetes', 'high_blood_pressure'];
+    }
+    
+    console.log('🤖 Generating personalized food recommendations for conditions:', conditions);
     
     const foodPrompt = `
     Generate personalized food recommendations for a patient with the following health conditions: ${conditions.join(', ')}.
+    
+    Based on the patient's health analysis, provide specific food recommendations that address their conditions.
+    Include both USA and Indian food options that are beneficial for their specific health needs.
     
     Provide recommendations in JSON format with the following structure:
     {
