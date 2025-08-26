@@ -274,100 +274,17 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
         console.error('❌ OpenRouter API error:', errorText);
         throw new Error(`OpenRouter API failed: ${openRouterResponse.status} - ${errorText}`);
       }
-    } catch (fetchError) {
-      console.error('❌ Fetch error:', fetchError);
-      console.log('🔄 Using fallback analysis due to API error');
-      
-      // Return fallback analysis instead of throwing error
-      const fallbackAnalysis = {
-        reportSummary: "Your health analysis reveals several important findings. Your blood sugar levels are slightly elevated, indicating a need for dietary monitoring. Most other metrics are within normal ranges, but there are specific areas that require attention and lifestyle modifications.",
-        detectedConditions: [
-          "Borderline High Blood Sugar - Random blood sugar level of 125 mg/dL is slightly elevated (mild severity)"
-        ],
-        riskFactors: [
-          {
-            factor: "Elevated blood sugar",
-            level: "medium",
-            description: "Blood sugar levels are above normal range"
-          }
-        ],
-        healthScore: 75,
-        keyMetrics: {
-          "Blood Sugar": {
-            value: 125,
-            unit: "mg/dL",
-            status: "warning",
-            normalRange: "70-99 mg/dL"
-          },
-          "Cholesterol": {
-            value: 180,
-            unit: "mg/dL",
-            status: "normal",
-            normalRange: "<200 mg/dL"
-          },
-          "Blood Pressure": {
-            value: 135,
-            unit: "mmHg",
-            status: "warning",
-            normalRange: "<120/80 mmHg"
-          },
-          "Hemoglobin A1C": {
-            value: 5.8,
-            unit: "%",
-            status: "normal",
-            normalRange: "4.5-5.9%"
-          },
-          "Total Reports Analyzed": {
-            value: 61,
-            unit: "count",
-            status: "normal",
-            normalRange: "1+"
-          }
-        },
-        recommendations: [
-          {
-            category: "medical",
-            recommendation: "Monitor blood sugar levels regularly and consult with healthcare provider",
-            priority: "high"
-          },
-          {
-            category: "lifestyle",
-            recommendation: "Implement regular exercise routine to help manage blood sugar levels",
-            priority: "medium"
-          },
-          {
-            category: "dietary",
-            recommendation: "Reduce intake of refined carbohydrates and increase fiber consumption",
-            priority: "high"
-          }
-        ],
-        nutritionGuidance: {
-          foodsToAvoid: [
-            "Processed Foods - Can trigger migraines and are often high in preservatives and additives. Alternative: Whole, unprocessed foods like fruits, vegetables, and whole grains."
-          ],
-          foodsToIncrease: [
-            "Oatmeal with Berries - High in fiber and antioxidants, helps reduce migraine symptoms. Frequency: 3-4 times a week. Portion: 1 cup cooked oatmeal topped with 1/2 cup mixed berries"
-          ],
-          mealPlanSuggestions: [],
-          supplementRecommendations: [
-            "Magnesium - May help reduce the frequency of migraines. Dosage: 400 mg daily. Note: Consult with a healthcare provider before starting any new supplement."
-          ]
-        },
-        analysisDetails: {
-          reportsAnalyzed: ["CBC", "Lipid Panel", "Blood Sugar", "Urinalysis"],
-          totalTests: 15,
-          abnormalFindings: 3,
-          criticalAlerts: 1
-        }
-      };
-      
-      // Add timestamp and analysis ID
-      fallbackAnalysis.timestamp = new Date().toISOString();
-      fallbackAnalysis.analysisId = `analysis_${Date.now()}`;
-      
-      console.log('✅ Fallback analysis completed successfully');
-      return res.json(fallbackAnalysis);
-    }
+         } catch (fetchError) {
+       console.error('❌ Fetch error:', fetchError);
+       console.log('🔄 AI analysis failed, returning error response');
+       
+       // Return error response instead of hardcoded fallback
+       return res.status(500).json({
+         error: 'AI analysis failed',
+         message: 'Unable to analyze health report. Please try again or contact support.',
+         details: fetchError.message
+       });
+     }
     
     const openRouterData = await openRouterResponse.json();
     const aiResponse = openRouterData.choices[0].message.content;
@@ -384,91 +301,15 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
       } else {
         throw new Error('No JSON found in AI response');
       }
-    } catch (parseError) {
-      console.error('❌ Failed to parse AI response:', parseError);
-      // Fallback to mock data
-      analysisResult = {
-        reportSummary: "Your health analysis reveals several important findings. Your blood sugar levels are slightly elevated, indicating a need for dietary monitoring. Most other metrics are within normal ranges, but there are specific areas that require attention and lifestyle modifications.",
-        detectedConditions: [
-          "Borderline High Blood Sugar - Random blood sugar level of 125 mg/dL is slightly elevated (mild severity)"
-        ],
-        riskFactors: [
-          {
-            factor: "Elevated blood sugar",
-            level: "medium",
-            description: "Blood sugar levels are above normal range"
-          }
-        ],
-        healthScore: 75,
-        keyMetrics: {
-          "Blood Sugar": {
-            value: 125,
-            unit: "mg/dL",
-            status: "warning",
-            normalRange: "70-99 mg/dL"
-          },
-          "Cholesterol": {
-            value: 180,
-            unit: "mg/dL",
-            status: "normal",
-            normalRange: "<200 mg/dL"
-          },
-          "Blood Pressure": {
-            value: 135,
-            unit: "mmHg",
-            status: "warning",
-            normalRange: "<120/80 mmHg"
-          },
-          "Hemoglobin A1C": {
-            value: 5.8,
-            unit: "%",
-            status: "normal",
-            normalRange: "4.5-5.9%"
-          },
-          "Total Reports Analyzed": {
-            value: 61,
-            unit: "count",
-            status: "normal",
-            normalRange: "1+"
-          }
-        },
-        recommendations: [
-          {
-            category: "medical",
-            recommendation: "Monitor blood sugar levels regularly and consult with healthcare provider",
-            priority: "high"
-          },
-          {
-            category: "lifestyle",
-            recommendation: "Implement regular exercise routine to help manage blood sugar levels",
-            priority: "medium"
-          },
-          {
-            category: "dietary",
-            recommendation: "Reduce intake of refined carbohydrates and increase fiber consumption",
-            priority: "high"
-          }
-        ],
-        nutritionGuidance: {
-          foodsToAvoid: [
-            "Processed Foods - Can trigger migraines and are often high in preservatives and additives. Alternative: Whole, unprocessed foods like fruits, vegetables, and whole grains."
-          ],
-          foodsToIncrease: [
-            "Oatmeal with Berries - High in fiber and antioxidants, helps reduce migraine symptoms. Frequency: 3-4 times a week. Portion: 1 cup cooked oatmeal topped with 1/2 cup mixed berries"
-          ],
-          mealPlanSuggestions: [],
-          supplementRecommendations: [
-            "Magnesium - May help reduce the frequency of migraines. Dosage: 400 mg daily. Note: Consult with a healthcare provider before starting any new supplement."
-          ]
-        },
-        analysisDetails: {
-          reportsAnalyzed: ["CBC", "Lipid Panel", "Blood Sugar", "Urinalysis"],
-          totalTests: 15,
-          abnormalFindings: 3,
-          criticalAlerts: 1
-        }
-      };
-    }
+         } catch (parseError) {
+       console.error('❌ Failed to parse AI response:', parseError);
+       // Return error response instead of hardcoded fallback
+       return res.status(500).json({
+         error: 'Analysis parsing failed',
+         message: 'Unable to parse AI analysis response. Please try again or contact support.',
+         details: parseError.message
+       });
+     }
     
     // Add timestamp and analysis ID
     analysisResult.timestamp = new Date().toISOString();
@@ -724,85 +565,15 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
       } else {
         throw new Error('No JSON found in AI response');
       }
-    } catch (parseError) {
-      console.error('❌ Failed to parse AI food recommendations:', parseError);
-      // Fallback to mock data
-      foodRecommendations = {
-        recommendations: [
-          {
-            food: "Oatmeal with blueberries",
-            reason: "Rich in fiber and antioxidants, helps reduce blood sugar spikes",
-            category: "Breakfast",
-            priority: "HIGH",
-            calories: 320,
-            protein: 12,
-            carbs: 45,
-            fat: 12,
-            nutrients: ["Fiber", "Antioxidants", "B Vitamins"],
-            servingSize: "1 cup cooked oatmeal with 1/2 cup blueberries",
-            bestTime: "Breakfast (7-9 AM)",
-            preparationTips: "• Use steel-cut oats for best texture\n• Add berries just before serving\n• Top with nuts for extra protein",
-            alternatives: "• Try quinoa porridge instead\n• Use different berries or fruits\n• Add chia seeds for omega-3",
-            frequency: "3-4 times per week",
-            notes: "Excellent for diabetes management due to low glycemic index",
-            cuisine: "USA"
-          },
-          {
-            food: "Dal with Brown Rice",
-            reason: "High in plant protein and fiber, good for blood pressure management",
-            category: "Dinner",
-            priority: "HIGH",
-            calories: 380,
-            protein: 15,
-            carbs: 60,
-            fat: 8,
-            nutrients: ["Protein", "Fiber", "Iron", "Folate"],
-            servingSize: "1 cup dal with 1/2 cup brown rice",
-            bestTime: "Dinner (7-8 PM)",
-            preparationTips: "• Soak dal for 2 hours before cooking\n• Add turmeric for anti-inflammatory benefits\n• Use minimal oil",
-            alternatives: "• Try moong dal instead of toor dal\n• Add vegetables for extra nutrition\n• Use quinoa instead of rice",
-            frequency: "2-3 times per week",
-            notes: "Traditional Indian food that's excellent for heart health",
-            cuisine: "Indian"
-          }
-        ],
-        mealPlan: {
-          breakfast: [
-            {
-              name: "Oatmeal with Berries",
-              calories: 320,
-              protein: 12,
-              carbs: 45,
-              fat: 12,
-              benefits: "High fiber, low glycemic index",
-              cuisine: "USA"
-            }
-          ],
-          lunch: [
-            {
-              name: "Grilled Chicken with Quinoa",
-              calories: 450,
-              protein: 35,
-              carbs: 30,
-              fat: 20,
-              benefits: "Lean protein, complex carbs",
-              cuisine: "USA"
-            }
-          ],
-          dinner: [
-            {
-              name: "Dal with Brown Rice",
-              calories: 380,
-              protein: 15,
-              carbs: 60,
-              fat: 8,
-              benefits: "Plant protein, fiber-rich",
-              cuisine: "Indian"
-            }
-          ]
-        }
-      };
-    }
+         } catch (parseError) {
+       console.error('❌ Failed to parse AI food recommendations:', parseError);
+       // Return error response instead of hardcoded fallback
+       return res.status(500).json({
+         error: 'Food recommendations failed',
+         message: 'Unable to generate food recommendations. Please try again or contact support.',
+         details: parseError.message
+       });
+     }
     
     // Add timestamp
     foodRecommendations.timestamp = new Date().toISOString();
@@ -1183,99 +954,13 @@ app.post('/api/ai/recognize-food', upload.single('image'), async (req, res) => {
     } catch (aiError) {
       console.error('❌ AI food recognition failed:', aiError);
       
-      // Smart fallback based on common foods
-      const commonFoods = [
-        {
-          name: "Donuts",
-          confidence: 0.85,
-          quantity: 3.0,
-          unit: "pieces",
-          description: "Glazed donuts with sprinkles",
-          nutrition: {
-            calories: 240,
-            protein: 3,
-            carbs: 30,
-            fat: 12,
-            fiber: 1,
-            sugar: 15,
-            sodium: 200
-          },
-          serving_size: "3 pieces (150g)",
-          health_score: 45
-        },
-        {
-          name: "Pizza Slice",
-          confidence: 0.80,
-          quantity: 1.0,
-          unit: "slice",
-          description: "Cheese pizza slice",
-          nutrition: {
-            calories: 285,
-            protein: 12,
-            carbs: 35,
-            fat: 10,
-            fiber: 2,
-            sugar: 3,
-            sodium: 640
-          },
-          serving_size: "1 slice (120g)",
-          health_score: 60
-        },
-        {
-          name: "Burger",
-          confidence: 0.75,
-          quantity: 1.0,
-          unit: "piece",
-          description: "Beef burger with bun",
-          nutrition: {
-            calories: 350,
-            protein: 20,
-            carbs: 30,
-            fat: 15,
-            fiber: 2,
-            sugar: 5,
-            sodium: 500
-          },
-          serving_size: "1 burger (200g)",
-          health_score: 55
-        },
-        {
-          name: "Salad Bowl",
-          confidence: 0.90,
-          quantity: 1.0,
-          unit: "bowl",
-          description: "Mixed green salad with vegetables",
-          nutrition: {
-            calories: 120,
-            protein: 8,
-            carbs: 15,
-            fat: 5,
-            fiber: 8,
-            sugar: 8,
-            sodium: 200
-          },
-          serving_size: "1 bowl (200g)",
-          health_score: 85
-        }
-      ];
-      
-      // Randomly select a food for demo purposes
-      const selectedFood = commonFoods[Math.floor(Math.random() * commonFoods.length)];
-      
-      const fallbackResponse = {
-        success: true,
-        recognizedFoods: [selectedFood],
-        nutritionData: [
-          { name: "Protein", value: selectedFood.nutrition.protein, unit: "g", dailyValue: selectedFood.nutrition.protein * 2 },
-          { name: "Fiber", value: selectedFood.nutrition.fiber, unit: "g", dailyValue: selectedFood.nutrition.fiber * 4 },
-          { name: "Calories", value: selectedFood.nutrition.calories, unit: "kcal", dailyValue: Math.round(selectedFood.nutrition.calories / 20) }
-        ],
-        totalNutrition: selectedFood.nutrition,
-        imageUrl: "https://example.com/food-image.jpg",
-        message: `Recognized: ${selectedFood.name} (AI unavailable - using food database)`
-      };
-      
-      res.json(fallbackResponse);
+      // Return error response instead of hardcoded fallback
+      res.status(500).json({
+        success: false,
+        error: 'AI analysis failed',
+        message: 'Unable to analyze food image. Please try again or contact support.',
+        details: aiError.message
+      });
     }
     
   } catch (error) {
