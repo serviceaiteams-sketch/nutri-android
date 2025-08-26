@@ -1888,6 +1888,23 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'API is working!' });
 });
 
+// Test food recommendations endpoint
+app.get('/api/test-food', (req, res) => {
+  res.json({ 
+    message: 'Food recommendations test endpoint',
+    recommendations: [
+      {
+        food: "Test Oatmeal",
+        reason: "Test reason",
+        category: "Breakfast",
+        priority: "HIGH",
+        calories: 320
+      }
+    ],
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Delete meal endpoint
 app.delete('/api/meals/:mealId', (req, res) => {
   try {
