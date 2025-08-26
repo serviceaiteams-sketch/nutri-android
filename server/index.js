@@ -1368,7 +1368,7 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
      console.error('❌ Error in food recommendations:', error);
      console.log('🔄 Final fallback to mock data due to error...');
      
-     // Final fallback - always return mock data
+     // Final fallback - always return mock data with 200 status
      const finalMockRecommendations = {
        recommendations: [
          {
