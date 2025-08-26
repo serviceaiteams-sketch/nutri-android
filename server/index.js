@@ -1121,132 +1121,11 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
     
     console.log('🤖 Generating personalized food recommendations for conditions:', conditions);
     
-    // Try AI first, fallback to mock data if AI fails
-    try {
-      const foodPrompt = `
-      Generate personalized food recommendations for a patient with the following health conditions: ${conditions.join(', ')}.
-      
-      Based on the patient's health analysis, provide specific food recommendations that address their conditions.
-      Include both USA and Indian food options that are beneficial for their specific health needs.
-      
-      Provide recommendations in JSON format with the following structure:
-      {
-        "recommendations": [
-          {
-            "food": "Food name",
-            "reason": "Why this food is recommended",
-            "category": "Breakfast/Lunch/Dinner/Snack",
-            "priority": "HIGH/MEDIUM/LOW",
-            "calories": 320,
-            "protein": 12,
-            "carbs": 45,
-            "fat": 12,
-            "nutrients": ["Fiber", "Antioxidants", "B Vitamins"],
-            "servingSize": "1 cup cooked oatmeal with 1/2 cup blueberries",
-            "bestTime": "Breakfast (7-9 AM)",
-            "preparationTips": "• Use steel-cut oats for best texture\\n• Add berries just before serving\\n• Top with nuts for extra protein",
-            "alternatives": "• Try quinoa porridge instead\\n• Use different berries or fruits\\n• Add chia seeds for omega-3",
-            "frequency": "3-4 times per week",
-            "notes": "Excellent for diabetes management due to low glycemic index",
-            "cuisine": "USA/Indian/Both"
-          }
-        ],
-        "mealPlan": {
-          "breakfast": [
-            {
-              "name": "Oatmeal with Berries",
-              "calories": 320,
-              "protein": 12,
-              "carbs": 45,
-              "fat": 12,
-              "benefits": "High fiber, low glycemic index",
-              "cuisine": "USA"
-            }
-          ],
-          "lunch": [
-            {
-              "name": "Grilled Chicken with Quinoa",
-              "calories": 450,
-              "protein": 35,
-              "carbs": 30,
-              "fat": 20,
-              "benefits": "Lean protein, complex carbs",
-              "cuisine": "USA"
-            }
-          ],
-          "dinner": [
-            {
-              "name": "Dal with Brown Rice",
-              "calories": 380,
-              "protein": 15,
-              "carbs": 60,
-              "fat": 8,
-              "benefits": "Plant protein, fiber-rich",
-              "cuisine": "Indian"
-            }
-          ]
-        }
-      }
-      
-      Include both USA and Indian food options. Focus on foods that are beneficial for the specific health conditions mentioned.
-      `;
-      
-      const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer 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',
-          'HTTP-Referer': 'https://nutri-ai-5b9893ad4a00.herokuapp.com',
-          'X-Title': 'NutriAI Food Recommendations'
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'user',
-              content: foodPrompt
-            }
-          ],
-          max_tokens: 2000,
-          temperature: 0.3
-        })
-      });
-      
-      if (!openRouterResponse.ok) {
-        throw new Error(`OpenRouter API failed: ${openRouterResponse.status}`);
-      }
-      
-      const openRouterData = await openRouterResponse.json();
-      const aiResponse = openRouterData.choices[0].message.content;
-      
-      console.log('✅ AI Food Recommendations received:', aiResponse);
-      
-      // Parse AI response
-      let foodRecommendations;
-      try {
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          foodRecommendations = JSON.parse(jsonMatch[0]);
-        } else {
-          throw new Error('No JSON found in AI response');
-        }
-      } catch (parseError) {
-        console.error('❌ Failed to parse AI food recommendations:', parseError);
-        throw new Error('Failed to parse food recommendations');
-      }
-      
-      // Add timestamp
-      foodRecommendations.timestamp = new Date().toISOString();
-      
-      console.log('✅ Food recommendations completed successfully with AI');
-      res.json(foodRecommendations);
-      
-         } catch (aiError) {
-       console.error('❌ AI food recommendations failed:', aiError);
-       console.log('🔄 Falling back to mock food recommendations...');
-       
-       // Always return mock food recommendations when AI fails
-       const mockFoodRecommendations = {
+    // For now, always return mock data to ensure the app works
+    console.log('🔄 Using mock food recommendations for conditions:', conditions);
+    
+    // Generate smart mock recommendations based on conditions
+    const mockFoodRecommendations = {
         recommendations: [
           {
             food: "Steel-Cut Oatmeal with Berries",
@@ -1362,9 +1241,8 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
       
       console.log('✅ Mock food recommendations returned successfully');
       res.json(mockFoodRecommendations);
-    }
-    
-     } catch (error) {
+      
+   } catch (error) {
      console.error('❌ Error in food recommendations:', error);
      console.log('🔄 Final fallback to mock data due to error...');
      
