@@ -671,14 +671,38 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 // Real AI-powered health analysis endpoint
-app.post('/api/health-analysis/upload-reports', async (req, res) => {
+app.post('/api/health-analysis/upload-reports', upload.array('reports', 10), async (req, res) => {
   try {
     console.log('📄 Received health report upload request - MOCK VERSION');
     console.log('📄 Request body:', JSON.stringify(req.body, null, 2));
+    console.log('📄 Files uploaded:', req.files ? req.files.length : 0);
     
-    // Extract report content from request
-    const reportContent = req.body.reportContent || req.body.content || "Health report data";
-    const patientInfo = req.body.patientInfo || {};
+    // Extract report content from request (handle both JSON and multipart)
+    let reportContent = "Health report data";
+    let patientInfo = {};
+    let healthConditions = [];
+    
+    if (req.body.reportContent) {
+      reportContent = req.body.reportContent;
+    } else if (req.body.content) {
+      reportContent = req.body.content;
+    }
+    
+    if (req.body.patientInfo) {
+      try {
+        patientInfo = JSON.parse(req.body.patientInfo);
+      } catch (e) {
+        patientInfo = req.body.patientInfo;
+      }
+    }
+    
+    if (req.body.healthConditions) {
+      try {
+        healthConditions = JSON.parse(req.body.healthConditions);
+      } catch (e) {
+        healthConditions = req.body.healthConditions;
+      }
+    }
     
     console.log('🔍 Report content length:', reportContent.length);
     console.log('🔍 Patient info:', JSON.stringify(patientInfo, null, 2));
