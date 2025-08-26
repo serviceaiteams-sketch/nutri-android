@@ -811,11 +811,17 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
 });
 
 // Dashboard endpoint
-app.get('/api/analytics/dashboard', (req, res) => {
+app.get('/api/analytics/dashboard', async (req, res) => {
   try {
     console.log('📊 Received dashboard request');
+    const userId = req.headers.authorization || 'default_user';
     
-    const mockDashboard = {
+    // Get stored analysis for the user
+    const storedAnalysis = userAnalysisResults.get(userId);
+    const userInfo = uploadedReports.get(userId);
+    
+    // Calculate real dashboard data based on stored information
+    const dashboard = {
       user: {
         name: "User",
         streak: 7,
@@ -882,14 +888,31 @@ app.get('/api/analytics/dashboard', (req, res) => {
         carbs: [220, 240, 260, 200, 235, 210, 150],
         fat: [55, 62, 68, 48, 60, 52, 40]
       },
-      recommendations: [
-        "Try to increase your protein intake",
-        "Great job on staying hydrated!",
-        "Consider adding more vegetables to your meals"
-      ]
+      recommendations: storedAnalysis ? [
+        storedAnalysis.recommendations?.[0]?.recommendation || "Monitor your health metrics regularly",
+        storedAnalysis.recommendations?.[1]?.recommendation || "Maintain a balanced diet",
+        storedAnalysis.recommendations?.[2]?.recommendation || "Stay active and exercise regularly"
+      ] : [
+        "Upload health reports for personalized recommendations",
+        "Track your meals to monitor nutrition",
+        "Stay consistent with your health goals"
+      ],
+      healthScore: storedAnalysis?.healthScore || 75,
+      detectedConditions: storedAnalysis?.detectedConditions || [],
+      analysisTimestamp: storedAnalysis?.timestamp || null
     };
     
-    res.json(mockDashboard);
+    // Update stats based on stored analysis if available
+    if (storedAnalysis && storedAnalysis.keyMetrics) {
+      // Use real health metrics to adjust recommendations
+      const bloodSugar = storedAnalysis.keyMetrics["Blood Sugar"];
+      if (bloodSugar && bloodSugar.status === "warning") {
+        dashboard.recommendations.unshift("Monitor blood sugar levels closely");
+      }
+    }
+    
+    console.log('✅ Dashboard data prepared with', storedAnalysis ? 'real' : 'default', 'analysis');
+    res.json(dashboard);
   } catch (error) {
     console.error('❌ Error in dashboard:', error);
     res.status(500).json({ error: 'Dashboard failed' });
@@ -975,112 +998,190 @@ app.put('/api/users/profile', (req, res) => {
   }
 });
 
-// Food recognition endpoint
-app.post('/api/ai/recognize-food', (req, res) => {
+// Food recognition endpoint with real AI
+app.post('/api/ai/recognize-food', async (req, res) => {
   try {
     console.log('🍎 Received food recognition request');
     console.log('🍎 Request body:', JSON.stringify(req.body, null, 2));
     
     // Extract image data or food description from request
     const imageData = req.body.image || req.body.imageData;
-    const foodDescription = req.body.description || req.body.foodDescription || "Healthy food bowl";
+    const foodDescription = req.body.description || req.body.foodDescription || "Healthy food bowl with vegetables and protein";
     
     console.log('🍎 Food description:', foodDescription);
+    console.log('🤖 Using OpenRouter AI for food recognition...');
     
-    // Return response in the format expected by Android app
-    const foodRecognitionResponse = {
-      success: true,
-      recognizedFoods: [
-        {
-          name: "Healthy Protein Bowl with Mixed Vegetables",
-          confidence: 0.95,
-          quantity: 1.0,
-          unit: "bowl",
-          description: "A nutritious bowl containing grilled chicken, mixed vegetables, quinoa, and healthy toppings",
-          nutrition: {
-            calories: 320,
-            protein: 25,
-            carbs: 45,
-            fat: 12,
-            fiber: 8,
-            sugar: 15,
-            sodium: 200
-          },
-          serving_size: "1 bowl (approximately 2 cups)",
-          health_score: 85
-        },
-        {
-          name: "Grilled Chicken Breast",
-          confidence: 0.92,
-          quantity: 0.5,
-          unit: "piece",
-          description: "Lean grilled chicken breast, high in protein",
-          nutrition: {
-            calories: 165,
-            protein: 31,
-            carbs: 0,
-            fat: 3.6,
-            fiber: 0,
-            sugar: 0,
-            sodium: 74
-          },
-          serving_size: "1 piece (3 oz)",
-          health_score: 90
-        },
-        {
-          name: "Mixed Vegetables",
-          confidence: 0.88,
-          quantity: 1.0,
-          unit: "cup",
-          description: "Assorted fresh vegetables including broccoli, carrots, and tomatoes",
-          nutrition: {
-            calories: 55,
-            protein: 3,
-            carbs: 12,
-            fat: 0.5,
-            fiber: 4,
-            sugar: 6,
-            sodium: 45
-          },
-          serving_size: "1 cup",
-          health_score: 95
+    // Call OpenRouter AI for food recognition
+    try {
+      const foodPrompt = `
+      Analyze this food/meal and provide detailed nutritional information.
+      
+      FOOD DESCRIPTION: ${foodDescription}
+      
+      Provide a comprehensive analysis in JSON format. Identify individual food items and their nutritional content.
+      Return ONLY valid JSON with this exact structure:
+      {
+        "recognizedFoods": [
+          {
+            "name": "Food item name",
+            "confidence": 0.95,
+            "quantity": 1.0,
+            "unit": "serving/cup/piece/bowl",
+            "description": "Brief description",
+            "nutrition": {
+              "calories": 200,
+              "protein": 20,
+              "carbs": 30,
+              "fat": 10,
+              "fiber": 5,
+              "sugar": 10,
+              "sodium": 200
+            },
+            "serving_size": "1 cup (240g)",
+            "health_score": 85
+          }
+        ],
+        "totalNutrition": {
+          "calories": 500,
+          "protein": 40,
+          "carbs": 60,
+          "fat": 20,
+          "fiber": 10,
+          "sugar": 15,
+          "sodium": 400
         }
-      ],
-      nutritionData: [
-        {
-          name: "Protein",
-          value: 59,
-          unit: "g",
-          dailyValue: 118
+      }
+      
+      Focus on accuracy and include both USA and Indian food items if relevant.
+      `;
+      
+      console.log('🤖 Calling OpenRouter API for food recognition...');
+      
+      const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer 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',
+          'HTTP-Referer': 'https://nutri-ai-5b9893ad4a00.herokuapp.com',
+          'X-Title': 'NutriAI Food Recognition'
         },
-        {
-          name: "Fiber",
-          value: 12,
-          unit: "g",
-          dailyValue: 48
-        },
-        {
-          name: "Vitamin C",
-          value: 45,
-          unit: "mg",
-          dailyValue: 75
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'user',
+              content: foodPrompt
+            }
+          ],
+          max_tokens: 1500,
+          temperature: 0.3
+        })
+      });
+      
+      if (!openRouterResponse.ok) {
+        const errorText = await openRouterResponse.text();
+        console.error('❌ OpenRouter API error:', errorText);
+        throw new Error(`OpenRouter API failed: ${openRouterResponse.status}`);
+      }
+      
+      const openRouterData = await openRouterResponse.json();
+      const aiResponse = openRouterData.choices[0].message.content;
+      
+      console.log('✅ AI Response received');
+      
+      // Parse AI response
+      let foodAnalysis;
+      try {
+        // Extract JSON from the response
+        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          foodAnalysis = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error('No JSON found in AI response');
         }
-      ],
-      totalNutrition: {
-        calories: 540,
-        protein: 59,
-        carbs: 57,
-        fat: 16.1,
-        fiber: 12,
-        sugar: 21,
-        sodium: 319
-      },
-      imageUrl: "https://example.com/food-image.jpg",
-      message: "Successfully recognized 3 food items in your meal"
-    };
-    
-    console.log('✅ Food recognition completed successfully');
-    res.json(foodRecognitionResponse);
+      } catch (parseError) {
+        console.error('❌ Failed to parse AI response:', parseError);
+        throw new Error('Failed to parse AI food analysis');
+      }
+      
+      // Build response in Android app format
+      const foodRecognitionResponse = {
+        success: true,
+        recognizedFoods: foodAnalysis.recognizedFoods || [],
+        nutritionData: [
+          {
+            name: "Protein",
+            value: foodAnalysis.totalNutrition?.protein || 0,
+            unit: "g",
+            dailyValue: Math.round((foodAnalysis.totalNutrition?.protein || 0) * 2)
+          },
+          {
+            name: "Fiber",
+            value: foodAnalysis.totalNutrition?.fiber || 0,
+            unit: "g",
+            dailyValue: Math.round((foodAnalysis.totalNutrition?.fiber || 0) * 4)
+          },
+          {
+            name: "Calories",
+            value: foodAnalysis.totalNutrition?.calories || 0,
+            unit: "kcal",
+            dailyValue: Math.round((foodAnalysis.totalNutrition?.calories || 0) / 20)
+          }
+        ],
+        totalNutrition: foodAnalysis.totalNutrition || {},
+        imageUrl: "https://example.com/food-image.jpg",
+        message: `Successfully recognized ${foodAnalysis.recognizedFoods?.length || 0} food items using AI`
+      };
+      
+      console.log('✅ Food recognition completed successfully with AI');
+      res.json(foodRecognitionResponse);
+      
+    } catch (aiError) {
+      console.error('❌ AI food recognition failed:', aiError);
+      
+      // Fallback response
+      const fallbackResponse = {
+        success: true,
+        recognizedFoods: [
+          {
+            name: "Mixed Food Bowl",
+            confidence: 0.75,
+            quantity: 1.0,
+            unit: "bowl",
+            description: "Unable to analyze with AI - generic healthy meal",
+            nutrition: {
+              calories: 400,
+              protein: 25,
+              carbs: 50,
+              fat: 15,
+              fiber: 8,
+              sugar: 12,
+              sodium: 300
+            },
+            serving_size: "1 bowl",
+            health_score: 75
+          }
+        ],
+        nutritionData: [
+          { name: "Protein", value: 25, unit: "g", dailyValue: 50 },
+          { name: "Fiber", value: 8, unit: "g", dailyValue: 32 },
+          { name: "Calories", value: 400, unit: "kcal", dailyValue: 20 }
+        ],
+        totalNutrition: {
+          calories: 400,
+          protein: 25,
+          carbs: 50,
+          fat: 15,
+          fiber: 8,
+          sugar: 12,
+          sodium: 300
+        },
+        imageUrl: "https://example.com/food-image.jpg",
+        message: "Food recognition completed (AI unavailable - using estimates)"
+      };
+      
+      res.json(fallbackResponse);
+    }
     
   } catch (error) {
     console.error('❌ Error in food recognition:', error);
@@ -1121,47 +1222,95 @@ app.get('/api/meals/daily/:date', (req, res) => {
   try {
     console.log('📅 Received daily meals request for:', req.params.date);
     
-    const mockDailyMeals = {
-      date: req.params.date,
+    // Return in Android app format (MealHistoryResponse)
+    const mealHistoryResponse = {
       meals: [
         {
           id: 1,
-          name: "Oatmeal with Berries",
-          calories: 320,
-          protein: 12,
-          carbs: 45,
-          fat: 12,
-          time: "08:30",
-          type: "breakfast"
+          meal_type: "breakfast",
+          food_items: [
+            {
+              id: 1,
+              food_name: "Oatmeal with Berries",
+              quantity: 1,
+              unit: "bowl",
+              calories: 320,
+              protein: 12,
+              carbs: 45,
+              fat: 12,
+              fiber: 8,
+              sugar: 15,
+              sodium: 100
+            }
+          ],
+          total_calories: 320,
+          total_protein: 12,
+          total_carbs: 45,
+          total_fat: 12,
+          created_at: new Date().toISOString(),
+          image_url: null
         },
         {
           id: 2,
-          name: "Grilled Chicken Salad",
-          calories: 450,
-          protein: 35,
-          carbs: 15,
-          fat: 25,
-          time: "12:30",
-          type: "lunch"
+          meal_type: "lunch",
+          food_items: [
+            {
+              id: 2,
+              food_name: "Grilled Chicken Salad",
+              quantity: 1,
+              unit: "plate",
+              calories: 450,
+              protein: 35,
+              carbs: 15,
+              fat: 25,
+              fiber: 5,
+              sugar: 8,
+              sodium: 300
+            }
+          ],
+          total_calories: 450,
+          total_protein: 35,
+          total_carbs: 15,
+          total_fat: 25,
+          created_at: new Date().toISOString(),
+          image_url: null
         },
         {
           id: 3,
-          name: "Greek Yogurt with Nuts",
-          calories: 280,
-          protein: 18,
-          carbs: 25,
-          fat: 15,
-          time: "15:00",
-          type: "snack"
+          meal_type: "snack",
+          food_items: [
+            {
+              id: 3,
+              food_name: "Greek Yogurt with Nuts",
+              quantity: 1,
+              unit: "cup",
+              calories: 280,
+              protein: 18,
+              carbs: 25,
+              fat: 15,
+              fiber: 3,
+              sugar: 12,
+              sodium: 50
+            }
+          ],
+          total_calories: 280,
+          total_protein: 18,
+          total_carbs: 25,
+          total_fat: 15,
+          created_at: new Date().toISOString(),
+          image_url: null
         }
       ],
-      totalCalories: 1050,
-      totalProtein: 65,
-      totalCarbs: 85,
-      totalFat: 52
+      dailySummary: {
+        totalCalories: 1050,
+        totalProtein: 65,
+        totalCarbs: 85,
+        totalFat: 52,
+        mealCount: 3
+      }
     };
     
-    res.json(mockDailyMeals);
+    res.json(mealHistoryResponse);
   } catch (error) {
     console.error('❌ Error in daily meals:', error);
     res.status(500).json({ error: 'Daily meals failed' });
