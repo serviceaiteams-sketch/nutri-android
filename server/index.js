@@ -1121,7 +1121,7 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
     
     console.log('🤖 Generating personalized food recommendations for conditions:', conditions);
     
-    // For now, always return mock data to ensure the app works
+    // For now, always return mock data to ensure the app works - UPDATED
     console.log('🔄 Using mock food recommendations for conditions:', conditions);
     
     // Generate smart mock recommendations based on conditions
