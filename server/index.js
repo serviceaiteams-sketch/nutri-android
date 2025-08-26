@@ -771,20 +771,106 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
      analysisResult.timestamp = new Date().toISOString();
      analysisResult.analysisId = `analysis_${Date.now()}`;
      
-           // Generate food recommendations based on the analysis
-      console.log('🍎 Generating food recommendations based on analysis...');
-      try {
-        const foodRecommendations = await generateFoodRecommendations(analysisResult);
-        analysisResult.foodRecommendations = foodRecommendations;
-        console.log('✅ Food recommendations added to analysis');
-      } catch (foodError) {
-        console.error('❌ Error generating food recommendations:', foodError);
-        // Generate fallback food recommendations
-        console.log('🔄 Using fallback food recommendations...');
-        const fallbackRecommendations = generateSmartFoodRecommendations(['diabetes', 'high_blood_pressure']);
-        analysisResult.foodRecommendations = fallbackRecommendations;
-        console.log('✅ Fallback food recommendations added to analysis');
-      }
+           // Generate mock food recommendations based on the analysis
+      console.log('🍎 Generating mock food recommendations based on analysis...');
+      const mockFoodRecommendations = {
+        recommendations: [
+          {
+            food: "Steel-Cut Oatmeal with Berries",
+            reason: "Low glycemic index, high fiber content helps regulate blood sugar levels",
+            category: "Breakfast",
+            priority: "HIGH",
+            calories: 320,
+            protein: 12,
+            carbs: 45,
+            fat: 12,
+            nutrients: ["Fiber", "Antioxidants", "B Vitamins"],
+            servingSize: "1 cup cooked oatmeal with 1/2 cup mixed berries",
+            bestTime: "Breakfast (7-9 AM)",
+            preparationTips: "• Use steel-cut oats for best texture\n• Add berries just before serving\n• Top with nuts for extra protein",
+            alternatives: "• Try quinoa porridge instead\n• Use different berries or fruits\n• Add chia seeds for omega-3",
+            frequency: "3-4 times per week",
+            notes: "Excellent for diabetes management due to low glycemic index",
+            cuisine: "USA"
+          },
+          {
+            food: "Grilled Salmon with Quinoa",
+            reason: "Omega-3 fatty acids help reduce inflammation and improve insulin sensitivity",
+            category: "Lunch",
+            priority: "HIGH",
+            calories: 450,
+            protein: 35,
+            carbs: 30,
+            fat: 20,
+            nutrients: ["Omega-3", "Protein", "Fiber"],
+            servingSize: "4 oz salmon with 1/2 cup quinoa",
+            bestTime: "Lunch (12-2 PM)",
+            preparationTips: "• Grill salmon for 4-5 minutes per side\n• Season with herbs and lemon\n• Serve with steamed vegetables",
+            alternatives: "• Try mackerel or sardines\n• Substitute with tofu for vegetarian option\n• Use brown rice instead of quinoa",
+            frequency: "2-3 times per week",
+            notes: "Rich in omega-3 fatty acids beneficial for heart health",
+            cuisine: "USA"
+          },
+          {
+            food: "Dal with Brown Rice",
+            reason: "Plant protein and complex carbs provide sustained energy without blood sugar spikes",
+            category: "Dinner",
+            priority: "MEDIUM",
+            calories: 380,
+            protein: 15,
+            carbs: 60,
+            fat: 8,
+            nutrients: ["Plant Protein", "Fiber", "Iron"],
+            servingSize: "1 cup dal with 1/2 cup brown rice",
+            bestTime: "Dinner (7-9 PM)",
+            preparationTips: "• Soak dal for 2 hours before cooking\n• Add turmeric and cumin for flavor\n• Serve with fresh coriander",
+            alternatives: "• Try different types of lentils\n• Add vegetables for more nutrition\n• Use quinoa instead of rice",
+            frequency: "2-3 times per week",
+            notes: "Traditional Indian food excellent for diabetes management",
+            cuisine: "Indian"
+          }
+        ],
+        mealPlan: {
+          breakfast: [
+            {
+              name: "Steel-Cut Oatmeal with Berries",
+              calories: 320,
+              protein: 12,
+              carbs: 45,
+              fat: 12,
+              benefits: "Low glycemic index, high fiber",
+              cuisine: "USA"
+            }
+          ],
+          lunch: [
+            {
+              name: "Grilled Salmon with Quinoa",
+              calories: 450,
+              protein: 35,
+              carbs: 30,
+              fat: 20,
+              benefits: "Omega-3 fatty acids, lean protein",
+              cuisine: "USA"
+            }
+          ],
+          dinner: [
+            {
+              name: "Dal with Brown Rice",
+              calories: 380,
+              protein: 15,
+              carbs: 60,
+              fat: 8,
+              benefits: "Plant protein, complex carbs",
+              cuisine: "Indian"
+            }
+          ]
+        },
+        timestamp: new Date().toISOString(),
+        source: "mock_data"
+      };
+      
+      analysisResult.foodRecommendations = mockFoodRecommendations;
+      console.log('✅ Mock food recommendations added to analysis');
      
      // Store the analysis result for later retrieval
      const userId = req.headers.authorization || 'default_user';
