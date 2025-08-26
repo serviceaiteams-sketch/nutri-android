@@ -20,13 +20,7 @@ app.get('/', (req, res) => {
     endpoints: {
       health: '/api/health',
       healthAnalysis: '/api/health-analysis/upload-reports',
-      foodRecommendations: '/api/health-analysis/food-recommendations',
-      dashboard: '/api/analytics/dashboard',
-      userProfile: '/api/user/profile',
-      foodRecognition: '/api/ai/recognize-food',
-      mealLogging: '/api/meals/log',
-      dailyMeals: '/api/meals/daily/:date',
-      healthConditions: '/api/health-analysis/conditions'
+      foodRecommendations: '/api/health-analysis/food-recommendations'
     },
     description: 'AI-powered health analysis and nutrition recommendations'
   });
@@ -36,7 +30,7 @@ app.get('/', (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'NutriAI Server is running',
+    message: 'NutriAI  Server is running',
     timestamp: new Date().toISOString(),
     version: '1.0.0'
   });
@@ -281,214 +275,285 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
     });
   }
 });
+          recommendations: [
+            {
+              food: "Oatmeal with blueberries",
+              reason: "Rich in fiber and antioxidants, helps reduce migraine frequency",
+              category: "Breakfast",
+              priority: "HIGH",
+              calories: 320,
+              protein: 12,
+              carbs: 45,
+              fat: 12,
+              nutrients: ["Fiber", "Antioxidants", "B Vitamins"],
+              servingSize: "1 cup cooked oatmeal with 1/2 cup blueberries",
+              bestTime: "Breakfast (7-9 AM)",
+              preparationTips: "• Use steel-cut oats for best texture\n• Add berries just before serving\n• Top with nuts for extra protein",
+              alternatives: "• Try quinoa porridge instead\n• Use different berries or fruits\n• Add chia seeds for omega-3",
+              frequency: "3-4 times per week",
+              notes: "Excellent for migraine prevention due to magnesium content"
+            },
+            {
+              food: "Greek yogurt with chia seeds",
+              reason: "High in protein and omega-3 fatty acids, supports overall health",
+              category: "Breakfast/Snack",
+              priority: "HIGH",
+              calories: 280,
+              protein: 18,
+              carbs: 25,
+              fat: 15,
+              nutrients: ["Protein", "Omega-3", "Calcium", "Probiotics"],
+              servingSize: "1 cup Greek yogurt with 1 tablespoon chia seeds",
+              bestTime: "Breakfast or afternoon snack",
+              preparationTips: "• Let chia seeds soak for 10 minutes\n• Add honey or maple syrup for sweetness\n• Top with fresh fruits",
+              alternatives: "• Try coconut yogurt for dairy-free option\n• Use flax seeds instead of chia\n• Add granola for crunch",
+              frequency: "3-4 times per week",
+              notes: "Great source of probiotics for gut health"
+            },
+            {
+              food: "Quinoa salad with spinach and chickpeas",
+              reason: "High in iron and magnesium, beneficial for migraine management",
+              category: "Lunch",
+              priority: "HIGH",
+              calories: 380,
+              protein: 15,
+              carbs: 55,
+              fat: 10,
+              nutrients: ["Iron", "Magnesium", "Fiber", "Complete Protein"],
+              servingSize: "1 cup quinoa, 1 cup spinach, 1/2 cup chickpeas",
+              bestTime: "Lunch (12-2 PM)",
+              preparationTips: "• Rinse quinoa thoroughly before cooking\n• Steam spinach lightly to preserve nutrients\n• Add lemon juice for iron absorption",
+              alternatives: "• Try farro or bulgur instead of quinoa\n• Use kale instead of spinach\n• Add grilled chicken for extra protein",
+              frequency: "2-3 times per week",
+              notes: "Iron from plant sources is better absorbed with vitamin C"
+            }
+          ],
+          mealPlan: {
+            breakfast: [
+              {
+                day: "Monday",
+                meal: "Oatmeal with berries and almonds",
+                nutrition: "High in fiber and antioxidants",
+                calories: 320,
+                protein: "12g",
+                carbs: "45g",
+                fat: "12g"
+              },
+              {
+                day: "Tuesday",
+                meal: "Greek yogurt with honey and walnuts",
+                nutrition: "Protein-rich with healthy fats",
+                calories: 280,
+                protein: "18g",
+                carbs: "25g",
+                fat: "15g"
+              }
+            ],
+            lunch: [
+              {
+                day: "Monday",
+                meal: "Grilled chicken salad with mixed greens",
+                nutrition: "Lean protein with vitamins",
+                calories: 380,
+                protein: "35g",
+                carbs: "15g",
+                fat: "18g"
+              },
+              {
+                day: "Tuesday",
+                meal: "Quinoa bowl with roasted vegetables",
+                nutrition: "Complete protein and fiber",
+                calories: 420,
+                protein: "15g",
+                carbs: "65g",
+                fat: "12g"
+              }
+            ],
+            dinner: [
+              {
+                day: "Monday",
+                meal: "Baked salmon with quinoa and vegetables",
+                nutrition: "Omega-3 fatty acids and complete protein",
+                calories: 450,
+                protein: "40g",
+                carbs: "35g",
+                fat: "22g"
+              },
+              {
+                day: "Tuesday",
+                meal: "Stir-fried tofu with brown rice",
+                nutrition: "Plant-based protein and whole grains",
+                calories: 380,
+                protein: "20g",
+                carbs: "55g",
+                fat: "12g"
+              }
+            ],
+            snacks: [
+              {
+                day: "Monday",
+                meal: "Apple slices with almond butter",
+                nutrition: "Fiber and healthy fats",
+                calories: 180,
+                protein: "4g",
+                carbs: "25g",
+                fat: "8g"
+              },
+              {
+                day: "Tuesday",
+                meal: "Mixed nuts and dried fruits",
+                nutrition: "Energy boost with minerals",
+                calories: 200,
+                protein: "6g",
+                carbs: "20g",
+                fat: "12g"
+              }
+            ]
+          },
+          weeklyNutrition: {
+            totalCalories: 1800,
+            averageProtein: "120g",
+            averageCarbs: "180g",
+            averageFat: "65g"
+          },
+          shoppingList: [
+            "Oatmeal", "Mixed berries", "Almonds", "Chicken breast", "Mixed greens",
+            "Salmon fillets", "Quinoa", "Vegetables", "Greek yogurt", "Honey",
+            "Walnuts", "Tofu", "Brown rice"
+          ]
+        },
+        nextSteps: [
+          "Schedule follow-up blood sugar test",
+          "Consult with healthcare provider",
+          "Implement dietary changes"
+        ]
+      };
+      
+      res.json(mockAnalysis);
+    }, 2000); // 2 second delay to simulate processing
+    
+  } catch (error) {
+    console.error('❌ Error in health analysis:', error);
+    res.status(500).json({ error: 'Analysis failed' });
+  }
+});
 
-// AI-powered food recommendations based on health conditions
-app.get('/api/health-analysis/food-recommendations', async (req, res) => {
+// Mock food recommendations endpoint
+app.get('/api/health-analysis/food-recommendations', (req, res) => {
   try {
     console.log('🍎 Received food recommendations request');
     
-    // Get health conditions from query params or use default
-    const conditions = req.query.conditions ? req.query.conditions.split(',') : ['diabetes', 'high_blood_pressure'];
-    
-    console.log('🤖 Generating personalized food recommendations with AI...');
-    
-    const foodPrompt = `
-    Generate personalized food recommendations for a patient with the following health conditions: ${conditions.join(', ')}.
-    
-    Provide recommendations in JSON format with the following structure:
-    {
-      "recommendations": [
-        {
-          "food": "Food name",
-          "reason": "Why this food is recommended",
-          "category": "Breakfast/Lunch/Dinner/Snack",
-          "priority": "HIGH/MEDIUM/LOW",
-          "calories": 320,
-          "protein": 12,
-          "carbs": 45,
-          "fat": 12,
-          "nutrients": ["Fiber", "Antioxidants", "B Vitamins"],
-          "servingSize": "1 cup cooked oatmeal with 1/2 cup blueberries",
-          "bestTime": "Breakfast (7-9 AM)",
-          "preparationTips": "• Use steel-cut oats for best texture\\n• Add berries just before serving\\n• Top with nuts for extra protein",
-          "alternatives": "• Try quinoa porridge instead\\n• Use different berries or fruits\\n• Add chia seeds for omega-3",
-          "frequency": "3-4 times per week",
-          "notes": "Excellent for diabetes management due to low glycemic index",
-          "cuisine": "USA/Indian/Both"
-        }
-      ],
-      "mealPlan": {
-        "breakfast": [
-          {
-            "name": "Oatmeal with Berries",
-            "calories": 320,
-            "protein": 12,
-            "carbs": 45,
-            "fat": 12,
-            "benefits": "High fiber, low glycemic index",
-            "cuisine": "USA"
-          }
-        ],
-        "lunch": [
-          {
-            "name": "Grilled Chicken with Quinoa",
-            "calories": 450,
-            "protein": 35,
-            "carbs": 30,
-            "fat": 20,
-            "benefits": "Lean protein, complex carbs",
-            "cuisine": "USA"
-          }
-        ],
-        "dinner": [
-          {
-            "name": "Dal with Brown Rice",
-            "calories": 380,
-            "protein": 15,
-            "carbs": 60,
-            "fat": 8,
-            "benefits": "Plant protein, fiber-rich",
-            "cuisine": "Indian"
-          }
-        ]
-      }
-    }
-    
-    Include both USA and Indian food options. Focus on foods that are beneficial for the specific health conditions mentioned.
-    `;
-    
-    const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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',
-        'HTTP-Referer': 'https://nutri-ai-5b9893ad4a00.herokuapp.com',
-        'X-Title': 'NutriAI Food Recommendations'
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'user',
-            content: foodPrompt
-          }
-        ],
-        max_tokens: 2000,
-        temperature: 0.3
-      })
-    });
-    
-    if (!openRouterResponse.ok) {
-      throw new Error(`OpenRouter API failed: ${openRouterResponse.status}`);
-    }
-    
-    const openRouterData = await openRouterResponse.json();
-    const aiResponse = openRouterData.choices[0].message.content;
-    
-    console.log('✅ AI Food Recommendations received:', aiResponse);
-    
-    // Parse AI response
-    let foodRecommendations;
-    try {
-      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        foodRecommendations = JSON.parse(jsonMatch[0]);
-      } else {
-        throw new Error('No JSON found in AI response');
-      }
-    } catch (parseError) {
-      console.error('❌ Failed to parse AI food recommendations:', parseError);
-      // Fallback to mock data
-      foodRecommendations = {
+    const mockRecommendations = {
+      success: true,
+      recommendations: {
         recommendations: [
           {
-            food: "Oatmeal with blueberries",
-            reason: "Rich in fiber and antioxidants, helps reduce blood sugar spikes",
-            category: "Breakfast",
+            food: "Leafy green vegetables",
+            reason: "Rich in vitamins and minerals",
+            category: "Vegetables",
             priority: "HIGH",
-            calories: 320,
-            protein: 12,
-            carbs: 45,
-            fat: 12,
-            nutrients: ["Fiber", "Antioxidants", "B Vitamins"],
-            servingSize: "1 cup cooked oatmeal with 1/2 cup blueberries",
-            bestTime: "Breakfast (7-9 AM)",
-            preparationTips: "• Use steel-cut oats for best texture\n• Add berries just before serving\n• Top with nuts for extra protein",
-            alternatives: "• Try quinoa porridge instead\n• Use different berries or fruits\n• Add chia seeds for omega-3",
-            frequency: "3-4 times per week",
-            notes: "Excellent for diabetes management due to low glycemic index",
-            cuisine: "USA"
+            calories: 45,
+            protein: 3,
+            carbs: 8,
+            fat: 0,
+            nutrients: ["Vitamin A", "Vitamin C", "Iron", "Fiber"],
+            servingSize: "2-3 cups",
+            bestTime: "Lunch or Dinner",
+            preparationTips: "• Steam lightly to preserve nutrients\n• Add olive oil for better absorption\n• Season with herbs and spices",
+            alternatives: "• Try different colored vegetables\n• Mix raw and cooked varieties",
+            frequency: "Daily",
+            notes: null
           },
           {
-            food: "Dal with Brown Rice",
-            reason: "High in plant protein and fiber, good for blood pressure management",
-            category: "Dinner",
+            food: "Lean proteins (chicken, fish, beans)",
+            reason: "Essential for muscle maintenance",
+            category: "Protein",
             priority: "HIGH",
-            calories: 380,
-            protein: 15,
-            carbs: 60,
+            calories: 180,
+            protein: 25,
+            carbs: 0,
             fat: 8,
-            nutrients: ["Protein", "Fiber", "Iron", "Folate"],
-            servingSize: "1 cup dal with 1/2 cup brown rice",
-            bestTime: "Dinner (7-8 PM)",
-            preparationTips: "• Soak dal for 2 hours before cooking\n• Add turmeric for anti-inflammatory benefits\n• Use minimal oil",
-            alternatives: "• Try moong dal instead of toor dal\n• Add vegetables for extra nutrition\n• Use quinoa instead of rice",
-            frequency: "2-3 times per week",
-            notes: "Traditional Indian food that's excellent for heart health",
-            cuisine: "Indian"
+            nutrients: ["Protein", "B vitamins", "Iron"],
+            servingSize: "3-4 oz per meal",
+            bestTime: "Lunch or Dinner",
+            preparationTips: "• Grill or bake for healthier cooking\n• Marinate for flavor without extra calories\n• Use herbs instead of heavy sauces",
+            alternatives: "• Try different protein sources\n• Include plant-based options",
+            frequency: "Daily",
+            notes: null
+          },
+          {
+            food: "Whole grains (brown rice, quinoa, oats)",
+            reason: "Complex carbohydrates and fiber",
+            category: "Grains",
+            priority: "MEDIUM",
+            calories: 150,
+            protein: 5,
+            carbs: 30,
+            fat: 2,
+            nutrients: ["Fiber", "B vitamins", "Minerals"],
+            servingSize: "1/2 cup cooked",
+            bestTime: "Breakfast or as side dish",
+            preparationTips: "• Cook in broth for extra flavor\n• Add vegetables for nutrition\n• Use as base for bowls",
+            alternatives: "• Try different grain varieties\n• Mix grains for variety",
+            frequency: "Daily",
+            notes: null
           }
         ],
         mealPlan: {
           breakfast: [
             {
-              name: "Oatmeal with Berries",
+              day: "Monday",
+              meal: "Oatmeal with berries and nuts",
+              nutrition: "High in fiber and antioxidants",
               calories: 320,
-              protein: 12,
-              carbs: 45,
-              fat: 12,
-              benefits: "High fiber, low glycemic index",
-              cuisine: "USA"
+              protein: "12g",
+              carbs: "45g",
+              fat: "12g"
             }
           ],
           lunch: [
             {
-              name: "Grilled Chicken with Quinoa",
-              calories: 450,
-              protein: 35,
-              carbs: 30,
-              fat: 20,
-              benefits: "Lean protein, complex carbs",
-              cuisine: "USA"
+              day: "Monday",
+              meal: "Quinoa salad with vegetables",
+              nutrition: "Complete protein and fiber",
+              calories: 380,
+              protein: "15g",
+              carbs: "55g",
+              fat: "10g"
             }
           ],
           dinner: [
             {
-              name: "Dal with Brown Rice",
-              calories: 380,
-              protein: 15,
-              carbs: 60,
-              fat: 8,
-              benefits: "Plant protein, fiber-rich",
-              cuisine: "Indian"
+              day: "Monday",
+              meal: "Grilled salmon with brown rice",
+              nutrition: "Omega-3 fatty acids and protein",
+              calories: 450,
+              protein: "35g",
+              carbs: "40g",
+              fat: "20g"
+            }
+          ],
+          snacks: [
+            {
+              day: "Monday",
+              meal: "Apple with almond butter",
+              nutrition: "Fiber and healthy fats",
+              calories: 200,
+              protein: "4g",
+              carbs: "25g",
+              fat: "8g"
             }
           ]
         }
-      };
-    }
+      },
+      note: "Using fallback recommendations due to AI service issue"
+    };
     
-    // Add timestamp
-    foodRecommendations.timestamp = new Date().toISOString();
-    
-    console.log('✅ Food recommendations completed successfully');
-    res.json(foodRecommendations);
+    res.json(mockRecommendations);
     
   } catch (error) {
     console.error('❌ Error in food recommendations:', error);
-    res.status(500).json({ 
-      error: 'Food recommendations failed',
-      message: error.message,
-      fallback: true
-    });
+    res.status(500).json({ error: 'Food recommendations failed' });
   }
 });
 
@@ -739,6 +804,11 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'API is working!' });
 });
 
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err);
@@ -746,7 +816,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 NutriAI Server running on port ${PORT}`);
+  console.log(`🚀 NutriAI Oracle Server running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
   console.log(`🔐 Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+}); 

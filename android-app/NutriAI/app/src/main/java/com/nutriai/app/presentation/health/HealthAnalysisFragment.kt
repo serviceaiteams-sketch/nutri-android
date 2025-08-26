@@ -127,6 +127,24 @@ class HealthAnalysisFragment : Fragment() {
             // Update report summary
             binding.tvReportSummary.text = analysis.reportSummary ?: "Analysis complete. Please review your health metrics below."
             
+            // Update analysis details
+            analysis.analysisDetails?.let { details ->
+                binding.tvReportsAnalyzed.text = details.reportsAnalyzed?.joinToString(", ") ?: "None"
+                binding.tvTotalTests.text = details.totalTests?.toString() ?: "0"
+                binding.tvAbnormalFindings.text = details.abnormalFindings?.toString() ?: "0"
+                binding.tvCriticalAlerts.text = details.criticalAlerts?.toString() ?: "0"
+                
+                // Show analysis details section
+                binding.cardAnalysisDetails.isVisible = true
+            } ?: run {
+                binding.cardAnalysisDetails.isVisible = false
+            }
+            
+            // Update timestamp
+            analysis.timestamp?.let { timestamp ->
+                binding.tvAnalysisTimestamp.text = "Analyzed on: ${timestamp.substring(0, 10)}"
+            }
+            
             // Update key metrics safely
             try {
                 analysis.keyMetrics?.let { metrics ->

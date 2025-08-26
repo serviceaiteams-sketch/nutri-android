@@ -74,7 +74,16 @@ data class HealthAnalysisResult(
     val foodRecommendations: FoodRecommendationsResponse? = null,
     
     @SerializedName("nextSteps")
-    val nextSteps: List<String>? = null
+    val nextSteps: List<String>? = null,
+    
+    @SerializedName("analysisDetails")
+    val analysisDetails: AnalysisDetails? = null,
+    
+    @SerializedName("timestamp")
+    val timestamp: String? = null,
+    
+    @SerializedName("analysisId")
+    val analysisId: String? = null
 )
 
 // Risk Factor
@@ -276,6 +285,21 @@ data class WeeklyNutrition(
     
     @SerializedName("averageFat")
     val averageFat: String? = null
+)
+
+// Analysis Details
+data class AnalysisDetails(
+    @SerializedName("reportsAnalyzed")
+    val reportsAnalyzed: List<String>? = null,
+    
+    @SerializedName("totalTests")
+    val totalTests: Int? = null,
+    
+    @SerializedName("abnormalFindings")
+    val abnormalFindings: Int? = null,
+    
+    @SerializedName("criticalAlerts")
+    val criticalAlerts: Int? = null
 )
 
 // Health Metric
