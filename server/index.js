@@ -28,7 +28,7 @@ app.post('/api/health-analysis/upload-reports', (req, res) => {
     // Simulate processing delay
     setTimeout(() => {
       const mockAnalysis = {
-        reportSummary: "Analysis completed successfully. Your health reports show normal ranges for most metrics with a few areas requiring attention.",
+        reportSummary: "Your health analysis reveals several important findings. Your blood sugar levels are slightly elevated, indicating a need for dietary monitoring. Most other metrics are within normal ranges, but there are specific areas that require attention and lifestyle modifications.",
         detectedConditions: [
           {
             name: "Borderline High Blood Sugar",
@@ -51,8 +51,26 @@ app.post('/api/health-analysis/upload-reports', (req, res) => {
             status: "warning",
             normalRange: "70-99 mg/dL"
           },
+          "Cholesterol": {
+            value: 180,
+            unit: "mg/dL",
+            status: "normal",
+            normalRange: "<200 mg/dL"
+          },
+          "Blood Pressure": {
+            value: 135,
+            unit: "mmHg",
+            status: "warning",
+            normalRange: "<120/80 mmHg"
+          },
+          "Hemoglobin A1C": {
+            value: 5.8,
+            unit: "%",
+            status: "normal",
+            normalRange: "4.5-5.9%"
+          },
           "Total Reports Analyzed": {
-            value: 58,
+            value: 61,
             unit: "count",
             status: "normal",
             normalRange: "1+"
@@ -62,7 +80,17 @@ app.post('/api/health-analysis/upload-reports', (req, res) => {
           {
             category: "medical",
             recommendation: "Monitor blood sugar levels regularly and consult with healthcare provider",
+            priority: "high"
+          },
+          {
+            category: "lifestyle",
+            recommendation: "Implement regular exercise routine to help manage blood sugar levels",
             priority: "medium"
+          },
+          {
+            category: "dietary",
+            recommendation: "Reduce intake of refined carbohydrates and increase fiber consumption",
+            priority: "high"
           }
         ],
         nutritionGuidance: {

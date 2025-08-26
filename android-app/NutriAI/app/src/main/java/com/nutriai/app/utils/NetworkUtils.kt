@@ -54,6 +54,12 @@ object NetworkUtils {
      * Get the appropriate base URL based on current environment
      */
     fun getBaseUrl(context: Context): String {
+        // Force using Heroku URL for now to test the detailed analysis
+        Log.d(TAG, "🚀 Using Heroku URL for testing: $PRODUCTION_BASE_URL")
+        return PRODUCTION_BASE_URL
+        
+        // Original logic (commented out for testing)
+        /*
         return if (isProductionBuild()) {
             PRODUCTION_BASE_URL
         } else {
@@ -83,6 +89,7 @@ object NetworkUtils {
             
             return defaultUrl
         }
+        */
     }
     
     /**
