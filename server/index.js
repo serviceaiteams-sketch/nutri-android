@@ -1885,7 +1885,7 @@ app.get('/api/health-analysis/conditions', (req, res) => {
 
 // Basic routes for testing
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working!' });
+  res.json({ message: 'API is working! - UPDATED VERSION' });
 });
 
 // Test food recommendations endpoint
