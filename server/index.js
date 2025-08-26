@@ -172,11 +172,7 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
       const fallbackAnalysis = {
         reportSummary: "Your health analysis reveals several important findings. Your blood sugar levels are slightly elevated, indicating a need for dietary monitoring. Most other metrics are within normal ranges, but there are specific areas that require attention and lifestyle modifications.",
         detectedConditions: [
-          {
-            name: "Borderline High Blood Sugar",
-            severity: "mild",
-            description: "Random blood sugar level of 125 mg/dL is slightly elevated"
-          }
+          "Borderline High Blood Sugar - Random blood sugar level of 125 mg/dL is slightly elevated (mild severity)"
         ],
         riskFactors: [
           {
@@ -237,28 +233,14 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
         ],
         nutritionGuidance: {
           foodsToAvoid: [
-            {
-              name: "Processed Foods",
-              reason: "Can trigger migraines and are often high in preservatives and additives.",
-              alternative: "Whole, unprocessed foods like fruits, vegetables, and whole grains."
-            }
+            "Processed Foods - Can trigger migraines and are often high in preservatives and additives. Alternative: Whole, unprocessed foods like fruits, vegetables, and whole grains."
           ],
           foodsToIncrease: [
-            {
-              name: "Oatmeal with Berries",
-              benefit: "High in fiber and antioxidants, helps reduce migraine symptoms.",
-              frequency: "3-4 times a week",
-              portion: "1 cup cooked oatmeal topped with 1/2 cup mixed berries"
-            }
+            "Oatmeal with Berries - High in fiber and antioxidants, helps reduce migraine symptoms. Frequency: 3-4 times a week. Portion: 1 cup cooked oatmeal topped with 1/2 cup mixed berries"
           ],
           mealPlanSuggestions: [],
           supplementRecommendations: [
-            {
-              name: "Magnesium",
-              benefit: "May help reduce the frequency of migraines.",
-              dosage: "400 mg daily",
-              note: "Consult with a healthcare provider before starting any new supplement."
-            }
+            "Magnesium - May help reduce the frequency of migraines. Dosage: 400 mg daily. Note: Consult with a healthcare provider before starting any new supplement."
           ]
         },
         analysisDetails: {
@@ -298,11 +280,7 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
       analysisResult = {
         reportSummary: "Your health analysis reveals several important findings. Your blood sugar levels are slightly elevated, indicating a need for dietary monitoring. Most other metrics are within normal ranges, but there are specific areas that require attention and lifestyle modifications.",
         detectedConditions: [
-          {
-            name: "Borderline High Blood Sugar",
-            severity: "mild",
-            description: "Random blood sugar level of 125 mg/dL is slightly elevated"
-          }
+          "Borderline High Blood Sugar - Random blood sugar level of 125 mg/dL is slightly elevated (mild severity)"
         ],
         riskFactors: [
           {
@@ -363,28 +341,14 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
         ],
         nutritionGuidance: {
           foodsToAvoid: [
-            {
-              name: "Processed Foods",
-              reason: "Can trigger migraines and are often high in preservatives and additives.",
-              alternative: "Whole, unprocessed foods like fruits, vegetables, and whole grains."
-            }
+            "Processed Foods - Can trigger migraines and are often high in preservatives and additives. Alternative: Whole, unprocessed foods like fruits, vegetables, and whole grains."
           ],
           foodsToIncrease: [
-            {
-              name: "Oatmeal with Berries",
-              benefit: "High in fiber and antioxidants, helps reduce migraine symptoms.",
-              frequency: "3-4 times a week",
-              portion: "1 cup cooked oatmeal topped with 1/2 cup mixed berries"
-            }
+            "Oatmeal with Berries - High in fiber and antioxidants, helps reduce migraine symptoms. Frequency: 3-4 times a week. Portion: 1 cup cooked oatmeal topped with 1/2 cup mixed berries"
           ],
           mealPlanSuggestions: [],
           supplementRecommendations: [
-            {
-              name: "Magnesium",
-              benefit: "May help reduce the frequency of migraines.",
-              dosage: "400 mg daily",
-              note: "Consult with a healthcare provider before starting any new supplement."
-            }
+            "Magnesium - May help reduce the frequency of migraines. Dosage: 400 mg daily. Note: Consult with a healthcare provider before starting any new supplement."
           ]
         },
         analysisDetails: {
@@ -1082,6 +1046,27 @@ app.get('/api/health-analysis/conditions', (req, res) => {
 // Basic routes for testing
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API is working!' });
+});
+
+// Delete meal endpoint
+app.delete('/api/meals/:mealId', (req, res) => {
+  try {
+    console.log('🗑️ Received delete meal request for:', req.params.mealId);
+    
+    const response = {
+      success: true,
+      message: `Meal ${req.params.mealId} deleted successfully`
+    };
+    
+    res.json(response);
+  } catch (error) {
+    console.error('❌ Error deleting meal:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to delete meal',
+      message: error.message
+    });
+  }
 });
 
 // Global error handler
