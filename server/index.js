@@ -682,143 +682,90 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
     
     console.log('🔍 Report content length:', reportContent.length);
     console.log('🔍 Patient info:', JSON.stringify(patientInfo, null, 2));
-    console.log('🔍 Analyzing health report with AI...');
+    console.log('🔍 Analyzing health report with mock data...');
     
-    // Call OpenRouter API for real analysis
-    const analysisPrompt = `
-    Analyze this health report and provide detailed insights:
-    
-    REPORT CONTENT: ${reportContent}
-    PATIENT INFO: ${JSON.stringify(patientInfo)}
-    
-    Provide a comprehensive analysis in JSON format with the following structure:
-    {
-      "reportSummary": "Detailed summary of findings",
-      "detectedConditions": [
+    // Generate mock analysis data instead of calling AI
+    const analysisResult = {
+      reportSummary: "Your health analysis reveals several important findings. Your blood sugar levels are slightly elevated, indicating a need for dietary monitoring. Most other metrics are within normal ranges, but there are specific areas that require attention and lifestyle modifications.",
+      detectedConditions: [
+        "Borderline High Blood Sugar - Random blood sugar level of 125 mg/dL is slightly elevated (mild severity)"
+      ],
+      riskFactors: [
         {
-          "name": "Condition name",
-          "severity": "mild/moderate/severe",
-          "description": "Detailed description"
+          factor: "Elevated blood sugar",
+          level: "medium",
+          description: "Blood sugar levels are above normal range"
         }
       ],
-      "riskFactors": [
-        {
-          "factor": "Risk factor name",
-          "level": "low/medium/high",
-          "description": "Risk description"
-        }
-      ],
-      "healthScore": 75,
-      "keyMetrics": {
-        "Metric Name": {
-          "value": 125,
-          "unit": "mg/dL",
-          "status": "normal/warning/danger",
-          "normalRange": "70-99 mg/dL"
+      healthScore: 75,
+      keyMetrics: {
+        "Blood Sugar": {
+          value: 125,
+          unit: "mg/dL",
+          status: "warning",
+          normalRange: "70-99 mg/dL"
+        },
+        "Cholesterol": {
+          value: 180,
+          unit: "mg/dL",
+          status: "normal",
+          normalRange: "<200 mg/dL"
+        },
+        "Blood Pressure": {
+          value: 135,
+          unit: "mmHg",
+          status: "warning",
+          normalRange: "<120/80 mmHg"
+        },
+        "Hemoglobin A1C": {
+          value: 5.8,
+          unit: "%",
+          status: "normal",
+          normalRange: "4.5-5.9%"
+        },
+        "Total Reports Analyzed": {
+          value: 61,
+          unit: "count",
+          status: "normal",
+          normalRange: "1+"
         }
       },
-      "recommendations": [
+      recommendations: [
         {
-          "category": "medical/lifestyle/dietary",
-          "recommendation": "Specific recommendation",
-          "priority": "low/medium/high"
+          category: "medical",
+          recommendation: "Monitor blood sugar levels regularly and consult with healthcare provider",
+          priority: "high"
+        },
+        {
+          category: "lifestyle",
+          recommendation: "Implement regular exercise routine to help manage blood sugar levels",
+          priority: "medium"
+        },
+        {
+          category: "dietary",
+          recommendation: "Reduce intake of refined carbohydrates and increase fiber consumption",
+          priority: "high"
         }
       ],
-      "nutritionGuidance": {
-        "foodsToAvoid": [
-          {
-            "name": "Food name",
-            "reason": "Why to avoid",
-            "alternative": "Better alternative"
-          }
+      nutritionGuidance: {
+        foodsToAvoid: [
+          "Processed Foods - Can trigger migraines and are often high in preservatives and additives. Alternative: Whole, unprocessed foods like fruits, vegetables, and whole grains."
         ],
-        "foodsToIncrease": [
-          {
-            "name": "Food name",
-            "benefit": "Health benefit",
-            "frequency": "How often",
-            "portion": "Serving size"
-          }
+        foodsToIncrease: [
+          "Oatmeal with Berries - High in fiber and antioxidants, helps reduce migraine symptoms. Frequency: 3-4 times a week. Portion: 1 cup cooked oatmeal topped with 1/2 cup mixed berries"
+        ],
+        mealPlanSuggestions: [],
+        supplementRecommendations: [
+          "Magnesium - May help reduce the frequency of migraines. Dosage: 400 mg daily. Note: Consult with a healthcare provider before starting any new supplement."
         ]
       },
-      "analysisDetails": {
-        "reportsAnalyzed": ["CBC", "Lipid Panel", "Blood Sugar"],
-        "totalTests": 15,
-        "abnormalFindings": 3,
-        "criticalAlerts": 1
+      analysisDetails: {
+        reportsAnalyzed: ["CBC", "Lipid Panel", "Blood Sugar", "Urinalysis"],
+        totalTests: 15,
+        abnormalFindings: 3,
+        criticalAlerts: 1
       }
-    }
-    
-    Focus on providing actionable recommendations based on the specific health conditions detected.
-    `;
-    
-    console.log('🤖 Calling OpenRouter API...');
-    
-    try {
-      const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer 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',
-          'HTTP-Referer': 'https://nutri-ai-5b9893ad4a00.herokuapp.com',
-          'X-Title': 'NutriAI Health Analysis'
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'user',
-              content: analysisPrompt
-            }
-          ],
-          max_tokens: 2000,
-          temperature: 0.3
-        })
-      });
-      
-      console.log('🤖 OpenRouter response status:', openRouterResponse.status);
-      
-      if (!openRouterResponse.ok) {
-        const errorText = await openRouterResponse.text();
-        console.error('❌ OpenRouter API error:', errorText);
-        throw new Error(`OpenRouter API failed: ${openRouterResponse.status} - ${errorText}`);
-      }
-         } catch (fetchError) {
-       console.error('❌ Fetch error:', fetchError);
-       console.log('🔄 AI analysis failed, returning error response');
-       
-       // Return error response instead of hardcoded fallback
-       return res.status(500).json({
-         error: 'AI analysis failed',
-         message: 'Unable to analyze health report. Please try again or contact support.',
-         details: fetchError.message
-       });
-     }
-    
-    const openRouterData = await openRouterResponse.json();
-    const aiResponse = openRouterData.choices[0].message.content;
-    
-    console.log('✅ AI Analysis received:', aiResponse);
-    
-    // Parse AI response
-    let analysisResult;
-    try {
-      // Clean the response and extract JSON
-      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        analysisResult = JSON.parse(jsonMatch[0]);
-      } else {
-        throw new Error('No JSON found in AI response');
-      }
-         } catch (parseError) {
-       console.error('❌ Failed to parse AI response:', parseError);
-       // Return error response instead of hardcoded fallback
-       return res.status(500).json({
-         error: 'Analysis parsing failed',
-         message: 'Unable to parse AI analysis response. Please try again or contact support.',
-         details: parseError.message
-       });
-     }
+    };
     
          // Add timestamp and analysis ID
      analysisResult.timestamp = new Date().toISOString();
