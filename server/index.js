@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 // Root endpoint - welcome page
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to NutriAI Oracle Server!',
+    message: 'Welcome to NutriAI Server!',
     status: 'OK',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'NutriAI Oracle Server is running',
+    message: 'NutriAI  Server is running',
     timestamp: new Date().toISOString(),
     version: '1.0.0'
   });
@@ -415,6 +415,248 @@ app.get('/api/health-analysis/food-recommendations', (req, res) => {
   } catch (error) {
     console.error('❌ Error in food recommendations:', error);
     res.status(500).json({ error: 'Food recommendations failed' });
+  }
+});
+
+// Dashboard endpoint
+app.get('/api/analytics/dashboard', (req, res) => {
+  try {
+    console.log('📊 Received dashboard request');
+    
+    const mockDashboard = {
+      user: {
+        name: "User",
+        streak: 7,
+        totalMeals: 45,
+        joinedDays: 30
+      },
+      todayStats: {
+        calories: {
+          consumed: 1200,
+          target: 2000,
+          unit: "kcal",
+          percentage: 60
+        },
+        protein: {
+          consumed: 65,
+          target: 120,
+          unit: "g",
+          percentage: 54
+        },
+        carbs: {
+          consumed: 150,
+          target: 250,
+          unit: "g",
+          percentage: 60
+        },
+        fat: {
+          consumed: 40,
+          target: 65,
+          unit: "g",
+          percentage: 62
+        },
+        water: {
+          consumed: 6,
+          target: 8,
+          unit: "glasses"
+        }
+      },
+      recentMeals: [
+        {
+          id: 1,
+          name: "Oatmeal with Berries",
+          calories: 320,
+          time: "08:30",
+          type: "breakfast"
+        },
+        {
+          id: 2,
+          name: "Grilled Chicken Salad",
+          calories: 450,
+          time: "12:30",
+          type: "lunch"
+        },
+        {
+          id: 3,
+          name: "Greek Yogurt with Nuts",
+          calories: 280,
+          time: "15:00",
+          type: "snack"
+        }
+      ],
+      weeklyProgress: {
+        calories: [1800, 1950, 2100, 1850, 2000, 1750, 1200],
+        protein: [85, 92, 105, 78, 95, 82, 65],
+        carbs: [220, 240, 260, 200, 235, 210, 150],
+        fat: [55, 62, 68, 48, 60, 52, 40]
+      },
+      recommendations: [
+        "Try to increase your protein intake",
+        "Great job on staying hydrated!",
+        "Consider adding more vegetables to your meals"
+      ]
+    };
+    
+    res.json(mockDashboard);
+  } catch (error) {
+    console.error('❌ Error in dashboard:', error);
+    res.status(500).json({ error: 'Dashboard failed' });
+  }
+});
+
+// User profile endpoint
+app.get('/api/user/profile', (req, res) => {
+  try {
+    console.log('👤 Received user profile request');
+    
+    const mockProfile = {
+      id: 1,
+      name: "John Doe",
+      email: "john.doe@example.com",
+      age: 28,
+      weight: 70,
+      height: 175,
+      activityLevel: "moderate",
+      goals: ["weight_loss", "muscle_gain"],
+      preferences: {
+        dietaryRestrictions: [],
+        allergies: [],
+        cuisinePreferences: ["mediterranean", "asian"]
+      }
+    };
+    
+    res.json(mockProfile);
+  } catch (error) {
+    console.error('❌ Error in user profile:', error);
+    res.status(500).json({ error: 'Profile failed' });
+  }
+});
+
+// Food recognition endpoint
+app.post('/api/ai/recognize-food', (req, res) => {
+  try {
+    console.log('🍎 Received food recognition request');
+    
+    const mockRecognition = {
+      foodName: "Grilled Chicken Breast",
+      confidence: 0.95,
+      calories: 165,
+      protein: 31,
+      carbs: 0,
+      fat: 3.6,
+      nutrients: ["Protein", "B6", "B12", "Iron"],
+      alternatives: ["Turkey Breast", "Fish Fillet", "Tofu"]
+    };
+    
+    res.json(mockRecognition);
+  } catch (error) {
+    console.error('❌ Error in food recognition:', error);
+    res.status(500).json({ error: 'Food recognition failed' });
+  }
+});
+
+// Meal logging endpoint
+app.post('/api/meals/log', (req, res) => {
+  try {
+    console.log('🍽️ Received meal log request');
+    
+    const mockMealLog = {
+      id: 123,
+      name: req.body.name || "Logged Meal",
+      calories: req.body.calories || 500,
+      protein: req.body.protein || 25,
+      carbs: req.body.carbs || 45,
+      fat: req.body.fat || 20,
+      time: new Date().toISOString(),
+      type: req.body.type || "meal",
+      success: true
+    };
+    
+    res.json(mockMealLog);
+  } catch (error) {
+    console.error('❌ Error in meal logging:', error);
+    res.status(500).json({ error: 'Meal logging failed' });
+  }
+});
+
+// Daily meals endpoint
+app.get('/api/meals/daily/:date', (req, res) => {
+  try {
+    console.log('📅 Received daily meals request for:', req.params.date);
+    
+    const mockDailyMeals = {
+      date: req.params.date,
+      meals: [
+        {
+          id: 1,
+          name: "Oatmeal with Berries",
+          calories: 320,
+          protein: 12,
+          carbs: 45,
+          fat: 12,
+          time: "08:30",
+          type: "breakfast"
+        },
+        {
+          id: 2,
+          name: "Grilled Chicken Salad",
+          calories: 450,
+          protein: 35,
+          carbs: 15,
+          fat: 25,
+          time: "12:30",
+          type: "lunch"
+        },
+        {
+          id: 3,
+          name: "Greek Yogurt with Nuts",
+          calories: 280,
+          protein: 18,
+          carbs: 25,
+          fat: 15,
+          time: "15:00",
+          type: "snack"
+        }
+      ],
+      totalCalories: 1050,
+      totalProtein: 65,
+      totalCarbs: 85,
+      totalFat: 52
+    };
+    
+    res.json(mockDailyMeals);
+  } catch (error) {
+    console.error('❌ Error in daily meals:', error);
+    res.status(500).json({ error: 'Daily meals failed' });
+  }
+});
+
+// Health conditions endpoint
+app.get('/api/health-analysis/conditions', (req, res) => {
+  try {
+    console.log('🏥 Received health conditions request');
+    
+    const mockConditions = [
+      {
+        id: 1,
+        name: "Diabetes",
+        type: "chronic",
+        severity: "moderate",
+        description: "Type 2 diabetes requiring dietary management"
+      },
+      {
+        id: 2,
+        name: "High Blood Pressure",
+        type: "chronic",
+        severity: "mild",
+        description: "Elevated blood pressure requiring monitoring"
+      }
+    ];
+    
+    res.json(mockConditions);
+  } catch (error) {
+    console.error('❌ Error in health conditions:', error);
+    res.status(500).json({ error: 'Health conditions failed' });
   }
 });
 
