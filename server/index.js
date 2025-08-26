@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const multer = require('multer');
 
 // Import fetch for Node.js (for older versions)
 let fetch;
@@ -10,6 +11,15 @@ try {
   // For newer Node.js versions that have fetch built-in
   fetch = global.fetch;
 }
+
+// Configure multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  }
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -1023,10 +1033,8 @@ app.post('/api/ai/recognize-food', upload.single('image'), async (req, res) => {
     
     // Call OpenRouter AI for food recognition
     try {
-      // Convert image to base64 for AI analysis
-      const fs = require('fs');
-      const imageBuffer = fs.readFileSync(imageFile.path);
-      const base64Image = imageBuffer.toString('base64');
+      // Convert image buffer to base64 for AI analysis
+      const base64Image = imageFile.buffer.toString('base64');
       
       const foodPrompt = `
       Analyze this food image and provide detailed nutritional information.
