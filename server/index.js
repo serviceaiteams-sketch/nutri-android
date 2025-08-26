@@ -27,11 +27,15 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     timestamp: new Date().toISOString(),
     endpoints: {
+      auth: {
+        login: '/api/auth/login',
+        register: '/api/auth/register'
+      },
       health: '/api/health',
       healthAnalysis: '/api/health-analysis/upload-reports',
       foodRecommendations: '/api/health-analysis/food-recommendations',
       dashboard: '/api/analytics/dashboard',
-      userProfile: '/api/user/profile',
+      userProfile: '/api/users/profile',
       foodRecognition: '/api/ai/recognize-food',
       mealLogging: '/api/meals/log',
       dailyMeals: '/api/meals/daily/:date',
@@ -49,6 +53,98 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     version: '1.0.0'
   });
+});
+
+// Authentication endpoints
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    console.log('🔐 Login request received');
+    const { email, password } = req.body;
+    
+    // Mock authentication - in production, verify against database
+    if (email && password) {
+      const mockUser = {
+        id: 1,
+        email: email,
+        name: "Test User",
+        age: 25,
+        gender: "male",
+        height: 175,
+        weight: 70,
+        activity_level: "moderate",
+        dietary_preferences: "vegetarian",
+        health_conditions: null,
+        created_at: new Date().toISOString()
+      };
+      
+      const mockToken = `mock_token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      console.log('✅ Login successful for:', email);
+      res.json({
+        token: mockToken,
+        user: mockUser,
+        message: "Login successful"
+      });
+    } else {
+      console.log('❌ Login failed: Missing credentials');
+      res.status(400).json({ 
+        error: "Invalid credentials",
+        message: "Email and password are required"
+      });
+    }
+  } catch (error) {
+    console.error('❌ Login error:', error);
+    res.status(500).json({ 
+      error: "Login failed",
+      message: error.message
+    });
+  }
+});
+
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    console.log('📝 Register request received');
+    const { email, password, name, age, gender, height, weight } = req.body;
+    
+    // Validate required fields
+    if (!email || !password || !name) {
+      return res.status(400).json({
+        error: "Missing required fields",
+        message: "Email, password, and name are required"
+      });
+    }
+    
+    // Mock user creation - in production, save to database
+    const newUser = {
+      id: Date.now(),
+      email: email,
+      name: name,
+      age: age || null,
+      gender: gender || null,
+      height: height || null,
+      weight: weight || null,
+      activity_level: "moderate",
+      dietary_preferences: null,
+      health_conditions: null,
+      created_at: new Date().toISOString()
+    };
+    
+    const mockToken = `mock_token_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    console.log('✅ Registration successful for:', email);
+    res.json({
+      user: newUser,
+      token: mockToken,
+      message: "Registration successful"
+    });
+    
+  } catch (error) {
+    console.error('❌ Registration error:', error);
+    res.status(500).json({ 
+      error: "Registration failed",
+      message: error.message
+    });
+  }
 });
 
 // Real AI-powered health analysis endpoint
@@ -818,6 +914,57 @@ app.get('/api/user/profile', (req, res) => {
   } catch (error) {
     console.error('❌ Error in user profile:', error);
     res.status(500).json({ error: 'Profile failed' });
+  }
+});
+
+// User profile endpoint with correct path for Android app (/users/profile)
+app.get('/api/users/profile', (req, res) => {
+  try {
+    console.log('👤 Received user profile request (users path)');
+    
+    // Return user data in the format expected by Android app
+    const mockUser = {
+      id: 1,
+      email: "john.doe@example.com",
+      name: "John Doe",
+      age: 28,
+      gender: "male",
+      height: 175.0,
+      weight: 70.0,
+      activity_level: "moderate",
+      dietary_preferences: "vegetarian",
+      health_conditions: null,
+      created_at: new Date().toISOString()
+    };
+    
+    res.json(mockUser);
+  } catch (error) {
+    console.error('❌ Error getting user profile:', error);
+    res.status(500).json({ error: 'Failed to get user profile' });
+  }
+});
+
+// Update user profile endpoint
+app.put('/api/users/profile', (req, res) => {
+  try {
+    console.log('📝 Received user profile update request');
+    console.log('📝 Update data:', JSON.stringify(req.body, null, 2));
+    
+    // Return updated user data
+    const updatedUser = {
+      ...req.body,
+      id: req.body.id || 1,
+      created_at: req.body.created_at || new Date().toISOString()
+    };
+    
+    console.log('✅ User profile updated successfully');
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('❌ Error updating user profile:', error);
+    res.status(500).json({ 
+      error: 'Failed to update user profile',
+      message: error.message
+    });
   }
 });
 
