@@ -60,128 +60,481 @@ async function generateFoodRecommendations(analysisResult) {
     
     console.log('🔍 Extracted conditions for food recommendations:', conditions);
     
-    const foodPrompt = `
-    Generate personalized food recommendations for a patient with the following health conditions: ${conditions.join(', ')}.
-    
-    Based on the patient's health analysis, provide specific food recommendations that address their conditions.
-    Include both USA and Indian food options that are beneficial for their specific health needs.
-    
-    Provide recommendations in JSON format with the following structure:
-    {
-      "recommendations": [
-        {
-          "food": "Food name",
-          "reason": "Why this food is recommended",
-          "category": "Breakfast/Lunch/Dinner/Snack",
-          "priority": "HIGH/MEDIUM/LOW",
-          "calories": 320,
-          "protein": 12,
-          "carbs": 45,
-          "fat": 12,
-          "nutrients": ["Fiber", "Antioxidants", "B Vitamins"],
-          "servingSize": "1 cup cooked oatmeal with 1/2 cup blueberries",
-          "bestTime": "Breakfast (7-9 AM)",
-          "preparationTips": "• Use steel-cut oats for best texture\\n• Add berries just before serving\\n• Top with nuts for extra protein",
-          "alternatives": "• Try quinoa porridge instead\\n• Use different berries or fruits\\n• Add chia seeds for omega-3",
-          "frequency": "3-4 times per week",
-          "notes": "Excellent for diabetes management due to low glycemic index",
-          "cuisine": "USA/Indian/Both"
-        }
-      ],
-      "mealPlan": {
-        "breakfast": [
+    // Try AI first, fallback to smart recommendations if AI fails
+    try {
+      const foodPrompt = `
+      Generate personalized food recommendations for a patient with the following health conditions: ${conditions.join(', ')}.
+      
+      Based on the patient's health analysis, provide specific food recommendations that address their conditions.
+      Include both USA and Indian food options that are beneficial for their specific health needs.
+      
+      Provide recommendations in JSON format with the following structure:
+      {
+        "recommendations": [
           {
-            "name": "Oatmeal with Berries",
+            "food": "Food name",
+            "reason": "Why this food is recommended",
+            "category": "Breakfast/Lunch/Dinner/Snack",
+            "priority": "HIGH/MEDIUM/LOW",
             "calories": 320,
             "protein": 12,
             "carbs": 45,
             "fat": 12,
-            "benefits": "High fiber, low glycemic index",
-            "cuisine": "USA"
+            "nutrients": ["Fiber", "Antioxidants", "B Vitamins"],
+            "servingSize": "1 cup cooked oatmeal with 1/2 cup blueberries",
+            "bestTime": "Breakfast (7-9 AM)",
+            "preparationTips": "• Use steel-cut oats for best texture\\n• Add berries just before serving\\n• Top with nuts for extra protein",
+            "alternatives": "• Try quinoa porridge instead\\n• Use different berries or fruits\\n• Add chia seeds for omega-3",
+            "frequency": "3-4 times per week",
+            "notes": "Excellent for diabetes management due to low glycemic index",
+            "cuisine": "USA/Indian/Both"
           }
         ],
-        "lunch": [
-          {
-            "name": "Grilled Chicken with Quinoa",
-            "calories": 450,
-            "protein": 35,
-            "carbs": 30,
-            "fat": 20,
-            "benefits": "Lean protein, complex carbs",
-            "cuisine": "USA"
-          }
-        ],
-        "dinner": [
-          {
-            "name": "Dal with Brown Rice",
-            "calories": 380,
-            "protein": 15,
-            "carbs": 60,
-            "fat": 8,
-            "benefits": "Plant protein, fiber-rich",
-            "cuisine": "Indian"
-          }
-        ]
+        "mealPlan": {
+          "breakfast": [
+            {
+              "name": "Oatmeal with Berries",
+              "calories": 320,
+              "protein": 12,
+              "carbs": 45,
+              "fat": 12,
+              "benefits": "High fiber, low glycemic index",
+              "cuisine": "USA"
+            }
+          ],
+          "lunch": [
+            {
+              "name": "Grilled Chicken with Quinoa",
+              "calories": 450,
+              "protein": 35,
+              "carbs": 30,
+              "fat": 20,
+              "benefits": "Lean protein, complex carbs",
+              "cuisine": "USA"
+            }
+          ],
+          "dinner": [
+            {
+              "name": "Dal with Brown Rice",
+              "calories": 380,
+              "protein": 15,
+              "carbs": 60,
+              "fat": 8,
+              "benefits": "Plant protein, fiber-rich",
+              "cuisine": "Indian"
+            }
+          ]
+        }
       }
-    }
-    
-    Include both USA and Indian food options. Focus on foods that are beneficial for the specific health conditions mentioned.
-    `;
-    
-    const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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',
-        'HTTP-Referer': 'https://nutri-ai-5b9893ad4a00.herokuapp.com',
-        'X-Title': 'NutriAI Food Recommendations'
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'user',
-            content: foodPrompt
-          }
-        ],
-        max_tokens: 2000,
-        temperature: 0.3
-      })
-    });
-    
-    if (!openRouterResponse.ok) {
-      throw new Error(`OpenRouter API failed: ${openRouterResponse.status}`);
-    }
-    
-    const openRouterData = await openRouterResponse.json();
-    const aiResponse = openRouterData.choices[0].message.content;
-    
-    console.log('✅ AI Food Recommendations received:', aiResponse);
-    
-    // Parse AI response
-    let foodRecommendations;
-    try {
-      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        foodRecommendations = JSON.parse(jsonMatch[0]);
-      } else {
-        throw new Error('No JSON found in AI response');
+      
+      Include both USA and Indian food options. Focus on foods that are beneficial for the specific health conditions mentioned.
+      `;
+      
+      const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer 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',
+          'HTTP-Referer': 'https://nutri-ai-5b9893ad4a00.herokuapp.com',
+          'X-Title': 'NutriAI Food Recommendations'
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'user',
+              content: foodPrompt
+            }
+          ],
+          max_tokens: 2000,
+          temperature: 0.3
+        })
+      });
+      
+      if (!openRouterResponse.ok) {
+        throw new Error(`OpenRouter API failed: ${openRouterResponse.status}`);
       }
-    } catch (parseError) {
-      console.error('❌ Failed to parse AI food recommendations:', parseError);
-      throw new Error('Failed to parse food recommendations');
+      
+      const openRouterData = await openRouterResponse.json();
+      const aiResponse = openRouterData.choices[0].message.content;
+      
+      console.log('✅ AI Food Recommendations received:', aiResponse);
+      
+      // Parse AI response
+      let foodRecommendations;
+      try {
+        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          foodRecommendations = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error('No JSON found in AI response');
+        }
+      } catch (parseError) {
+        console.error('❌ Failed to parse AI food recommendations:', parseError);
+        throw new Error('Failed to parse food recommendations');
+      }
+      
+      // Add timestamp
+      foodRecommendations.timestamp = new Date().toISOString();
+      
+      console.log('✅ Food recommendations generated successfully with AI');
+      return foodRecommendations;
+      
+    } catch (aiError) {
+      console.error('❌ AI food recommendations failed:', aiError);
+      console.log('🔄 Falling back to smart recommendations based on conditions...');
+      
+      // Generate smart fallback recommendations based on conditions
+      return generateSmartFoodRecommendations(conditions);
     }
-    
-    // Add timestamp
-    foodRecommendations.timestamp = new Date().toISOString();
-    
-    console.log('✅ Food recommendations generated successfully');
-    return foodRecommendations;
     
   } catch (error) {
     console.error('❌ Error generating food recommendations:', error);
     throw error;
   }
+}
+
+// Smart fallback function for food recommendations
+function generateSmartFoodRecommendations(conditions) {
+  console.log('🍎 Generating smart fallback recommendations for conditions:', conditions);
+  
+  // Define food recommendations based on common health conditions
+  const foodDatabase = {
+    'diabetes': {
+      recommendations: [
+        {
+          food: "Steel-Cut Oatmeal with Berries",
+          reason: "Low glycemic index, high fiber content helps regulate blood sugar levels",
+          category: "Breakfast",
+          priority: "HIGH",
+          calories: 320,
+          protein: 12,
+          carbs: 45,
+          fat: 12,
+          nutrients: ["Fiber", "Antioxidants", "B Vitamins"],
+          servingSize: "1 cup cooked oatmeal with 1/2 cup mixed berries",
+          bestTime: "Breakfast (7-9 AM)",
+          preparationTips: "• Use steel-cut oats for best texture\n• Add berries just before serving\n• Top with nuts for extra protein",
+          alternatives: "• Try quinoa porridge instead\n• Use different berries or fruits\n• Add chia seeds for omega-3",
+          frequency: "3-4 times per week",
+          notes: "Excellent for diabetes management due to low glycemic index",
+          cuisine: "USA"
+        },
+        {
+          food: "Grilled Salmon with Quinoa",
+          reason: "Omega-3 fatty acids help reduce inflammation and improve insulin sensitivity",
+          category: "Lunch",
+          priority: "HIGH",
+          calories: 450,
+          protein: 35,
+          carbs: 30,
+          fat: 20,
+          nutrients: ["Omega-3", "Protein", "Fiber"],
+          servingSize: "4 oz salmon with 1/2 cup quinoa",
+          bestTime: "Lunch (12-2 PM)",
+          preparationTips: "• Grill salmon for 4-5 minutes per side\n• Season with herbs and lemon\n• Serve with steamed vegetables",
+          alternatives: "• Try mackerel or sardines\n• Substitute with tofu for vegetarian option\n• Use brown rice instead of quinoa",
+          frequency: "2-3 times per week",
+          notes: "Rich in omega-3 fatty acids beneficial for heart health",
+          cuisine: "USA"
+        },
+        {
+          food: "Dal with Brown Rice",
+          reason: "Plant protein and complex carbs provide sustained energy without blood sugar spikes",
+          category: "Dinner",
+          priority: "MEDIUM",
+          calories: 380,
+          protein: 15,
+          carbs: 60,
+          fat: 8,
+          nutrients: ["Plant Protein", "Fiber", "Iron"],
+          servingSize: "1 cup dal with 1/2 cup brown rice",
+          bestTime: "Dinner (7-9 PM)",
+          preparationTips: "• Soak dal for 2 hours before cooking\n• Add turmeric and cumin for flavor\n• Serve with fresh coriander",
+          alternatives: "• Try different types of lentils\n• Add vegetables for more nutrition\n• Use quinoa instead of rice",
+          frequency: "2-3 times per week",
+          notes: "Traditional Indian food excellent for diabetes management",
+          cuisine: "Indian"
+        }
+      ],
+      mealPlan: {
+        breakfast: [
+          {
+            name: "Steel-Cut Oatmeal with Berries",
+            calories: 320,
+            protein: 12,
+            carbs: 45,
+            fat: 12,
+            benefits: "Low glycemic index, high fiber",
+            cuisine: "USA"
+          }
+        ],
+        lunch: [
+          {
+            name: "Grilled Salmon with Quinoa",
+            calories: 450,
+            protein: 35,
+            carbs: 30,
+            fat: 20,
+            benefits: "Omega-3 fatty acids, lean protein",
+            cuisine: "USA"
+          }
+        ],
+        dinner: [
+          {
+            name: "Dal with Brown Rice",
+            calories: 380,
+            protein: 15,
+            carbs: 60,
+            fat: 8,
+            benefits: "Plant protein, complex carbs",
+            cuisine: "Indian"
+          }
+        ]
+      }
+    },
+    'high blood pressure': {
+      recommendations: [
+        {
+          food: "Greek Yogurt with Nuts",
+          reason: "High potassium content helps lower blood pressure naturally",
+          category: "Snack",
+          priority: "HIGH",
+          calories: 280,
+          protein: 18,
+          carbs: 25,
+          fat: 15,
+          nutrients: ["Potassium", "Calcium", "Protein"],
+          servingSize: "1 cup Greek yogurt with 1/4 cup mixed nuts",
+          bestTime: "Snack (3-4 PM)",
+          preparationTips: "• Choose plain Greek yogurt\n• Add fresh berries for sweetness\n• Include almonds and walnuts",
+          alternatives: "• Try cottage cheese instead\n• Use different types of nuts\n• Add honey for natural sweetness",
+          frequency: "Daily",
+          notes: "Excellent source of potassium for blood pressure management",
+          cuisine: "USA"
+        },
+        {
+          food: "Spinach and Chickpea Curry",
+          reason: "Rich in magnesium and potassium, helps relax blood vessels",
+          category: "Dinner",
+          priority: "HIGH",
+          calories: 350,
+          protein: 18,
+          carbs: 45,
+          fat: 12,
+          nutrients: ["Magnesium", "Potassium", "Iron"],
+          servingSize: "1 cup curry with 1/2 cup brown rice",
+          bestTime: "Dinner (7-9 PM)",
+          preparationTips: "• Use fresh spinach leaves\n• Add ginger and garlic for flavor\n• Cook with minimal oil",
+          alternatives: "• Try other leafy greens\n• Add tofu for protein\n• Use different spices",
+          frequency: "2-3 times per week",
+          notes: "Traditional Indian dish beneficial for heart health",
+          cuisine: "Indian"
+        }
+      ],
+      mealPlan: {
+        breakfast: [
+          {
+            name: "Oatmeal with Banana",
+            calories: 300,
+            protein: 10,
+            carbs: 50,
+            fat: 8,
+            benefits: "High potassium, low sodium",
+            cuisine: "USA"
+          }
+        ],
+        lunch: [
+          {
+            name: "Grilled Chicken Salad",
+            calories: 400,
+            protein: 30,
+            carbs: 20,
+            fat: 25,
+            benefits: "Lean protein, low sodium",
+            cuisine: "USA"
+          }
+        ],
+        dinner: [
+          {
+            name: "Spinach and Chickpea Curry",
+            calories: 350,
+            protein: 18,
+            carbs: 45,
+            fat: 12,
+            benefits: "Magnesium, potassium rich",
+            cuisine: "Indian"
+          }
+        ]
+      }
+    },
+    'blood sugar': {
+      recommendations: [
+        {
+          food: "Cinnamon Quinoa Bowl",
+          reason: "Cinnamon helps improve insulin sensitivity and blood sugar control",
+          category: "Breakfast",
+          priority: "HIGH",
+          calories: 340,
+          protein: 14,
+          carbs: 48,
+          fat: 10,
+          nutrients: ["Fiber", "Protein", "Antioxidants"],
+          servingSize: "1 cup cooked quinoa with cinnamon and nuts",
+          bestTime: "Breakfast (7-9 AM)",
+          preparationTips: "• Cook quinoa in water or almond milk\n• Add cinnamon and vanilla\n• Top with nuts and berries",
+          alternatives: "• Try steel-cut oats instead\n• Use different spices\n• Add protein powder",
+          frequency: "3-4 times per week",
+          notes: "Cinnamon has been shown to help regulate blood sugar",
+          cuisine: "USA"
+        }
+      ],
+      mealPlan: {
+        breakfast: [
+          {
+            name: "Cinnamon Quinoa Bowl",
+            calories: 340,
+            protein: 14,
+            carbs: 48,
+            fat: 10,
+            benefits: "Blood sugar regulation",
+            cuisine: "USA"
+          }
+        ],
+        lunch: [
+          {
+            name: "Vegetable Stir-Fry",
+            calories: 380,
+            protein: 20,
+            carbs: 35,
+            fat: 18,
+            benefits: "Low glycemic vegetables",
+            cuisine: "USA"
+          }
+        ],
+        dinner: [
+          {
+            name: "Lentil Soup",
+            calories: 320,
+            protein: 16,
+            carbs: 42,
+            fat: 8,
+            benefits: "Slow-release carbs",
+            cuisine: "Indian"
+          }
+        ]
+      }
+    }
+  };
+  
+  // Find matching recommendations based on conditions
+  let allRecommendations = [];
+  let mealPlan = { breakfast: [], lunch: [], dinner: [] };
+  
+  conditions.forEach(condition => {
+    const conditionKey = Object.keys(foodDatabase).find(key => 
+      condition.includes(key) || key.includes(condition)
+    );
+    
+    if (conditionKey && foodDatabase[conditionKey]) {
+      allRecommendations = allRecommendations.concat(foodDatabase[conditionKey].recommendations);
+      
+      // Merge meal plans
+      if (foodDatabase[conditionKey].mealPlan) {
+        Object.keys(foodDatabase[conditionKey].mealPlan).forEach(mealType => {
+          mealPlan[mealType] = mealPlan[mealType].concat(foodDatabase[conditionKey].mealPlan[mealType]);
+        });
+      }
+    }
+  });
+  
+  // If no specific conditions found, provide general healthy recommendations
+  if (allRecommendations.length === 0) {
+    allRecommendations = [
+      {
+        food: "Mixed Berry Smoothie Bowl",
+        reason: "Rich in antioxidants and fiber for overall health",
+        category: "Breakfast",
+        priority: "MEDIUM",
+        calories: 280,
+        protein: 12,
+        carbs: 35,
+        fat: 8,
+        nutrients: ["Antioxidants", "Fiber", "Vitamin C"],
+        servingSize: "1 bowl with granola and nuts",
+        bestTime: "Breakfast (7-9 AM)",
+        preparationTips: "• Blend frozen berries with yogurt\n• Top with granola and nuts\n• Add honey for sweetness",
+        alternatives: "• Try different fruits\n• Use plant-based milk\n• Add protein powder",
+        frequency: "2-3 times per week",
+        notes: "Great way to start the day with essential nutrients",
+        cuisine: "USA"
+      },
+      {
+        food: "Grilled Vegetable Wrap",
+        reason: "High in fiber and nutrients, low in calories",
+        category: "Lunch",
+        priority: "MEDIUM",
+        calories: 320,
+        protein: 15,
+        carbs: 40,
+        fat: 12,
+        nutrients: ["Fiber", "Vitamins", "Minerals"],
+        servingSize: "1 whole grain wrap with vegetables",
+        bestTime: "Lunch (12-2 PM)",
+        preparationTips: "• Grill vegetables until tender\n• Use whole grain tortilla\n• Add hummus for protein",
+        alternatives: "• Try different vegetables\n• Use lettuce wraps\n• Add grilled chicken",
+        frequency: "2-3 times per week",
+        notes: "Nutritious and satisfying lunch option",
+        cuisine: "USA"
+      }
+    ];
+    
+    mealPlan = {
+      breakfast: [
+        {
+          name: "Mixed Berry Smoothie Bowl",
+          calories: 280,
+          protein: 12,
+          carbs: 35,
+          fat: 8,
+          benefits: "Antioxidants and fiber",
+          cuisine: "USA"
+        }
+      ],
+      lunch: [
+        {
+          name: "Grilled Vegetable Wrap",
+          calories: 320,
+          protein: 15,
+          carbs: 40,
+          fat: 12,
+          benefits: "High fiber, low calorie",
+          cuisine: "USA"
+        }
+      ],
+      dinner: [
+        {
+          name: "Baked Fish with Vegetables",
+          calories: 350,
+          protein: 25,
+          carbs: 25,
+          fat: 15,
+          benefits: "Lean protein, omega-3",
+          cuisine: "USA"
+        }
+      ]
+    };
+  }
+  
+  const smartRecommendations = {
+    recommendations: allRecommendations,
+    mealPlan: mealPlan,
+    timestamp: new Date().toISOString(),
+    source: "smart_fallback"
+  };
+  
+  console.log('✅ Smart food recommendations generated successfully');
+  return smartRecommendations;
 }
 
 // Basic middleware
