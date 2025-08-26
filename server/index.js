@@ -673,7 +673,7 @@ app.post('/api/auth/register', async (req, res) => {
 // Real AI-powered health analysis endpoint
 app.post('/api/health-analysis/upload-reports', upload.array('reports', 10), async (req, res) => {
   try {
-    console.log('📄 Received health report upload request - MOCK VERSION');
+    console.log('📄 Received health report upload request - MOCK VERSION - FORCED RESTART');
     console.log('📄 Request body:', JSON.stringify(req.body, null, 2));
     console.log('📄 Files uploaded:', req.files ? req.files.length : 0);
     
