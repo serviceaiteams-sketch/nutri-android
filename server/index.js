@@ -10,6 +10,22 @@ app.use(cors());
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
+// Root endpoint - welcome page
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to NutriAI Oracle Server!',
+    status: 'OK',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/api/health',
+      healthAnalysis: '/api/health-analysis/upload-reports',
+      foodRecommendations: '/api/health-analysis/food-recommendations'
+    },
+    description: 'AI-powered health analysis and nutrition recommendations'
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
