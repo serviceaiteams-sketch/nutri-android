@@ -999,35 +999,50 @@ app.put('/api/users/profile', (req, res) => {
 });
 
 // Food recognition endpoint with real AI
-app.post('/api/ai/recognize-food', async (req, res) => {
+app.post('/api/ai/recognize-food', upload.single('image'), async (req, res) => {
   try {
     console.log('🍎 Received food recognition request');
-    console.log('🍎 Request body:', JSON.stringify(req.body, null, 2));
+    console.log('🍎 Request body:', req.body);
+    console.log('🍎 Request file:', req.file);
     
-    // Extract image data or food description from request
-    const imageData = req.body.image || req.body.imageData;
-    const foodDescription = req.body.description || req.body.foodDescription || "Healthy food bowl with vegetables and protein";
+    // Extract image file from multipart request
+    const imageFile = req.file;
+    const foodDescription = req.body.description || "Food image for analysis";
     
+    if (!imageFile) {
+      return res.status(400).json({
+        success: false,
+        error: 'No image file provided',
+        message: 'Please upload an image file'
+      });
+    }
+    
+    console.log('🍎 Image file received:', imageFile.originalname);
     console.log('🍎 Food description:', foodDescription);
     console.log('🤖 Using OpenRouter AI for food recognition...');
     
     // Call OpenRouter AI for food recognition
     try {
+      // Convert image to base64 for AI analysis
+      const fs = require('fs');
+      const imageBuffer = fs.readFileSync(imageFile.path);
+      const base64Image = imageBuffer.toString('base64');
+      
       const foodPrompt = `
-      Analyze this food/meal and provide detailed nutritional information.
+      Analyze this food image and provide detailed nutritional information.
       
-      FOOD DESCRIPTION: ${foodDescription}
+      Identify all visible food items in the image and provide comprehensive nutritional analysis.
+      Be very specific with food names - if you see donuts, say "donuts", if you see pizza, say "pizza".
       
-      Provide a comprehensive analysis in JSON format. Identify individual food items and their nutritional content.
       Return ONLY valid JSON with this exact structure:
       {
         "recognizedFoods": [
           {
-            "name": "Food item name",
+            "name": "Specific food name (e.g., donuts, pizza, salad)",
             "confidence": 0.95,
             "quantity": 1.0,
             "unit": "serving/cup/piece/bowl",
-            "description": "Brief description",
+            "description": "Brief description of the food",
             "nutrition": {
               "calories": 200,
               "protein": 20,
@@ -1037,7 +1052,7 @@ app.post('/api/ai/recognize-food', async (req, res) => {
               "sugar": 10,
               "sodium": 200
             },
-            "serving_size": "1 cup (240g)",
+            "serving_size": "1 piece (100g)",
             "health_score": 85
           }
         ],
@@ -1052,7 +1067,11 @@ app.post('/api/ai/recognize-food', async (req, res) => {
         }
       }
       
-      Focus on accuracy and include both USA and Indian food items if relevant.
+      IMPORTANT: 
+      - Be very specific with food names (donuts, pizza, burger, etc.)
+      - Provide accurate nutritional values based on the actual food shown
+      - Include both USA and Indian food items if relevant
+      - If you see multiple items, list each one separately
       `;
       
       console.log('🤖 Calling OpenRouter API for food recognition...');
@@ -1066,11 +1085,22 @@ app.post('/api/ai/recognize-food', async (req, res) => {
           'X-Title': 'NutriAI Food Recognition'
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'gpt-4o',
           messages: [
             {
               role: 'user',
-              content: foodPrompt
+              content: [
+                {
+                  type: 'text',
+                  text: foodPrompt
+                },
+                {
+                  type: 'image_url',
+                  image_url: {
+                    url: `data:image/jpeg;base64,${base64Image}`
+                  }
+                }
+              ]
             }
           ],
           max_tokens: 1500,
@@ -1139,42 +1169,42 @@ app.post('/api/ai/recognize-food', async (req, res) => {
     } catch (aiError) {
       console.error('❌ AI food recognition failed:', aiError);
       
-      // Fallback response
+      // Fallback response - more generic
       const fallbackResponse = {
         success: true,
         recognizedFoods: [
           {
-            name: "Mixed Food Bowl",
+            name: "Food Item",
             confidence: 0.75,
             quantity: 1.0,
-            unit: "bowl",
-            description: "Unable to analyze with AI - generic healthy meal",
+            unit: "serving",
+            description: "Food item detected but AI analysis unavailable",
             nutrition: {
-              calories: 400,
-              protein: 25,
-              carbs: 50,
-              fat: 15,
-              fiber: 8,
-              sugar: 12,
-              sodium: 300
+              calories: 300,
+              protein: 20,
+              carbs: 40,
+              fat: 10,
+              fiber: 5,
+              sugar: 8,
+              sodium: 250
             },
-            serving_size: "1 bowl",
-            health_score: 75
+            serving_size: "1 serving",
+            health_score: 70
           }
         ],
         nutritionData: [
-          { name: "Protein", value: 25, unit: "g", dailyValue: 50 },
-          { name: "Fiber", value: 8, unit: "g", dailyValue: 32 },
-          { name: "Calories", value: 400, unit: "kcal", dailyValue: 20 }
+          { name: "Protein", value: 20, unit: "g", dailyValue: 40 },
+          { name: "Fiber", value: 5, unit: "g", dailyValue: 20 },
+          { name: "Calories", value: 300, unit: "kcal", dailyValue: 15 }
         ],
         totalNutrition: {
-          calories: 400,
-          protein: 25,
-          carbs: 50,
-          fat: 15,
-          fiber: 8,
-          sugar: 12,
-          sodium: 300
+          calories: 300,
+          protein: 20,
+          carbs: 40,
+          fat: 10,
+          fiber: 5,
+          sugar: 8,
+          sodium: 250
         },
         imageUrl: "https://example.com/food-image.jpg",
         message: "Food recognition completed (AI unavailable - using estimates)"
