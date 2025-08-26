@@ -14,6 +14,10 @@ try {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// In-memory storage for uploaded reports (in production, use a database)
+const uploadedReports = new Map();
+const userAnalysisResults = new Map();
+
 // Basic middleware
 app.use(cors());
 app.use(express.json({ limit: '100mb' }));
@@ -460,7 +464,18 @@ app.post('/api/health-analysis/upload-reports', async (req, res) => {
     analysisResult.timestamp = new Date().toISOString();
     analysisResult.analysisId = `analysis_${Date.now()}`;
     
+    // Store the analysis result for later retrieval
+    const userId = req.headers.authorization || 'default_user';
+    userAnalysisResults.set(userId, analysisResult);
+    uploadedReports.set(userId, {
+      reportContent: reportContent,
+      patientInfo: patientInfo,
+      analysisResult: analysisResult,
+      uploadTime: new Date().toISOString()
+    });
+    
     console.log('✅ Analysis completed successfully');
+    console.log('💾 Analysis result stored for user:', userId);
     res.json(analysisResult);
     
   } catch (error) {
@@ -478,15 +493,21 @@ app.post('/api/health-analysis/analyze-reports', async (req, res) => {
   try {
     console.log('🔍 Received analyze reports request');
     
-    // Return the same analysis data as the upload endpoint
+    // Try to retrieve stored analysis result first
+    const userId = req.headers.authorization || 'default_user';
+    const storedAnalysis = userAnalysisResults.get(userId);
+    
+    if (storedAnalysis) {
+      console.log('💾 Retrieved stored analysis for user:', userId);
+      return res.json(storedAnalysis);
+    }
+    
+    // Return default analysis data if no stored result
+    console.log('📋 No stored analysis found, returning default analysis');
     const analysisResult = {
       reportSummary: "Your health analysis reveals several important findings. Your blood sugar levels are slightly elevated, indicating a need for dietary monitoring. Most other metrics are within normal ranges, but there are specific areas that require attention and lifestyle modifications.",
       detectedConditions: [
-        {
-          name: "Borderline High Blood Sugar",
-          severity: "mild",
-          description: "Random blood sugar level of 125 mg/dL is slightly elevated"
-        }
+        "Borderline High Blood Sugar - Random blood sugar level of 125 mg/dL is slightly elevated (mild severity)"
       ],
       riskFactors: [
         {
@@ -547,28 +568,14 @@ app.post('/api/health-analysis/analyze-reports', async (req, res) => {
       ],
       nutritionGuidance: {
         foodsToAvoid: [
-          {
-            name: "Processed Foods",
-            reason: "Can trigger migraines and are often high in preservatives and additives.",
-            alternative: "Whole, unprocessed foods like fruits, vegetables, and whole grains."
-          }
+          "Processed Foods - Can trigger migraines and are often high in preservatives and additives. Alternative: Whole, unprocessed foods like fruits, vegetables, and whole grains."
         ],
         foodsToIncrease: [
-          {
-            name: "Oatmeal with Berries",
-            benefit: "High in fiber and antioxidants, helps reduce migraine symptoms.",
-            frequency: "3-4 times a week",
-            portion: "1 cup cooked oatmeal topped with 1/2 cup mixed berries"
-          }
+          "Oatmeal with Berries - High in fiber and antioxidants, helps reduce migraine symptoms. Frequency: 3-4 times a week. Portion: 1 cup cooked oatmeal topped with 1/2 cup mixed berries"
         ],
         mealPlanSuggestions: [],
         supplementRecommendations: [
-          {
-            name: "Magnesium",
-            benefit: "May help reduce the frequency of migraines.",
-            dosage: "400 mg daily",
-            note: "Consult with a healthcare provider before starting any new supplement."
-          }
+          "Magnesium - May help reduce the frequency of migraines. Dosage: 400 mg daily. Note: Consult with a healthcare provider before starting any new supplement."
         ]
       },
       analysisDetails: {
