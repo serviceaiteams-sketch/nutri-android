@@ -18,6 +18,7 @@ import com.nutriai.app.presentation.auth.LoginActivity
 import com.nutriai.app.presentation.food.FoodRecognitionFragment
 import com.nutriai.app.presentation.meals.MealHistoryFragment
 import com.nutriai.app.presentation.health.HealthReportsFragment
+import com.nutriai.app.presentation.DashboardFragment
 import com.nutriai.app.utils.NetworkUtils
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -161,13 +162,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
             }
             R.id.nav_meal_planning -> {
-                Toast.makeText(this, "Meal Planning coming soon!", Toast.LENGTH_SHORT).show()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, com.nutriai.app.presentation.meals.MealPlanningFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
             }
             R.id.nav_profile -> {
-                Toast.makeText(this, "Profile coming soon!", Toast.LENGTH_SHORT).show()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, com.nutriai.app.presentation.profile.ProfileFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
             }
             R.id.nav_settings -> {
-                showNetworkSettingsDialog()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, com.nutriai.app.presentation.settings.SettingsFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
             }
             R.id.nav_logout -> {
                 logout()

@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nutriai.app.data.models.FoodRecommendationsResponse
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.cancelChildren
 import com.nutriai.app.databinding.FragmentHealthRecommendationsBinding
 import com.nutriai.app.utils.Resource
 import kotlinx.coroutines.launch
@@ -58,6 +59,8 @@ class HealthRecommendationsFragment : Fragment() {
             android.util.Log.e("HealthRecommendationsFragment", "❌ Error in onViewCreated: ${e.message}", e)
             // Show empty state if setup fails
             showEmptyState(true)
+            // Show user-friendly error message
+            showErrorMessage("Unable to load recommendations. Please try again.")
         }
     }
     
@@ -308,9 +311,51 @@ class HealthRecommendationsFragment : Fragment() {
         }
     }
     
+    private fun showErrorMessage(message: String) {
+        try {
+            // Show toast message
+            android.widget.Toast.makeText(requireContext(), message, android.widget.Toast.LENGTH_LONG).show()
+            
+            // Also log the error
+            android.util.Log.e("HealthRecommendationsFragment", "❌ Error: $message")
+        } catch (e: Exception) {
+            android.util.Log.e("HealthRecommendationsFragment", "❌ Error showing error message: ${e.message}", e)
+        }
+    }
+    
+    private fun showLoading(show: Boolean) {
+        try {
+            // If there's a progress bar in the layout, show/hide it
+            binding.root.findViewById<android.view.View>(android.R.id.progress)?.let { progressBar ->
+                progressBar.isVisible = show
+            }
+            
+            // Show/hide content
+            binding.viewPagerFoodRecommendations.isVisible = !show
+            binding.emptyState.isVisible = !show
+        } catch (e: Exception) {
+            android.util.Log.e("HealthRecommendationsFragment", "❌ Error showing loading: ${e.message}", e)
+        }
+    }
+    
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        try {
+            // Clean up ViewPager adapter
+            if (::foodRecommendationsViewPagerAdapter.isInitialized) {
+                binding.viewPagerFoodRecommendations.adapter = null
+            }
+            
+            // Clear any pending operations
+            viewLifecycleOwner.lifecycleScope.coroutineContext.cancelChildren()
+            
+            // Clear binding
+            _binding = null
+            
+            android.util.Log.d("HealthRecommendationsFragment", "🧹 Cleaned up resources")
+        } catch (e: Exception) {
+            android.util.Log.e("HealthRecommendationsFragment", "❌ Error in onDestroyView: ${e.message}", e)
+        }
     }
     
     companion object {

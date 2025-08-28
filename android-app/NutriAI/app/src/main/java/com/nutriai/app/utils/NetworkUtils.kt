@@ -54,13 +54,8 @@ object NetworkUtils {
      * Get the appropriate base URL based on current environment
      */
     fun getBaseUrl(context: Context): String {
-        // Force using Heroku URL for now to test the detailed analysis
-        Log.d(TAG, "🚀 Using Heroku URL for testing: $PRODUCTION_BASE_URL")
-        return PRODUCTION_BASE_URL
-        
-        // Original logic (commented out for testing)
-        /*
         return if (isProductionBuild()) {
+            Log.d(TAG, "🚀 Using production URL: $PRODUCTION_BASE_URL")
             PRODUCTION_BASE_URL
         } else {
             // For development, try different strategies
@@ -89,7 +84,6 @@ object NetworkUtils {
             
             return defaultUrl
         }
-        */
     }
     
     /**
@@ -327,5 +321,33 @@ object NetworkUtils {
      */
     fun getCurrentDeviceIP(): String? {
         return getDeviceIpAddress()
+    }
+    
+    /**
+     * Check if this is a production build
+     */
+    private fun isProductionBuild(): Boolean {
+        return try {
+            // Check if BuildConfig.DEBUG is available (this will be false in release builds)
+            val buildConfigClass = Class.forName("com.nutriai.app.BuildConfig")
+            val debugField = buildConfigClass.getField("DEBUG")
+            val isDebug = debugField.getBoolean(null)
+            !isDebug
+        } catch (e: Exception) {
+            // If we can't determine, assume it's a debug build for safety
+            Log.w(TAG, "Could not determine build type, assuming debug build")
+            false
+        }
+    }
+    
+    /**
+     * Get user-friendly network error message
+     */
+    fun getNetworkErrorMessage(context: Context): String {
+        return when (getNetworkType(context)) {
+            "WiFi" -> "WiFi connection issue. Please check your internet connection."
+            "Mobile" -> "Mobile data connection issue. Please check your signal."
+            else -> "No internet connection. Please connect to WiFi or mobile data."
+        }
     }
 }
