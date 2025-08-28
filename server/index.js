@@ -260,35 +260,46 @@ function generateSmartFoodRecommendations(conditions) {
       mealPlan: {
         breakfast: [
           {
-            name: "Steel-Cut Oatmeal with Berries",
+            day: "Monday",
+            meal: "Steel-Cut Oatmeal with Berries",
+            nutrition: "320 cal, 12g protein, 45g carbs, 12g fat",
             calories: 320,
-            protein: 12,
-            carbs: 45,
-            fat: 12,
-            benefits: "Low glycemic index, high fiber",
-            cuisine: "USA"
+            protein: "12g",
+            carbs: "45g",
+            fat: "12g"
           }
         ],
         lunch: [
           {
-            name: "Grilled Salmon with Quinoa",
+            day: "Monday",
+            meal: "Grilled Salmon with Quinoa",
+            nutrition: "450 cal, 35g protein, 30g carbs, 20g fat",
             calories: 450,
-            protein: 35,
-            carbs: 30,
-            fat: 20,
-            benefits: "Omega-3 fatty acids, lean protein",
-            cuisine: "USA"
+            protein: "35g",
+            carbs: "30g",
+            fat: "20g"
           }
         ],
         dinner: [
           {
-            name: "Dal with Brown Rice",
+            day: "Monday",
+            meal: "Dal with Brown Rice",
+            nutrition: "380 cal, 15g protein, 60g carbs, 8g fat",
             calories: 380,
-            protein: 15,
-            carbs: 60,
-            fat: 8,
-            benefits: "Plant protein, complex carbs",
-            cuisine: "Indian"
+            protein: "15g",
+            carbs: "60g",
+            fat: "8g"
+          }
+        ],
+        snacks: [
+          {
+            day: "Monday",
+            meal: "Greek Yogurt with Nuts",
+            nutrition: "280 cal, 18g protein, 25g carbs, 15g fat",
+            calories: 280,
+            protein: "18g",
+            carbs: "25g",
+            fat: "15g"
           }
         ]
       }
@@ -335,35 +346,46 @@ function generateSmartFoodRecommendations(conditions) {
       mealPlan: {
         breakfast: [
           {
-            name: "Oatmeal with Banana",
+            day: "Monday",
+            meal: "Oatmeal with Banana",
+            nutrition: "300 cal, 10g protein, 50g carbs, 8g fat",
             calories: 300,
-            protein: 10,
-            carbs: 50,
-            fat: 8,
-            benefits: "High potassium, low sodium",
-            cuisine: "USA"
+            protein: "10g",
+            carbs: "50g",
+            fat: "8g"
           }
         ],
         lunch: [
           {
-            name: "Grilled Chicken Salad",
+            day: "Monday",
+            meal: "Grilled Chicken Salad",
+            nutrition: "400 cal, 30g protein, 20g carbs, 25g fat",
             calories: 400,
-            protein: 30,
-            carbs: 20,
-            fat: 25,
-            benefits: "Lean protein, low sodium",
-            cuisine: "USA"
+            protein: "30g",
+            carbs: "20g",
+            fat: "25g"
           }
         ],
         dinner: [
           {
-            name: "Spinach and Chickpea Curry",
+            day: "Monday",
+            meal: "Spinach and Chickpea Curry",
+            nutrition: "350 cal, 18g protein, 45g carbs, 12g fat",
             calories: 350,
-            protein: 18,
-            carbs: 45,
-            fat: 12,
-            benefits: "Magnesium, potassium rich",
-            cuisine: "Indian"
+            protein: "18g",
+            carbs: "45g",
+            fat: "12g"
+          }
+        ],
+        snacks: [
+          {
+            day: "Monday",
+            meal: "Greek Yogurt with Nuts",
+            nutrition: "280 cal, 18g protein, 25g carbs, 15g fat",
+            calories: 280,
+            protein: "18g",
+            carbs: "25g",
+            fat: "15g"
           }
         ]
       }
@@ -392,35 +414,46 @@ function generateSmartFoodRecommendations(conditions) {
       mealPlan: {
         breakfast: [
           {
-            name: "Cinnamon Quinoa Bowl",
+            day: "Monday",
+            meal: "Cinnamon Quinoa Bowl",
+            nutrition: "340 cal, 14g protein, 48g carbs, 10g fat",
             calories: 340,
-            protein: 14,
-            carbs: 48,
-            fat: 10,
-            benefits: "Blood sugar regulation",
-            cuisine: "USA"
+            protein: "14g",
+            carbs: "48g",
+            fat: "10g"
           }
         ],
         lunch: [
           {
-            name: "Vegetable Stir-Fry",
+            day: "Monday",
+            meal: "Vegetable Stir-Fry",
+            nutrition: "380 cal, 20g protein, 35g carbs, 18g fat",
             calories: 380,
-            protein: 20,
-            carbs: 35,
-            fat: 18,
-            benefits: "Low glycemic vegetables",
-            cuisine: "USA"
+            protein: "20g",
+            carbs: "35g",
+            fat: "18g"
           }
         ],
         dinner: [
           {
-            name: "Lentil Soup",
+            day: "Monday",
+            meal: "Lentil Soup",
+            nutrition: "320 cal, 16g protein, 42g carbs, 8g fat",
             calories: 320,
-            protein: 16,
-            carbs: 42,
-            fat: 8,
-            benefits: "Slow-release carbs",
-            cuisine: "Indian"
+            protein: "16g",
+            carbs: "42g",
+            fat: "8g"
+          }
+        ],
+        snacks: [
+          {
+            day: "Monday",
+            meal: "Greek Yogurt with Nuts",
+            nutrition: "280 cal, 18g protein, 25g carbs, 15g fat",
+            calories: 280,
+            protein: "18g",
+            carbs: "25g",
+            fat: "15g"
           }
         ]
       }
@@ -492,35 +525,46 @@ function generateSmartFoodRecommendations(conditions) {
     mealPlan = {
       breakfast: [
         {
-          name: "Mixed Berry Smoothie Bowl",
+          day: "Monday",
+          meal: "Mixed Berry Smoothie Bowl",
+          nutrition: "280 cal, 12g protein, 35g carbs, 8g fat",
           calories: 280,
-          protein: 12,
-          carbs: 35,
-          fat: 8,
-          benefits: "Antioxidants and fiber",
-          cuisine: "USA"
+          protein: "12g",
+          carbs: "35g",
+          fat: "8g"
         }
       ],
       lunch: [
         {
-          name: "Grilled Vegetable Wrap",
+          day: "Monday",
+          meal: "Grilled Vegetable Wrap",
+          nutrition: "320 cal, 15g protein, 40g carbs, 12g fat",
           calories: 320,
-          protein: 15,
-          carbs: 40,
-          fat: 12,
-          benefits: "High fiber, low calorie",
-          cuisine: "USA"
+          protein: "15g",
+          carbs: "40g",
+          fat: "12g"
         }
       ],
       dinner: [
         {
-          name: "Baked Fish with Vegetables",
+          day: "Monday",
+          meal: "Baked Fish with Vegetables",
+          nutrition: "350 cal, 25g protein, 25g carbs, 15g fat",
           calories: 350,
-          protein: 25,
-          carbs: 25,
-          fat: 15,
-          benefits: "Lean protein, omega-3",
-          cuisine: "USA"
+          protein: "25g",
+          carbs: "25g",
+          fat: "15g"
+        }
+      ],
+      snacks: [
+        {
+          day: "Monday",
+          meal: "Greek Yogurt with Nuts",
+          nutrition: "280 cal, 18g protein, 25g carbs, 15g fat",
+          calories: 280,
+          protein: "18g",
+          carbs: "25g",
+          fat: "15g"
         }
       ]
     };
@@ -857,35 +901,46 @@ app.post('/api/health-analysis/upload-reports', upload.array('reports', 10), asy
         mealPlan: {
           breakfast: [
             {
-              name: "Steel-Cut Oatmeal with Berries",
+              day: "Monday",
+              meal: "Steel-Cut Oatmeal with Berries",
+              nutrition: "320 cal, 12g protein, 45g carbs, 12g fat",
               calories: 320,
-              protein: 12,
-              carbs: 45,
-              fat: 12,
-              benefits: "Low glycemic index, high fiber",
-              cuisine: "USA"
+              protein: "12g",
+              carbs: "45g",
+              fat: "12g"
             }
           ],
           lunch: [
             {
-              name: "Grilled Salmon with Quinoa",
+              day: "Monday",
+              meal: "Grilled Salmon with Quinoa",
+              nutrition: "450 cal, 35g protein, 30g carbs, 20g fat",
               calories: 450,
-              protein: 35,
-              carbs: 30,
-              fat: 20,
-              benefits: "Omega-3 fatty acids, lean protein",
-              cuisine: "USA"
+              protein: "35g",
+              carbs: "30g",
+              fat: "20g"
             }
           ],
           dinner: [
             {
-              name: "Dal with Brown Rice",
+              day: "Monday",
+              meal: "Dal with Brown Rice",
+              nutrition: "380 cal, 15g protein, 60g carbs, 8g fat",
               calories: 380,
-              protein: 15,
-              carbs: 60,
-              fat: 8,
-              benefits: "Plant protein, complex carbs",
-              cuisine: "Indian"
+              protein: "15g",
+              carbs: "60g",
+              fat: "8g"
+            }
+          ],
+          snacks: [
+            {
+              day: "Monday",
+              meal: "Greek Yogurt with Nuts",
+              nutrition: "280 cal, 18g protein, 25g carbs, 15g fat",
+              calories: 280,
+              protein: "18g",
+              carbs: "25g",
+              fat: "15g"
             }
           ]
         },
@@ -1076,35 +1131,46 @@ app.post('/api/health-analysis/analyze-reports', async (req, res) => {
         mealPlan: {
           breakfast: [
             {
-              name: "Steel-Cut Oatmeal with Berries",
+              day: "Monday",
+              meal: "Steel-Cut Oatmeal with Berries",
+              nutrition: "320 cal, 12g protein, 45g carbs, 12g fat",
               calories: 320,
-              protein: 12,
-              carbs: 45,
-              fat: 12,
-              benefits: "Low glycemic index, high fiber",
-              cuisine: "USA"
+              protein: "12g",
+              carbs: "45g",
+              fat: "12g"
             }
           ],
           lunch: [
             {
-              name: "Grilled Salmon with Quinoa",
+              day: "Monday",
+              meal: "Grilled Salmon with Quinoa",
+              nutrition: "450 cal, 35g protein, 30g carbs, 20g fat",
               calories: 450,
-              protein: 35,
-              carbs: 30,
-              fat: 20,
-              benefits: "Omega-3 fatty acids, lean protein",
-              cuisine: "USA"
+              protein: "35g",
+              carbs: "30g",
+              fat: "20g"
             }
           ],
           dinner: [
             {
-              name: "Dal with Brown Rice",
+              day: "Monday",
+              meal: "Dal with Brown Rice",
+              nutrition: "380 cal, 15g protein, 60g carbs, 8g fat",
               calories: 380,
-              protein: 15,
-              carbs: 60,
-              fat: 8,
-              benefits: "Plant protein, complex carbs",
-              cuisine: "Indian"
+              protein: "15g",
+              carbs: "60g",
+              fat: "8g"
+            }
+          ],
+          snacks: [
+            {
+              day: "Monday",
+              meal: "Greek Yogurt with Nuts",
+              nutrition: "280 cal, 18g protein, 25g carbs, 15g fat",
+              calories: 280,
+              protein: "18g",
+              carbs: "25g",
+              fat: "15g"
             }
           ]
         },
@@ -1260,35 +1326,46 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
         mealPlan: {
           breakfast: [
             {
-              name: "Steel-Cut Oatmeal with Berries",
+              day: "Monday",
+              meal: "Steel-Cut Oatmeal with Berries",
+              nutrition: "320 cal, 12g protein, 45g carbs, 12g fat",
               calories: 320,
-              protein: 12,
-              carbs: 45,
-              fat: 12,
-              benefits: "Low glycemic index, high fiber",
-              cuisine: "USA"
+              protein: "12g",
+              carbs: "45g",
+              fat: "12g"
             }
           ],
           lunch: [
             {
-              name: "Grilled Salmon with Quinoa",
+              day: "Monday",
+              meal: "Grilled Salmon with Quinoa",
+              nutrition: "450 cal, 35g protein, 30g carbs, 20g fat",
               calories: 450,
-              protein: 35,
-              carbs: 30,
-              fat: 20,
-              benefits: "Omega-3 fatty acids, lean protein",
-              cuisine: "USA"
+              protein: "35g",
+              carbs: "30g",
+              fat: "20g"
             }
           ],
           dinner: [
             {
-              name: "Dal with Brown Rice",
+              day: "Monday",
+              meal: "Dal with Brown Rice",
+              nutrition: "380 cal, 15g protein, 60g carbs, 8g fat",
               calories: 380,
-              protein: 15,
-              carbs: 60,
-              fat: 8,
-              benefits: "Plant protein, complex carbs",
-              cuisine: "Indian"
+              protein: "15g",
+              carbs: "60g",
+              fat: "8g"
+            }
+          ],
+          snacks: [
+            {
+              day: "Monday",
+              meal: "Greek Yogurt with Nuts",
+              nutrition: "280 cal, 18g protein, 25g carbs, 15g fat",
+              calories: 280,
+              protein: "18g",
+              carbs: "25g",
+              fat: "15g"
             }
           ]
         },
@@ -1364,35 +1441,46 @@ app.get('/api/health-analysis/food-recommendations', async (req, res) => {
        mealPlan: {
          breakfast: [
            {
-             name: "Steel-Cut Oatmeal with Berries",
+             day: "Monday",
+             meal: "Steel-Cut Oatmeal with Berries",
+             nutrition: "320 cal, 12g protein, 45g carbs, 12g fat",
              calories: 320,
-             protein: 12,
-             carbs: 45,
-             fat: 12,
-             benefits: "Low glycemic index, high fiber",
-             cuisine: "USA"
+             protein: "12g",
+             carbs: "45g",
+             fat: "12g"
            }
          ],
          lunch: [
            {
-             name: "Grilled Salmon with Quinoa",
+             day: "Monday",
+             meal: "Grilled Salmon with Quinoa",
+             nutrition: "450 cal, 35g protein, 30g carbs, 20g fat",
              calories: 450,
-             protein: 35,
-             carbs: 30,
-             fat: 20,
-             benefits: "Omega-3 fatty acids, lean protein",
-             cuisine: "USA"
+             protein: "35g",
+             carbs: "30g",
+             fat: "20g"
            }
          ],
          dinner: [
            {
-             name: "Dal with Brown Rice",
+             day: "Monday",
+             meal: "Dal with Brown Rice",
+             nutrition: "380 cal, 15g protein, 60g carbs, 8g fat",
              calories: 380,
-             protein: 15,
-             carbs: 60,
-             fat: 8,
-             benefits: "Plant protein, complex carbs",
-             cuisine: "Indian"
+             protein: "15g",
+             carbs: "60g",
+             fat: "8g"
+           }
+         ],
+         snacks: [
+           {
+             day: "Monday",
+             meal: "Greek Yogurt with Nuts",
+             nutrition: "280 cal, 18g protein, 25g carbs, 15g fat",
+             calories: 280,
+             protein: "18g",
+             carbs: "25g",
+             fat: "15g"
            }
          ]
        },
