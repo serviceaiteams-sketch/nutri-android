@@ -41,5 +41,33 @@
     <string name="profile">Profile</string>
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
+    
+    <!-- Health Analysis -->
+    <string name="health_report_analysis">Health Report Analysis</string>
+    <string name="ai_powered_analysis">AI-powered analysis of your health reports</string>
+    <string name="your_health_score">Your Health Score</string>
+    <string name="report_summary">Report Summary</string>
+    <string name="analysis_details">Analysis Details</string>
+    <string name="key_health_metrics">Key Health Metrics</string>
+    <string name="risk_factors">Risk Factors</string>
+    <string name="health_recommendations">Health Recommendations</string>
+    <string name="nutrition_guidance">Nutrition Guidance</string>
+    <string name="no_analysis_available">No Analysis Available</string>
+    <string name="upload_reports_message">Upload your health reports to get AI-powered analysis</string>
+    
+    <!-- Food Recommendations -->
+    <string name="food_recommendations">Food Recommendations</string>
+    <string name="personalized_recommendations">Personalized recommendations based on your health analysis</string>
+    <string name="personalized_food_recommendations">Personalized Food Recommendations</string>
+    <string name="swipe_recommendations">🍎 Swipe left/right to see more recommendations</string>
+    <string name="sample_meal_plan">Sample Meal Plan</string>
+    <string name="breakfast">🌅 Breakfast</string>
+    <string name="lunch">☀️ Lunch</string>
+    <string name="dinner">🌙 Dinner</string>
+    <string name="snacks">🍎 Snacks</string>
+    <string name="foods_to_avoid">Foods to Avoid</string>
+    <string name="recommended_supplements">Recommended Supplements</string>
+    <string name="no_recommendations_yet">No Recommendations Yet</string>
+    <string name="complete_analysis_message">Complete your health analysis to get personalized food recommendations</string>
 </resources>
 
