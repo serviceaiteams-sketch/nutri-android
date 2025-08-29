@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/background_gradient"
     tools:context=".presentation.meals.MealHistoryFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -17,88 +17,113 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Header Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Meal History"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="24dp">
 
-            <!-- Date Selector -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Meal History"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-medium" />
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_notification"
+                    android:tint="@color/white"
+                    android:alpha="0.8" />
+
+            </LinearLayout>
+
+            <!-- Date Selector Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/dateCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginBottom="20dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="12dp">
+                app:cardElevation="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp"
+                    android:padding="20dp"
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_calendar"
-                        app:tint="@color/primary" />
+                        android:tint="@color/primary" />
 
                     <TextView
                         android:id="@+id/tvSelectedDate"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="12dp"
-                        android:text="Today"
-                        android:textSize="16sp"
-                        android:textColor="@color/text_primary" />
+                        android:layout_marginStart="16dp"
+                        android:text="Today, August 29"
+                        android:textSize="18sp"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_arrow_drop_down"
-                        app:tint="@color/text_secondary" />
+                        android:tint="@color/text_secondary" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Daily Summary -->
+            <!-- Daily Summary Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/dailySummaryCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="@color/primary_light">
+                android:layout_marginBottom="20dp"
+                app:cardElevation="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/primary"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Daily Summary"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_secondary" />
+                        android:textSize="16sp"
+                        android:textColor="@color/white"
+                        android:alpha="0.9"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="16dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp">
+                        android:orientation="horizontal">
 
                         <!-- Calories -->
                         <LinearLayout
@@ -112,17 +137,19 @@
                                 android:id="@+id/tvTotalCalories"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textSize="20sp"
+                                android:text="1050"
+                                android:textSize="24sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/primary" />
+                                android:textColor="@color/white"
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Calories"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:alpha="0.8" />
 
                         </LinearLayout>
 
@@ -138,17 +165,19 @@
                                 android:id="@+id/tvTotalProtein"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0g"
-                                android:textSize="20sp"
+                                android:text="65g"
+                                android:textSize="24sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/success" />
+                                android:textColor="@color/success"
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Protein"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:alpha="0.8" />
 
                         </LinearLayout>
 
@@ -164,17 +193,19 @@
                                 android:id="@+id/tvTotalCarbs"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0g"
-                                android:textSize="20sp"
+                                android:text="85g"
+                                android:textSize="24sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/warning" />
+                                android:textColor="@color/warning"
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Carbs"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:alpha="0.8" />
 
                         </LinearLayout>
 
@@ -190,17 +221,19 @@
                                 android:id="@+id/tvTotalFat"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0g"
-                                android:textSize="20sp"
+                                android:text="52g"
+                                android:textSize="24sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/error" />
+                                android:textColor="@color/error"
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Fat"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:alpha="0.8" />
 
                         </LinearLayout>
 
@@ -219,7 +252,7 @@
         android:id="@+id/rvMeals"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="80dp"
+        android:paddingBottom="100dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_meal" />
@@ -231,32 +264,36 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="32dp"
+        android:padding="40dp"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             android:src="@drawable/ic_restaurant"
-            app:tint="@color/text_disabled"
-            android:alpha="0.5" />
+            android:tint="@color/white"
+            android:alpha="0.6" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="No meals logged"
-            android:textSize="18sp"
-            android:textColor="@color/text_secondary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Start tracking your meals to see them here"
-            android:textColor="@color/text_disabled"
+            android:layout_marginTop="24dp"
+            android:text="No meals logged yet"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Start tracking your meals to see your nutrition history"
+            android:textColor="@color/white"
+            android:alpha="0.7"
+            android:gravity="center"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -266,6 +303,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:indeterminateTint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
