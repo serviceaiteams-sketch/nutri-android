@@ -72,6 +72,9 @@ class HealthDashboardFragment : Fragment() {
     }
     
     private fun animateEntrance() {
+        // Check if fragment is still attached
+        if (!isAdded || context == null) return
+        
         // Main container fade in
         binding.root.alpha = 0f
         binding.root.animate()
@@ -125,6 +128,9 @@ class HealthDashboardFragment : Fragment() {
         lifecycleScope.launch {
             delay(1000) // Wait for entrance animations
             
+            // Check if fragment is still attached
+            if (!isAdded || context == null) return@launch
+            
             // Find all progress bars and animate them
             val progressBars = mutableListOf<ProgressBar>()
             val progressTexts = mutableListOf<TextView>()
@@ -169,6 +175,9 @@ class HealthDashboardFragment : Fragment() {
         lifecycleScope.launch {
             // Simulate data refresh
             delay(1000)
+            
+            // Check if fragment is still attached
+            if (!isAdded || context == null) return@launch
             
             // Update streak
             binding.root.findViewById<TextView>(R.id.tvStreak)?.text = "7 days"

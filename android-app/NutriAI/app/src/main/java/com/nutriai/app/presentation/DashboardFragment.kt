@@ -74,13 +74,17 @@ class DashboardFragment : Fragment() {
     
     private fun animateEntrance() {
         // Animate header card
-        val headerAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
-        binding.headerCard.startAnimation(headerAnimation)
+        context?.let { ctx ->
+            val headerAnimation = AnimationUtils.loadAnimation(ctx, R.anim.slide_up)
+            binding.headerCard.startAnimation(headerAnimation)
+        }
         
         // Animate streak card with delay
         binding.cardStreak.postDelayed({
-            val streakAnimation = AnimationUtils.loadAnimation(context, R.anim.scale_in)
-            binding.cardStreak.startAnimation(streakAnimation)
+            context?.let { ctx ->
+                val streakAnimation = AnimationUtils.loadAnimation(ctx, R.anim.scale_in)
+                binding.cardStreak.startAnimation(streakAnimation)
+            }
         }, 200L) // Ensure this is Long if required by postDelayed, it often is.
         
         // Animate nutrition cards with staggered delays
@@ -93,15 +97,19 @@ class DashboardFragment : Fragment() {
         
         nutritionCards.forEachIndexed { index, card ->
             card.postDelayed({
-                val cardAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
-                card.startAnimation(cardAnimation)
+                context?.let { ctx ->
+                    val cardAnimation = AnimationUtils.loadAnimation(ctx, R.anim.slide_up)
+                    card.startAnimation(cardAnimation)
+                }
             }, 400L + (index * 100L))
         }
         
         // Animate quick actions with delay
         binding.quickActionsContainer.postDelayed({
-            val actionsAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-            binding.quickActionsContainer.startAnimation(actionsAnimation)
+            context?.let { ctx ->
+                val actionsAnimation = AnimationUtils.loadAnimation(ctx, R.anim.fade_in)
+                binding.quickActionsContainer.startAnimation(actionsAnimation)
+            }
         }, 800L) // Ensure this is Long
     }
     
