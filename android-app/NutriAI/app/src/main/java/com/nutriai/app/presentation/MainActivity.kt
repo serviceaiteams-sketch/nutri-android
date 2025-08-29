@@ -19,6 +19,7 @@ import com.nutriai.app.presentation.auth.LoginActivity
 import com.nutriai.app.presentation.food.FoodRecognitionFragment
 import com.nutriai.app.presentation.meals.MealHistoryFragment
 import com.nutriai.app.presentation.health.HealthReportsFragment
+import com.nutriai.app.presentation.health.HealthDashboardFragment
 import com.nutriai.app.presentation.DashboardFragment
 import com.nutriai.app.utils.NetworkUtils
 import kotlinx.coroutines.flow.first
@@ -185,6 +186,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_health_reports -> {
                 navigateToFragment(HealthReportsFragment())
+            }
+            R.id.nav_health_dashboard -> {
+                navigateToFragment(HealthDashboardFragment.newInstance())
             }
             R.id.nav_meal_planning -> {
                 navigateToFragment(com.nutriai.app.presentation.meals.MealPlanningFragment.newInstance())
