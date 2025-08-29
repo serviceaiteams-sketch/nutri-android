@@ -2,17 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="12dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
     android:background="@drawable/card_background"
-    android:elevation="3dp">
+    android:elevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
         <!-- Header Section with Food Icon and Name -->
         <LinearLayout
@@ -22,12 +21,12 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:src="@drawable/ic_food"
                 android:tint="@color/success"
                 android:background="@drawable/circle_background_success"
-                android:padding="8dp" />
+                android:padding="12dp" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -40,24 +39,24 @@
                     android:id="@+id/tvFoodName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Spinach and Feta Omelette"
-                    android:textSize="18sp"
+                    android:text="Steel-Cut Oatmeal with Berries"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@color/text_primary"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/tvCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Protein-Rich Breakfast"
-                    android:textSize="12sp"
-                    android:textColor="@color/primary"
+                    android:layout_marginTop="4dp"
+                    android:text="Breakfast"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
                     android:background="@drawable/category_pill_background"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp" />
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:fontFamily="sans-serif-medium" />
 
             </LinearLayout>
 
@@ -66,14 +65,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="HIGH"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:background="@drawable/priority_high_background"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:fontFamily="sans-serif-medium" />
 
         </LinearLayout>
 
@@ -82,25 +80,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="✨ Health Benefits"
-                android:textSize="14sp"
+                android:text="⚡ Health Benefits"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/success" />
+                android:textColor="@color/success"
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/tvReason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="High in magnesium, which may help alleviate migraines. Rich in protein and healthy fats for sustained energy."
-                android:textSize="13sp"
+                android:layout_marginTop="8dp"
+                android:text="Low glycemic index, high fiber content helps regulate blood sugar levels"
+                android:textSize="14sp"
                 android:textColor="@color/text_secondary"
-                android:lineSpacingExtra="2dp" />
+                android:lineSpacingExtra="3dp" />
 
         </LinearLayout>
 
@@ -109,21 +108,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📊 Nutritional Profile"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif-medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="12dp">
 
                 <!-- Calories -->
                 <LinearLayout
@@ -133,23 +133,24 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/nutrition_pill_background"
-                    android:padding="8dp"
-                    android:layout_marginEnd="4dp">
+                    android:padding="12dp"
+                    android:layout_marginEnd="6dp">
 
                     <TextView
                         android:id="@+id/tvCalories"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="320"
-                        android:textSize="16sp"
+                        android:text="320.0"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Calories"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
@@ -162,24 +163,24 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/nutrition_pill_background"
-                    android:padding="8dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp">
+                    android:padding="12dp"
+                    android:layout_marginHorizontal="3dp">
 
                     <TextView
                         android:id="@+id/tvProtein"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="22g"
-                        android:textSize="16sp"
+                        android:text="12.0g"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Protein"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
@@ -192,24 +193,24 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/nutrition_pill_background"
-                    android:padding="8dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp">
+                    android:padding="12dp"
+                    android:layout_marginHorizontal="3dp">
 
                     <TextView
                         android:id="@+id/tvCarbs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8g"
-                        android:textSize="16sp"
+                        android:text="45.0g"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Carbs"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
@@ -222,23 +223,24 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/nutrition_pill_background"
-                    android:padding="8dp"
-                    android:layout_marginStart="4dp">
+                    android:padding="12dp"
+                    android:layout_marginStart="6dp">
 
                     <TextView
                         android:id="@+id/tvFat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24g"
-                        android:textSize="16sp"
+                        android:text="12.0g"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary" />
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fat"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
@@ -252,7 +254,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="20dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -260,24 +262,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:background="@drawable/info_pill_background"
-                android:padding="12dp"
-                android:layout_marginEnd="6dp">
+                android:padding="16dp"
+                android:layout_marginEnd="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="🍽️ Serving Size"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@color/text_primary"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/tvServingSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="2 eggs, 1/2 cup spinach, 1/4 cup feta"
-                    android:textSize="11sp"
+                    android:layout_marginTop="6dp"
+                    android:text="1 cup cooked"
+                    android:textSize="13sp"
                     android:textColor="@color/text_secondary" />
 
             </LinearLayout>
@@ -288,24 +291,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:background="@drawable/info_pill_background"
-                android:padding="12dp"
-                android:layout_marginStart="6dp">
+                android:padding="16dp"
+                android:layout_marginStart="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="⏰ Best Time"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@color/text_primary"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/tvBestTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Breakfast (7-9 AM)"
-                    android:textSize="11sp"
+                    android:layout_marginTop="6dp"
+                    android:text="Breakfast (7-9)"
+                    android:textSize="13sp"
                     android:textColor="@color/text_secondary" />
 
             </LinearLayout>
@@ -317,25 +321,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="👨‍🍳 Preparation Tips"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/tvPreparationTips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="• Use fresh spinach for best flavor\n• Cook eggs on medium heat for fluffy texture\n• Add feta just before serving to prevent melting"
-                android:textSize="12sp"
+                android:layout_marginTop="8dp"
+                android:text="• Cook with water or milk for creamier texture\n• Add berries and nuts for extra nutrition\n• Sweeten with honey instead of sugar"
+                android:textSize="13sp"
                 android:textColor="@color/text_secondary"
-                android:lineSpacingExtra="2dp" />
+                android:lineSpacingExtra="3dp" />
 
         </LinearLayout>
 
@@ -344,25 +349,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="🔄 Alternatives"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/tvAlternatives"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="• Replace feta with goat cheese\n• Use kale instead of spinach\n• Add mushrooms for extra nutrients"
-                android:textSize="12sp"
+                android:layout_marginTop="8dp"
+                android:text="• Replace with quinoa for protein boost\n• Use almond milk for dairy-free option\n• Add chia seeds for omega-3"
+                android:textSize="13sp"
                 android:textColor="@color/text_secondary"
-                android:lineSpacingExtra="2dp" />
+                android:lineSpacingExtra="3dp" />
 
         </LinearLayout>
 
@@ -371,34 +377,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:id="@+id/tvFrequency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Frequency: 3-4 times/week"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textColor="@color/primary"
                 android:background="@drawable/frequency_pill_background"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp" />
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/tvNotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Note: Avoid if allergic to eggs or dairy"
-                android:textSize="11sp"
+                android:layout_marginStart="12dp"
+                android:text="Note: Great for diabetes management"
+                android:textSize="12sp"
                 android:textColor="@color/warning"
                 android:background="@drawable/warning_pill_background"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp" />
 
         </LinearLayout>
 
