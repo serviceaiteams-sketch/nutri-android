@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme -->
-    <style name="Theme.NutriAI" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.NutriAI" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -32,8 +32,10 @@
         <item name="shapeAppearanceSmallComponent">@style/Shape.Round</item>
         <item name="shapeAppearanceMediumComponent">@style/Shape.Round</item>
         <item name="shapeAppearanceLargeComponent">@style/Shape.Round</item>
-        <item name="motionDurationLong1">400</item>
-        <item name="motionDurationMedium2">250</item>
+        <item name="motionDurationLong1">600</item>
+        <item name="motionDurationMedium2">400</item>
+        <item name="motionDurationShort1">200</item>
+        <item name="motionEasingStandard">@android:interpolator/fast_out_slow_in</item>
     </style>
     
     <!-- Theme with ActionBar -->
@@ -68,16 +70,20 @@
     <!-- Custom Button Style -->
     <style name="Widget.NutriAI.Button" parent="Widget.Material3.Button">
         <item name="android:textAllCaps">false</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="cornerRadius">8dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
     
     <!-- Custom OutlinedButton Style -->
     <style name="Widget.NutriAI.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:textAllCaps">false</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="cornerRadius">8dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="cornerRadius">16dp</item>
         <item name="strokeColor">@color/primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
     
     <!-- Custom TextInputLayout Style -->
@@ -90,6 +96,6 @@
 
     <style name="Shape.Round" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">16dp</item>
+        <item name="cornerSize">20dp</item>
     </style>
 </resources>

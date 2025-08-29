@@ -1,9 +1,12 @@
 package com.nutriai.app.presentation
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -67,6 +70,42 @@ class DashboardFragment : Fragment() {
             R.color.secondary,
             R.color.accent
         )
+        
+        // Add entrance animations
+        animateEntrance()
+    }
+    
+    private fun animateEntrance() {
+        // Animate header card
+        val headerAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+        binding.headerCard.startAnimation(headerAnimation)
+        
+        // Animate streak card with delay
+        binding.cardStreak.postDelayed({
+            val streakAnimation = AnimationUtils.loadAnimation(context, R.anim.scale_in)
+            binding.cardStreak.startAnimation(streakAnimation)
+        }, 200)
+        
+        // Animate nutrition cards with staggered delays
+        val nutritionCards = listOf(
+            binding.caloriesCard.root,
+            binding.proteinCard.root,
+            binding.carbsCard.root,
+            binding.fatCard.root
+        )
+        
+        nutritionCards.forEachIndexed { index, card ->
+            card.postDelayed({
+                val cardAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+                card.startAnimation(cardAnimation)
+            }, 400 + (index * 100))
+        }
+        
+        // Animate quick actions with delay
+        binding.quickActionsContainer.postDelayed({
+            val actionsAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+            binding.quickActionsContainer.startAnimation(actionsAnimation)
+        }, 800)
     }
     
     private fun observeDashboardData() {
@@ -163,19 +202,53 @@ class DashboardFragment : Fragment() {
     
     private fun setupClickListeners() {
         binding.btnLogMeal.setOnClickListener {
-            // Navigate to meal history to show logged meals
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, MealHistoryFragment())
-                .addToBackStack(null)
-                .commit()
+            // Add button press animation
+            animateButtonPress(binding.btnLogMeal) {
+                // Navigate to meal history to show logged meals
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, MealHistoryFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
         
         binding.btnScanFood.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FoodRecognitionFragment())
-                .addToBackStack(null)
-                .commit()
+            // Add button press animation
+            animateButtonPress(binding.btnScanFood) {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, FoodRecognitionFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
+    }
+    
+    private fun animateButtonPress(button: View, onComplete: () -> Unit) {
+        val scaleDown = ObjectAnimator.ofFloat(button, "scaleX", 0.95f)
+        val scaleDownY = ObjectAnimator.ofFloat(button, "scaleY", 0.95f)
+        val scaleUp = ObjectAnimator.ofFloat(button, "scaleX", 1.0f)
+        val scaleUpY = ObjectAnimator.ofFloat(button, "scaleY", 1.0f)
+        
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(scaleDown, scaleDownY)
+        animatorSet.duration = 100
+        
+        val animatorSet2 = AnimatorSet()
+        animatorSet2.playTogether(scaleUp, scaleUpY)
+        animatorSet2.duration = 100
+        
+        val finalSet = AnimatorSet()
+        finalSet.playSequentially(animatorSet, animatorSet2)
+        finalSet.start()
+        
+        finalSet.addListener(object : android.animation.Animator.AnimatorListener {
+            override fun onAnimationStart(animation: android.animation.Animator) {}
+            override fun onAnimationEnd(animation: android.animation.Animator) {
+                onComplete()
+            }
+            override fun onAnimationCancel(animation: android.animation.Animator) {}
+            override fun onAnimationRepeat(animation: android.animation.Animator) {}
+        })
     }
     
     private fun showLoading(isLoading: Boolean) {

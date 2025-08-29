@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Colors -->
-    <color name="primary">#2563EB</color>
-    <color name="primary_dark">#1E40AF</color>
-    <color name="primary_light">#60A5FA</color>
+    <!-- Primary Colors - Healthify Style -->
+    <color name="primary">#0EA5E9</color>
+    <color name="primary_dark">#0284C7</color>
+    <color name="primary_light">#38BDF8</color>
     
-    <!-- Secondary Colors -->
-    <color name="secondary">#10B981</color>
-    <color name="secondary_dark">#059669</color>
-    <color name="secondary_light">#34D399</color>
+    <!-- Secondary Colors - Healthify Style -->
+    <color name="secondary">#06B6D4</color>
+    <color name="secondary_dark">#0891B2</color>
+    <color name="secondary_light">#22D3EE</color>
     
-    <!-- Accent Colors -->
-    <color name="accent">#F59E0B</color>
-    <color name="accent_dark">#D97706</color>
-    <color name="accent_light">#FCD34D</color>
+    <!-- Accent Colors - Healthify Style -->
+    <color name="accent">#F97316</color>
+    <color name="accent_dark">#EA580C</color>
+    <color name="accent_light">#FB923C</color>
     
-    <!-- Background Colors -->
-    <color name="background">#FFFFFF</color>
-    <color name="background_secondary">#F3F4F6</color>
+    <!-- Background Colors - Healthify Style -->
+    <color name="background">#F8FAFC</color>
+    <color name="background_secondary">#F1F5F9</color>
     <color name="surface">#FFFFFF</color>
+    <color name="background_gradient_start">#E8F7FF</color>
+    <color name="background_gradient_center">#F0F9FF</color>
+    <color name="background_gradient_end">#F8FAFC</color>
     
     <!-- Text Colors -->
     <color name="text_primary">#111827</color>
@@ -27,11 +30,11 @@
     <color name="text_disabled">#D1D5DB</color>
     <color name="text_on_primary">#FFFFFF</color>
     
-    <!-- Status Colors -->
+    <!-- Status Colors - Healthify Style -->
     <color name="error">#EF4444</color>
     <color name="success">#10B981</color>
-    <color name="warning">#F59E0B</color>
-    <color name="info">#3B82F6</color>
+    <color name="warning">#F97316</color>
+    <color name="info">#0EA5E9</color>
     
     <!-- Other Colors -->
     <color name="divider">#E5E7EB</color>
@@ -43,19 +46,19 @@
     <color name="surface_light">#F8FAFC</color>
     <color name="border_light">#E5E7EB</color>
     
-    <!-- Material 3 Colors -->
-    <color name="md_theme_primary">#2563EB</color>
+    <!-- Material 3 Colors - Healthify Style -->
+    <color name="md_theme_primary">#0EA5E9</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#DBEAFE</color>
-    <color name="md_theme_onPrimaryContainer">#1E40AF</color>
-    <color name="md_theme_secondary">#10B981</color>
+    <color name="md_theme_primaryContainer">#E0F2FE</color>
+    <color name="md_theme_onPrimaryContainer">#0284C7</color>
+    <color name="md_theme_secondary">#06B6D4</color>
     <color name="md_theme_onSecondary">#FFFFFF</color>
-    <color name="md_theme_secondaryContainer">#D1FAE5</color>
-    <color name="md_theme_onSecondaryContainer">#059669</color>
-    <color name="md_theme_background">#FFFFFF</color>
-    <color name="md_theme_onBackground">#111827</color>
+    <color name="md_theme_secondaryContainer">#CFFAFE</color>
+    <color name="md_theme_onSecondaryContainer">#0891B2</color>
+    <color name="md_theme_background">#F8FAFC</color>
+    <color name="md_theme_onBackground">#0F172A</color>
     <color name="md_theme_surface">#FFFFFF</color>
-    <color name="md_theme_onSurface">#111827</color>
+    <color name="md_theme_onSurface">#0F172A</color>
     <color name="md_theme_error">#EF4444</color>
     <color name="md_theme_onError">#FFFFFF</color>
 </resources>
