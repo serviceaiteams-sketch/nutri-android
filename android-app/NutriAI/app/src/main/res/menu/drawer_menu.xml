@@ -25,6 +25,11 @@
             android:title="@string/health_reports" />
         
         <item
+            android:id="@+id/nav_health_dashboard"
+            android:icon="@drawable/ic_steps"
+            android:title="Health Dashboard" />
+        
+        <item
             android:id="@+id/nav_meal_planning"
             android:icon="@drawable/ic_calendar"
             android:title="@string/meal_planning" />

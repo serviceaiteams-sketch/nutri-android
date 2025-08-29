@@ -19,6 +19,7 @@
 
             <!-- Header Section -->
             <LinearLayout
+                android:id="@+id/headerSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -69,94 +70,216 @@
 
             </LinearLayout>
 
-            <!-- Health Stats Cards -->
+            <!-- Daily Progress Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@color/primary">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Today's Progress"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Steps -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="8,439"
+                                android:textSize="24sp"
+                                android:textColor="@color/white"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Steps"
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:alpha="0.8" />
+
+                        </LinearLayout>
+
+                        <!-- Calories -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1,234"
+                                android:textSize="24sp"
+                                android:textColor="@color/white"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Calories"
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:alpha="0.8" />
+
+                        </LinearLayout>
+
+                        <!-- Water -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="6/8"
+                                android:textSize="24sp"
+                                android:textColor="@color/white"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Glasses"
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:alpha="0.8" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Health Metrics -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Health Metrics"
+                android:textSize="20sp"
+                android:textColor="@color/text_primary"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="16dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="20dp">
 
-                <!-- Steps Card -->
+                <!-- Heart Rate -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="@color/primary">
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="16dp"
+                        android:gravity="center">
 
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:src="@drawable/ic_steps"
-                            android:tint="@color/white"
+                            android:src="@drawable/ic_heart"
+                            android:tint="@color/error"
                             android:layout_marginBottom="8dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="8,439"
-                            android:textSize="24sp"
-                            android:textColor="@color/white"
+                            android:text="72"
+                            android:textSize="20sp"
+                            android:textColor="@color/text_primary"
                             android:fontFamily="sans-serif-medium" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Steps"
-                            android:textSize="14sp"
-                            android:textColor="@color/white"
-                            android:alpha="0.8" />
+                            android:text="BPM"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary" />
 
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Calories Card -->
+                <!-- Sleep -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="6dp"
-                    app:cardBackgroundColor="@color/accent">
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/white">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="16dp"
+                        android:gravity="center">
 
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:src="@drawable/ic_calories"
-                            android:tint="@color/white"
+                            android:src="@drawable/ic_sleep"
+                            android:tint="@color/primary"
                             android:layout_marginBottom="8dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1,234"
-                            android:textSize="24sp"
-                            android:textColor="@color/white"
+                            android:text="7.5h"
+                            android:textSize="20sp"
+                            android:textColor="@color/text_primary"
                             android:fontFamily="sans-serif-medium" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Calories"
-                            android:textSize="14sp"
-                            android:textColor="@color/white"
-                            android:alpha="0.8" />
+                            android:text="Sleep"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary" />
 
                     </LinearLayout>
 
@@ -182,6 +305,7 @@
 
                 <!-- Morning Walk -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/morningWalkCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -242,6 +366,7 @@
 
                 <!-- Yoga Session -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/yogaCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -313,6 +438,7 @@
                 android:layout_marginBottom="16dp" />
 
             <LinearLayout
+                android:id="@+id/quickActionsSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">

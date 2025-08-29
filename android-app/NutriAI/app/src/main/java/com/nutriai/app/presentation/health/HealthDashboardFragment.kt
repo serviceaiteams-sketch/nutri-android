@@ -68,41 +68,24 @@ class HealthDashboardFragment : Fragment() {
     }
     
     private fun animateEntrance() {
-        // Animate header with slide up
-        val headerAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
-        binding.root.findViewById<View>(R.id.headerSection)?.startAnimation(headerAnimation)
+        // Simple fade in animation for now
+        binding.root.alpha = 0f
+        binding.root.animate()
+            .alpha(1f)
+            .setDuration(500)
+            .start()
         
-        // Animate stats cards with staggered delays
-        val statsCards = listOf(
-            binding.root.findViewById<View>(R.id.stepsCard),
-            binding.root.findViewById<View>(R.id.caloriesCard)
-        )
-        
-        statsCards.forEachIndexed { index, card ->
-            card?.postDelayed({
-                val cardAnimation = AnimationUtils.loadAnimation(context, R.anim.scale_in)
-                card.startAnimation(cardAnimation)
-            }, 200L + (index * 100L))
+        // Add some staggered animations for cards
+        binding.root.findViewById<View>(R.id.headerSection)?.let { header ->
+            header.alpha = 0f
+            header.translationY = -50f
+            header.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(600)
+                .setStartDelay(200)
+                .start()
         }
-        
-        // Animate activity cards
-        val activityCards = listOf(
-            binding.root.findViewById<View>(R.id.morningWalkCard),
-            binding.root.findViewById<View>(R.id.yogaCard)
-        )
-        
-        activityCards.forEachIndexed { index, card ->
-            card?.postDelayed({
-                val cardAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
-                card.startAnimation(cardAnimation)
-            }, 600L + (index * 150L))
-        }
-        
-        // Animate quick actions
-        binding.root.findViewById<View>(R.id.quickActionsSection)?.postDelayed({
-            val actionsAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-            binding.root.findViewById<View>(R.id.quickActionsSection)?.startAnimation(actionsAnimation)
-        }, 1000L)
     }
     
     private fun refreshHealthData() {
