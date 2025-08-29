@@ -44,8 +44,8 @@ class FoodRecommendationsAdapter : ListAdapter<FoodRecommendation, FoodRecommend
             android.util.Log.d("FoodViewHolder", "🔗 Binding recommendation: $recommendation")
             binding.apply {
                 // Basic food information
-                tvFoodName.text = recommendation.food
-                tvReason.text = recommendation.reason
+                tvFoodName.text = recommendation.food ?: "Food Item"
+                tvReason.text = recommendation.reason ?: "Good for health"
                 
                 // Category
                 tvCategory.text = recommendation.category ?: "Healthy Food"
@@ -82,31 +82,22 @@ class FoodRecommendationsAdapter : ListAdapter<FoodRecommendation, FoodRecommend
                 recommendation.servingSize?.let { serving ->
                     tvServingSize.text = serving
                 } ?: run {
-                    tvServingSize.text = "1 serving"
+                    tvServingSize.text = "1 cup"
                 }
                 
                 // Best time
-                tvBestTime.text = recommendation.bestTime ?: "Anytime"
+                tvBestTime.text = recommendation.bestTime ?: "Breakfast"
                 
-                // Preparation tips
-                tvPreparationTips.text = recommendation.preparationTips ?: "• Follow standard cooking methods\n• Use fresh ingredients when possible"
-                
-                // Alternatives
-                tvAlternatives.text = recommendation.alternatives ?: "• Try different cooking methods\n• Substitute with similar ingredients"
+                // Preparation tips (including alternatives)
+                val preparationTips = recommendation.preparationTips ?: "• Cook with water or milk\n• Add berries for flavor\n• Sweeten with honey"
+                val alternatives = recommendation.alternatives ?: "• Try different cooking methods\n• Substitute with similar ingredients"
+                tvPreparationTips.text = "$preparationTips\n\n🔄 Alternatives:\n$alternatives"
                 
                 // Frequency
                 recommendation.frequency?.let { freq ->
                     tvFrequency.text = "Frequency: $freq"
                 } ?: run {
-                    tvFrequency.text = "Frequency: As needed"
-                }
-                
-                // Notes/Warnings
-                recommendation.notes?.let { notes ->
-                    tvNotes.text = notes
-                    tvNotes.visibility = android.view.View.VISIBLE
-                } ?: run {
-                    tvNotes.visibility = android.view.View.GONE
+                    tvFrequency.text = "Frequency: 3-4 times/week"
                 }
             }
         }
