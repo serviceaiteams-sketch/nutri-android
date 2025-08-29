@@ -117,23 +117,25 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="@color/background_secondary"
-                android:padding="12dp"
-                android:layout_marginEnd="4dp">
+                android:padding="16dp"
+                android:layout_marginEnd="4dp"
+                android:minHeight="80dp">
 
                 <TextView
                     android:id="@+id/tvCalories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="320"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Calories"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textColor="@color/black" />
 
             </LinearLayout>
@@ -146,23 +148,25 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="@color/background_secondary"
-                android:padding="12dp"
-                android:layout_marginHorizontal="2dp">
+                android:padding="16dp"
+                android:layout_marginHorizontal="2dp"
+                android:minHeight="80dp">
 
                 <TextView
                     android:id="@+id/tvProtein"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12g"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Protein"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textColor="@color/black" />
 
             </LinearLayout>
@@ -175,23 +179,25 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="@color/background_secondary"
-                android:padding="12dp"
-                android:layout_marginHorizontal="2dp">
+                android:padding="16dp"
+                android:layout_marginHorizontal="2dp"
+                android:minHeight="80dp">
 
                 <TextView
                     android:id="@+id/tvCarbs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="45g"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Carbs"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textColor="@color/black" />
 
             </LinearLayout>
@@ -204,23 +210,25 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="@color/background_secondary"
-                android:padding="12dp"
-                android:layout_marginStart="4dp">
+                android:padding="16dp"
+                android:layout_marginStart="4dp"
+                android:minHeight="80dp">
 
                 <TextView
                     android:id="@+id/tvFat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12g"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Fat"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textColor="@color/black" />
 
             </LinearLayout>
