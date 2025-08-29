@@ -105,7 +105,7 @@ class HealthDashboardFragment : Fragment() {
                     .alpha(1f)
                     .translationX(0f)
                     .setDuration(500)
-                    .setStartDelay(400 + (index * 150))
+                    .setStartDelay((400 + (index * 150)).toLong())
                     .start()
             }
         }
@@ -116,7 +116,7 @@ class HealthDashboardFragment : Fragment() {
             actions.animate()
                 .alpha(1f)
                 .setDuration(400)
-                .setStartDelay(800)
+                .setStartDelay(800L)
                 .start()
         }
     }
