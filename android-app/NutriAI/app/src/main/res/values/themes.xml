@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme -->
-    <style name="Theme.NutriAI" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
+    <style name="Theme.NutriAI" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -23,7 +23,6 @@
         <!-- Error color -->
         <item name="colorError">@color/md_theme_error</item>
         <item name="colorOnError">@color/md_theme_onError</item>
-
 
         <!-- System bars / motion / shapes -->
         <item name="android:statusBarColor">@android:color/transparent</item>
