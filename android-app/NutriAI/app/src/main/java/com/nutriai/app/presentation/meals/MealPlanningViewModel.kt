@@ -103,19 +103,31 @@ class MealPlanningViewModel : ViewModel() {
                         val mealPlan = (map["mealPlan"] as? Map<String, Any>)
                         lastGeneratedPlan = mealPlan
 
-                        // Build human-readable preview (first 3 days)
+                        // Build human-readable preview (all days)
                         val days = (mealPlan?.get("days") as? List<Map<String, Any>>).orEmpty()
                         val preview = StringBuilder().apply {
                             append("AI Weekly Plan Preview\n\n")
-                            days.take(3).forEach { d ->
+                            days.forEach { d ->
                                 val dayName = (d["day"] as? String) ?: "Day"
                                 val meals = d["meals"] as? Map<String, Any>
-                                val b = (meals?.get("breakfast") as? Map<*, *>)?.get("name") as? String
-                                val l = (meals?.get("lunch") as? Map<*, *>)?.get("name") as? String
-                                val di = (meals?.get("dinner") as? Map<*, *>)?.get("name") as? String
-                                append("$dayName\n• Breakfast: ${b ?: "-"}\n• Lunch: ${l ?: "-"}\n• Dinner: ${di ?: "-"}\n\n")
+                                fun mealLine(key: String): String {
+                                    val m = meals?.get(key) as? Map<*, *>
+                                    val n = m?.get("name") as? String
+                                    val cal = (m?.get("nutrition") as? Map<*, *>)?.get("calories")
+                                    val c = when (cal) {
+                                        is Number -> cal.toInt()
+                                        is String -> cal
+                                        else -> null
+                                    }
+                                    return if (n != null) {
+                                        if (c != null) "$n (${c} cal)" else n
+                                    } else "-"
+                                }
+                                append("$dayName\n")
+                                append("• Breakfast: ${mealLine("breakfast")}\n")
+                                append("• Lunch: ${mealLine("lunch")}\n")
+                                append("• Dinner: ${mealLine("dinner")}\n\n")
                             }
-                            if (days.size > 3) append("…and more")
                         }.toString()
                         _generatedPlanPreview.value = preview
                         return@launch
