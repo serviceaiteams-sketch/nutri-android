@@ -142,10 +142,10 @@
                         app:tabBackground="@drawable/enhanced_tab_selector"
                         app:tabGravity="center"
                         app:tabIndicatorHeight="0dp"
-                        app:tabMinWidth="8dp"
-                        app:tabMaxWidth="8dp"
-                        app:tabPaddingStart="4dp"
-                        app:tabPaddingEnd="4dp" />
+                        app:tabMinWidth="6dp"
+                        app:tabMaxWidth="6dp"
+                        app:tabPaddingStart="2dp"
+                        app:tabPaddingEnd="2dp" />
 
                 </LinearLayout>
 
