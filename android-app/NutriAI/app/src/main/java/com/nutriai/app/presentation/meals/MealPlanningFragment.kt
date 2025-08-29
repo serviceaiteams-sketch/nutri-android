@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.app.AlertDialog
 import com.nutriai.app.databinding.FragmentMealPlanningBinding
 import com.nutriai.app.utils.Resource
 import kotlinx.coroutines.CancellationException
@@ -62,6 +63,26 @@ class MealPlanningFragment : Fragment() {
                 generateAIRecommendedMealPlan()
             }
             
+            // Observe AI preview to confirm before saving
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.generatedPlanPreview.collect { preview ->
+                        if (preview != null && _binding != null) {
+                            AlertDialog.Builder(requireContext())
+                                .setTitle("AI Meal Plan Preview")
+                                .setMessage(preview)
+                                .setPositiveButton("Save") { _, _ ->
+                                    viewModel.saveGeneratedMealPlan(requireContext())
+                                }
+                                .setNegativeButton("Cancel") { _, _ ->
+                                    viewModel.dismissGeneratedPreview()
+                                }
+                                .show()
+                        }
+                    }
+                }
+            }
+
         } catch (e: Exception) {
             android.util.Log.e("MealPlanningFragment", "❌ Error setting up UI: ${e.message}", e)
         }
@@ -109,12 +130,20 @@ class MealPlanningFragment : Fragment() {
     
     private fun createNewMealPlan() {
         try {
-            viewModel.createMealPlan(
-                name = "My Plan",
-                description = "Custom",
-                context = requireContext()
-            )
-            android.widget.Toast.makeText(requireContext(), "Meal plan saved", android.widget.Toast.LENGTH_SHORT).show()
+            // Ask user before saving
+            AlertDialog.Builder(requireContext())
+                .setTitle("Save Meal Plan")
+                .setMessage("Do you want to save this meal plan now?")
+                .setPositiveButton("Save") { _, _ ->
+                    viewModel.createMealPlan(
+                        name = "My Plan",
+                        description = "Custom",
+                        context = requireContext()
+                    )
+                    android.widget.Toast.makeText(requireContext(), "Meal plan saved", android.widget.Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         } catch (e: Exception) {
             android.util.Log.e("MealPlanningFragment", "❌ Error creating meal plan: ${e.message}", e)
         }
