@@ -37,9 +37,9 @@ class KeyMetricsAdapter : ListAdapter<KeyMetric, KeyMetricsAdapter.MetricViewHol
         
         fun bind(metric: KeyMetric) {
             binding.apply {
-                tvMetricName.text = metric.name.replace("_", " ").capitalize()
+                tvMetricName.text = metric.name.replace("_", " ").replaceFirstChar { it.uppercase() }
                 tvMetricValue.text = "${metric.value} ${metric.unit}"
-                tvMetricStatus.text = metric.status.capitalize()
+                tvMetricStatus.text = metric.status.replaceFirstChar { it.uppercase() }
                 
                 // Set status color
                 val statusColor = when (metric.status.lowercase()) {

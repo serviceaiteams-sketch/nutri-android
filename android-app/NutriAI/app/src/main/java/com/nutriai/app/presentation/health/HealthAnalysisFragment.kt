@@ -179,8 +179,8 @@ class HealthAnalysisFragment : Fragment() {
         
         // Animate analysis details if visible
         if (binding.cardAnalysisDetails.visibility == View.VISIBLE) {
-            // Animate reports analyzed
-            val reportsAnalyzed = analysis.analysisDetails?.reportsAnalyzed ?: 0
+            // Animate reports analyzed - convert List<String> to count
+            val reportsAnalyzed = analysis.analysisDetails?.reportsAnalyzed?.size ?: 0
             ValueAnimator.ofInt(0, reportsAnalyzed).apply {
                 duration = 1000
                 startDelay = 200L
@@ -241,22 +241,31 @@ class HealthAnalysisFragment : Fragment() {
         }
         
         // Update report summary
-        analysis.summary?.let { summary ->
+        analysis.reportSummary?.let { summary ->
             binding.tvReportSummary.text = summary
         }
         
         // Update analysis details
         analysis.analysisDetails?.let { details ->
             binding.cardAnalysisDetails.visibility = View.VISIBLE
-            binding.tvReportsAnalyzed.text = (details.reportsAnalyzed ?: 0).toString()
+            binding.tvReportsAnalyzed.text = (details.reportsAnalyzed?.size ?: 0).toString()
             binding.tvTotalTests.text = (details.totalTests ?: 0).toString()
             binding.tvAbnormalFindings.text = (details.abnormalFindings ?: 0).toString()
             binding.tvCriticalAlerts.text = (details.criticalAlerts ?: 0).toString()
         }
         
-        // Update key metrics
+        // Update key metrics - convert Map<String, MetricValue> to List<KeyMetric>
         analysis.keyMetrics?.let { metrics ->
-            metricsAdapter.submitList(metrics)
+            val keyMetricsList = metrics.map { (name, metricValue) ->
+                KeyMetric(
+                    name = name,
+                    value = metricValue.value,
+                    unit = metricValue.unit,
+                    status = metricValue.status,
+                    normalRange = metricValue.normalRange
+                )
+            }
+            metricsAdapter.submitList(keyMetricsList)
             animateRecyclerView(binding.rvKeyMetrics)
         }
         
@@ -278,8 +287,8 @@ class HealthAnalysisFragment : Fragment() {
         // Update nutrition guidance
         analysis.nutritionGuidance?.let { guidance ->
             binding.cardNutritionGuidance.visibility = View.VISIBLE
-            binding.tvFoodsToAvoid.text = guidance.foodsToAvoid ?: "None"
-            binding.tvFoodsToIncrease.text = guidance.foodsToIncrease ?: "None"
+            binding.tvFoodsToAvoid.text = guidance.foodsToAvoid?.joinToString(", ") ?: "None"
+            binding.tvFoodsToIncrease.text = guidance.foodsToIncrease?.joinToString(", ") ?: "None"
         }
     }
     
