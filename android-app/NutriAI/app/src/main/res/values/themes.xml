@@ -23,7 +23,8 @@
         <!-- Error color -->
         <item name="colorError">@color/md_theme_error</item>
         <item name="colorOnError">@color/md_theme_onError</item>
-        
+
+
         <!-- System bars / motion / shapes -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
