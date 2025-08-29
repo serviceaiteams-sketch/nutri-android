@@ -107,13 +107,12 @@ class MealPlanningFragment : Fragment() {
     
     private fun createNewMealPlan() {
         try {
-            // Navigate to meal plan creation screen
-            // For now, show a toast message
-            android.widget.Toast.makeText(
-                requireContext(),
-                "Create meal plan feature coming soon!",
-                android.widget.Toast.LENGTH_SHORT
-            ).show()
+            viewModel.createMealPlan(
+                name = "My Plan",
+                description = "Custom",
+                context = requireContext()
+            )
+            android.widget.Toast.makeText(requireContext(), "Meal plan saved", android.widget.Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             android.util.Log.e("MealPlanningFragment", "❌ Error creating meal plan: ${e.message}", e)
         }
@@ -122,7 +121,7 @@ class MealPlanningFragment : Fragment() {
     private fun generateAIRecommendedMealPlan() {
         try {
             // Generate AI-based meal plan
-            viewModel.generateAIRecommendedMealPlan()
+            viewModel.generateAIRecommendedMealPlan(requireContext())
         } catch (e: Exception) {
             android.util.Log.e("MealPlanningFragment", "❌ Error generating meal plan: ${e.message}", e)
             showErrorMessage("Failed to generate meal plan")

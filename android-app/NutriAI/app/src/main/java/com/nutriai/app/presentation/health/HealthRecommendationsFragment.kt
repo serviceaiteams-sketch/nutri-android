@@ -199,6 +199,10 @@ class HealthRecommendationsFragment : Fragment() {
     
     private fun updateRecommendationsUI(data: FoodRecommendationsResponse) {
         try {
+            if (_binding == null) {
+                android.util.Log.w("HealthRecommendationsFragment", "⚠️ Binding is null in updateRecommendationsUI; view already destroyed")
+                return
+            }
             android.util.Log.d("HealthRecommendationsFragment", "🔄 Updating recommendations UI with: $data")
             
             // Update food recommendations
@@ -208,10 +212,18 @@ class HealthRecommendationsFragment : Fragment() {
                     android.util.Log.d("HealthRecommendationsFragment", "🍽️ Recommendations content: $recommendations")
                     
                     // Check if adapter is initialized
+                    if (_binding == null) {
+                        android.util.Log.w("HealthRecommendationsFragment", "⚠️ Binding became null before posting UI update")
+                        return@let
+                    }
                     if (::foodRecommendationsViewPagerAdapter.isInitialized) {
                         // Run on main thread to avoid crashes
                         binding.root.post {
                             try {
+                                if (_binding == null) {
+                                    android.util.Log.w("HealthRecommendationsFragment", "⚠️ Binding became null during post; aborting UI update")
+                                    return@post
+                                }
                                 // Validate recommendations before submitting
                                 val validRecommendations = recommendations.filter { recommendation ->
                                     recommendation.food != null && recommendation.reason != null
@@ -311,6 +323,10 @@ class HealthRecommendationsFragment : Fragment() {
     
     private fun showEmptyState(show: Boolean) {
         try {
+            if (_binding == null) {
+                android.util.Log.w("HealthRecommendationsFragment", "⚠️ Binding is null in showEmptyState; view already destroyed")
+                return
+            }
             android.util.Log.d("HealthRecommendationsFragment", "🎭 Setting empty state: $show")
             
             if (show) {

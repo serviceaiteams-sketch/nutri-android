@@ -595,6 +595,15 @@ try {
   console.warn('⚠️ Could not mount AI routes:', e.message);
 }
 
+// Mount meal planning routes
+try {
+  const mealPlanningRoutes = require('./routes/meal-planning');
+  app.use('/api/meal-planning', mealPlanningRoutes);
+  console.log('✅ Mounted Meal Planning routes at /api/meal-planning');
+} catch (e) {
+  console.warn('⚠️ Could not mount meal planning routes:', e.message);
+}
+
 // Root endpoint - welcome page
 app.get('/', (req, res) => {
   res.json({

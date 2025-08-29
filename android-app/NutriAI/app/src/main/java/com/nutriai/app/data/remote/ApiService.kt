@@ -92,5 +92,24 @@ interface ApiService {
     suspend fun getFoodRecommendations(
         @Header("Authorization") token: String
     ): Response<FoodRecommendationsResponse>
+
+    // Meal Planning
+    @POST("meal-planning/generate")
+    suspend fun generateMealPlan(
+        @Header("Authorization") token: String,
+        @Body request: Map<String, @JvmSuppressWildcards Any>
+    ): Response<Map<String, @JvmSuppressWildcards Any>>
+
+    @POST("meal-planning/save")
+    suspend fun saveMealPlan(
+        @Header("Authorization") token: String,
+        @Body request: Map<String, @JvmSuppressWildcards Any>
+    ): Response<Map<String, @JvmSuppressWildcards Any>>
+
+    @GET("meal-planning/history")
+    suspend fun getMealPlanHistory(
+        @Header("Authorization") token: String,
+        @Query("limit") limit: Int = 10
+    ): Response<Map<String, @JvmSuppressWildcards Any>>
 }
 
