@@ -126,13 +126,7 @@ object NetworkUtils {
         Log.d(TAG, "🔧 Manual server IP cleared")
     }
     
-    /**
-     * Check if this is a production build
-     */
-    private fun isProductionBuild(): Boolean {
-        // You can set this based on BuildConfig.DEBUG or a custom flag
-        return false // For now, always use development mode
-    }
+
     
     /**
      * Detect the local server URL by trying common IP addresses
@@ -327,17 +321,8 @@ object NetworkUtils {
      * Check if this is a production build
      */
     private fun isProductionBuild(): Boolean {
-        return try {
-            // Check if BuildConfig.DEBUG is available (this will be false in release builds)
-            val buildConfigClass = Class.forName("com.nutriai.app.BuildConfig")
-            val debugField = buildConfigClass.getField("DEBUG")
-            val isDebug = debugField.getBoolean(null)
-            !isDebug
-        } catch (e: Exception) {
-            // If we can't determine, assume it's a debug build for safety
-            Log.w(TAG, "Could not determine build type, assuming debug build")
-            false
-        }
+        // For now, always use production server since local server is not running
+        return true
     }
     
     /**

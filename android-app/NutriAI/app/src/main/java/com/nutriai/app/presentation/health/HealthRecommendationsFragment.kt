@@ -212,12 +212,22 @@ class HealthRecommendationsFragment : Fragment() {
                         // Run on main thread to avoid crashes
                         binding.root.post {
                             try {
-                                foodRecommendationsViewPagerAdapter.submitList(recommendations)
+                                // Validate recommendations before submitting
+                                val validRecommendations = recommendations.filter { recommendation ->
+                                    recommendation.food != null && recommendation.reason != null
+                                }
                                 
-                                // Check if ViewPager is visible
-                                android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager visible: ${binding.viewPagerFoodRecommendations.isVisible}")
-                                android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager adapter count: ${foodRecommendationsViewPagerAdapter.itemCount}")
-                                android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager current item: ${binding.viewPagerFoodRecommendations.currentItem}")
+                                if (validRecommendations.isNotEmpty()) {
+                                    foodRecommendationsViewPagerAdapter.submitList(validRecommendations)
+                                    
+                                    // Check if ViewPager is visible
+                                    android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager visible: ${binding.viewPagerFoodRecommendations.isVisible}")
+                                    android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager adapter count: ${foodRecommendationsViewPagerAdapter.itemCount}")
+                                    android.util.Log.d("HealthRecommendationsFragment", "👁️ ViewPager current item: ${binding.viewPagerFoodRecommendations.currentItem}")
+                                } else {
+                                    android.util.Log.w("HealthRecommendationsFragment", "⚠️ No valid recommendations found")
+                                    showEmptyState(true)
+                                }
                             } catch (e: Exception) {
                                 android.util.Log.e("HealthRecommendationsFragment", "❌ Error in ViewPager update: ${e.message}", e)
                                 showEmptyState(true)
@@ -302,12 +312,98 @@ class HealthRecommendationsFragment : Fragment() {
     private fun showEmptyState(show: Boolean) {
         try {
             android.util.Log.d("HealthRecommendationsFragment", "🎭 Setting empty state: $show")
-            binding.emptyState.isVisible = show
-            binding.viewPagerFoodRecommendations.isVisible = !show
+            
+            if (show) {
+                binding.emptyState.isVisible = true
+                binding.viewPagerFoodRecommendations.isVisible = false
+                binding.mealPlanCard.isVisible = false
+                binding.nutritionGuidanceCard.isVisible = false
+                
+                // Show fallback recommendations if API fails
+                showFallbackRecommendations()
+            } else {
+                binding.emptyState.isVisible = false
+                binding.viewPagerFoodRecommendations.isVisible = true
+                binding.mealPlanCard.isVisible = true
+                binding.nutritionGuidanceCard.isVisible = true
+            }
+            
             android.util.Log.d("HealthRecommendationsFragment", "🎭 Empty state visible: ${binding.emptyState.isVisible}")
             android.util.Log.d("HealthRecommendationsFragment", "🎭 ViewPager visible: ${binding.viewPagerFoodRecommendations.isVisible}")
         } catch (e: Exception) {
             android.util.Log.e("HealthRecommendationsFragment", "❌ Error setting empty state: ${e.message}", e)
+        }
+    }
+    
+    private fun showFallbackRecommendations() {
+        try {
+            // Create fallback recommendations
+            val fallbackRecommendations = listOf(
+                com.nutriai.app.data.models.FoodRecommendation(
+                    food = "Steel-Cut Oatmeal with Berries",
+                    reason = "Low glycemic index, high fiber content helps regulate blood sugar levels",
+                    category = "Breakfast",
+                    priority = "HIGH",
+                    calories = 320f,
+                    protein = 12f,
+                    carbs = 45f,
+                    fat = 12f,
+                    servingSize = "1 cup cooked oatmeal with 1/2 cup mixed berries",
+                    bestTime = "Breakfast (7-9 AM)",
+                    preparationTips = "• Use steel-cut oats for best texture\n• Add berries just before serving\n• Top with nuts for extra protein",
+                    alternatives = "• Try quinoa porridge instead\n• Use different berries or fruits\n• Add chia seeds for omega-3",
+                    frequency = "3-4 times per week",
+                    notes = "Excellent for diabetes management due to low glycemic index"
+                ),
+                com.nutriai.app.data.models.FoodRecommendation(
+                    food = "Grilled Salmon with Quinoa",
+                    reason = "Omega-3 fatty acids help reduce inflammation and improve insulin sensitivity",
+                    category = "Lunch",
+                    priority = "HIGH",
+                    calories = 450f,
+                    protein = 35f,
+                    carbs = 30f,
+                    fat = 20f,
+                    servingSize = "4 oz salmon with 1/2 cup quinoa",
+                    bestTime = "Lunch (12-2 PM)",
+                    preparationTips = "• Grill salmon for 4-5 minutes per side\n• Season with herbs and lemon\n• Serve with steamed vegetables",
+                    alternatives = "• Try mackerel or sardines\n• Substitute with tofu for vegetarian option\n• Use brown rice instead of quinoa",
+                    frequency = "2-3 times per week",
+                    notes = "Rich in omega-3 fatty acids beneficial for heart health"
+                ),
+                com.nutriai.app.data.models.FoodRecommendation(
+                    food = "Greek Yogurt with Nuts",
+                    reason = "High potassium content helps lower blood pressure naturally",
+                    category = "Snack",
+                    priority = "HIGH",
+                    calories = 280f,
+                    protein = 18f,
+                    carbs = 25f,
+                    fat = 15f,
+                    servingSize = "1 cup Greek yogurt with 1/4 cup mixed nuts",
+                    bestTime = "Snack (3-4 PM)",
+                    preparationTips = "• Choose plain Greek yogurt\n• Add fresh berries for sweetness\n• Include almonds and walnuts",
+                    alternatives = "• Try cottage cheese instead\n• Use different types of nuts\n• Add honey for natural sweetness",
+                    frequency = "Daily",
+                    notes = "Excellent source of potassium for blood pressure management"
+                )
+            )
+            
+            // Show fallback recommendations
+            if (::foodRecommendationsViewPagerAdapter.isInitialized) {
+                binding.root.post {
+                    try {
+                        foodRecommendationsViewPagerAdapter.submitList(fallbackRecommendations)
+                        binding.viewPagerFoodRecommendations.isVisible = true
+                        binding.emptyState.isVisible = false
+                        android.util.Log.d("HealthRecommendationsFragment", "✅ Showing fallback recommendations")
+                    } catch (e: Exception) {
+                        android.util.Log.e("HealthRecommendationsFragment", "❌ Error showing fallback recommendations: ${e.message}", e)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("HealthRecommendationsFragment", "❌ Error creating fallback recommendations: ${e.message}", e)
         }
     }
     

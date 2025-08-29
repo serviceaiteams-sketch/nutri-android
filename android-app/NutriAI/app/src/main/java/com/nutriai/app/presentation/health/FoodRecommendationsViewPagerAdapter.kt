@@ -43,12 +43,12 @@ class FoodRecommendationsViewPagerAdapter : RecyclerView.Adapter<FoodRecommendat
         private val binding: ItemFoodRecommendationBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         
-        fun bind(recommendation: FoodRecommendation) {
-            try {
-                binding.apply {
+            fun bind(recommendation: FoodRecommendation) {
+        try {
+            binding.apply {
                 // Basic food information
-                tvFoodName.text = recommendation.food
-                tvReason.text = recommendation.reason
+                tvFoodName.text = recommendation.food ?: "Food Item"
+                tvReason.text = recommendation.reason ?: "Good for health"
                 
                 // Category
                 tvCategory.text = recommendation.category ?: "Healthy Food"
@@ -114,6 +114,25 @@ class FoodRecommendationsViewPagerAdapter : RecyclerView.Adapter<FoodRecommendat
             }
         } catch (e: Exception) {
             android.util.Log.e("FoodRecommendationsViewPagerAdapter", "❌ Error binding recommendation: ${e.message}", e)
+            // Set default values to prevent crash
+            try {
+                binding.tvFoodName.text = "Food Item"
+                binding.tvReason.text = "Good for health"
+                binding.tvCategory.text = "Healthy Food"
+                binding.tvPriority.text = "MEDIUM"
+                binding.tvCalories.text = "0"
+                binding.tvProtein.text = "0g"
+                binding.tvCarbs.text = "0g"
+                binding.tvFat.text = "0g"
+                binding.tvServingSize.text = "1 serving"
+                binding.tvBestTime.text = "Anytime"
+                binding.tvPreparationTips.text = "• Follow standard cooking methods\n• Use fresh ingredients when possible"
+                binding.tvAlternatives.text = "• Try different cooking methods\n• Substitute with similar ingredients"
+                binding.tvFrequency.text = "Frequency: As needed"
+                binding.tvNotes.visibility = android.view.View.GONE
+            } catch (fallbackError: Exception) {
+                android.util.Log.e("FoodRecommendationsViewPagerAdapter", "❌ Error in fallback binding: ${fallbackError.message}", fallbackError)
+            }
         }
     }
     }

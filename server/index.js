@@ -586,6 +586,15 @@ app.use(cors());
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
+// Mount robust AI routes (includes /api/ai/recognize-food with graceful fallbacks)
+try {
+  const aiRoutes = require('./routes/ai');
+  app.use('/api/ai', aiRoutes);
+  console.log('✅ Mounted AI routes at /api/ai');
+} catch (e) {
+  console.warn('⚠️ Could not mount AI routes:', e.message);
+}
+
 // Root endpoint - welcome page
 app.get('/', (req, res) => {
   res.json({
@@ -1682,198 +1691,7 @@ app.put('/api/users/profile', (req, res) => {
 });
 
 // Food recognition endpoint with real AI
-app.post('/api/ai/recognize-food', upload.single('image'), async (req, res) => {
-  try {
-    console.log('🍎 Received food recognition request');
-    console.log('🍎 Request body:', req.body);
-    console.log('🍎 Request file:', req.file);
-    
-    // Extract image file from multipart request
-    const imageFile = req.file;
-    const foodDescription = req.body.description || "Food image for analysis";
-    
-    if (!imageFile) {
-      return res.status(400).json({
-        success: false,
-        error: 'No image file provided',
-        message: 'Please upload an image file'
-      });
-    }
-    
-    console.log('🍎 Image file received:', imageFile.originalname);
-    console.log('🍎 Food description:', foodDescription);
-    console.log('🤖 Using OpenRouter AI for food recognition...');
-    
-    // Call OpenRouter AI for food recognition
-    try {
-      // Convert image buffer to base64 for AI analysis
-      const base64Image = imageFile.buffer.toString('base64');
-      
-      const foodPrompt = `
-      Analyze this food image and provide detailed nutritional information.
-      
-      Identify all visible food items in the image and provide comprehensive nutritional analysis.
-      Be very specific with food names - if you see donuts, say "donuts", if you see pizza, say "pizza".
-      
-      Return ONLY valid JSON with this exact structure:
-      {
-        "recognizedFoods": [
-          {
-            "name": "Specific food name (e.g., donuts, pizza, salad)",
-            "confidence": 0.95,
-            "quantity": 1.0,
-            "unit": "serving/cup/piece/bowl",
-            "description": "Brief description of the food",
-            "nutrition": {
-              "calories": 200,
-              "protein": 20,
-              "carbs": 30,
-              "fat": 10,
-              "fiber": 5,
-              "sugar": 10,
-              "sodium": 200
-            },
-            "serving_size": "1 piece (100g)",
-            "health_score": 85
-          }
-        ],
-        "totalNutrition": {
-          "calories": 500,
-          "protein": 40,
-          "carbs": 60,
-          "fat": 20,
-          "fiber": 10,
-          "sugar": 15,
-          "sodium": 400
-        }
-      }
-      
-      IMPORTANT: 
-      - Be very specific with food names (donuts, pizza, burger, etc.)
-      - Provide accurate nutritional values based on the actual food shown
-      - Include both USA and Indian food items if relevant
-      - If you see multiple items, list each one separately
-      `;
-      
-      console.log('🤖 Calling OpenRouter API for food recognition...');
-      console.log('⚠️  Note: OpenRouter API key may need to be updated for production use');
-      
-      console.log('🤖 Image size:', base64Image.length, 'characters');
-      
-      const openRouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer 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',
-          'HTTP-Referer': 'https://nutri-ai-5b9893ad4a00.herokuapp.com',
-          'X-Title': 'NutriAI Food Recognition'
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'user',
-              content: [
-                {
-                  type: 'text',
-                  text: foodPrompt
-                },
-                {
-                  type: 'image_url',
-                  image_url: {
-                    url: `data:image/jpeg;base64,${base64Image}`
-                  }
-                }
-              ]
-            }
-          ],
-          max_tokens: 1500,
-          temperature: 0.3
-        })
-      });
-      
-      if (!openRouterResponse.ok) {
-        const errorText = await openRouterResponse.text();
-        console.error('❌ OpenRouter API error:', errorText);
-        console.error('❌ Response status:', openRouterResponse.status);
-        console.error('❌ Response headers:', openRouterResponse.headers);
-        throw new Error(`OpenRouter API failed: ${openRouterResponse.status} - ${errorText}`);
-      }
-      
-      const openRouterData = await openRouterResponse.json();
-      console.log('✅ OpenRouter response data:', JSON.stringify(openRouterData, null, 2));
-      
-      const aiResponse = openRouterData.choices[0].message.content;
-      console.log('✅ AI Response received:', aiResponse.substring(0, 200) + '...');
-      
-      // Parse AI response
-      let foodAnalysis;
-      try {
-        // Extract JSON from the response
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          foodAnalysis = JSON.parse(jsonMatch[0]);
-        } else {
-          throw new Error('No JSON found in AI response');
-        }
-      } catch (parseError) {
-        console.error('❌ Failed to parse AI response:', parseError);
-        throw new Error('Failed to parse AI food analysis');
-      }
-      
-      // Build response in Android app format
-      const foodRecognitionResponse = {
-        success: true,
-        recognizedFoods: foodAnalysis.recognizedFoods || [],
-        nutritionData: [
-          {
-            name: "Protein",
-            value: foodAnalysis.totalNutrition?.protein || 0,
-            unit: "g",
-            dailyValue: Math.round((foodAnalysis.totalNutrition?.protein || 0) * 2)
-          },
-          {
-            name: "Fiber",
-            value: foodAnalysis.totalNutrition?.fiber || 0,
-            unit: "g",
-            dailyValue: Math.round((foodAnalysis.totalNutrition?.fiber || 0) * 4)
-          },
-          {
-            name: "Calories",
-            value: foodAnalysis.totalNutrition?.calories || 0,
-            unit: "kcal",
-            dailyValue: Math.round((foodAnalysis.totalNutrition?.calories || 0) / 20)
-          }
-        ],
-        totalNutrition: foodAnalysis.totalNutrition || {},
-        imageUrl: "https://example.com/food-image.jpg",
-        message: `Successfully recognized ${foodAnalysis.recognizedFoods?.length || 0} food items using AI`
-      };
-      
-      console.log('✅ Food recognition completed successfully with AI');
-      res.json(foodRecognitionResponse);
-      
-    } catch (aiError) {
-      console.error('❌ AI food recognition failed:', aiError);
-      
-      // Return error response instead of hardcoded fallback
-      res.status(500).json({
-        success: false,
-        error: 'AI analysis failed',
-        message: 'Unable to analyze food image. Please try again or contact support.',
-        details: aiError.message
-      });
-    }
-    
-  } catch (error) {
-    console.error('❌ Error in food recognition:', error);
-    res.status(500).json({ 
-      success: false,
-      error: 'Food recognition failed',
-      message: error.message
-    });
-  }
-});
+// Note: Food recognition is now handled by routes/ai.js under /api/ai
 
 // Meal logging endpoint
 app.post('/api/meals/log', (req, res) => {
