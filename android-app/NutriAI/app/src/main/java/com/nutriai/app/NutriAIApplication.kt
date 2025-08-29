@@ -2,6 +2,7 @@ package com.nutriai.app
 
 import android.app.Application
 import android.content.Context
+import com.google.android.material.color.DynamicColors
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -20,6 +21,9 @@ class NutriAIApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        try {
+            DynamicColors.applyToActivitiesIfAvailable(this)
+        } catch (_: Exception) { }
     }
 }
 
