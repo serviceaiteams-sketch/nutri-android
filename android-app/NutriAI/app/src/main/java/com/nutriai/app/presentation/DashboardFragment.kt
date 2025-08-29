@@ -7,13 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.nutriai.app.R
 import com.nutriai.app.data.models.DashboardResponse
 import com.nutriai.app.data.models.NutrientStat
@@ -84,7 +81,7 @@ class DashboardFragment : Fragment() {
         binding.cardStreak.postDelayed({
             val streakAnimation = AnimationUtils.loadAnimation(context, R.anim.scale_in)
             binding.cardStreak.startAnimation(streakAnimation)
-        }, 200)
+        }, 200L) // Ensure this is Long if required by postDelayed, it often is.
         
         // Animate nutrition cards with staggered delays
         val nutritionCards = listOf(
@@ -98,14 +95,14 @@ class DashboardFragment : Fragment() {
             card.postDelayed({
                 val cardAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_up)
                 card.startAnimation(cardAnimation)
-            }, 400 + (index * 100))
+            }, 400L + (index * 100L))
         }
         
         // Animate quick actions with delay
         binding.quickActionsContainer.postDelayed({
             val actionsAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
             binding.quickActionsContainer.startAnimation(actionsAnimation)
-        }, 800)
+        }, 800L) // Ensure this is Long
     }
     
     private fun observeDashboardData() {
@@ -265,4 +262,3 @@ class DashboardFragment : Fragment() {
         _binding = null
     }
 }
-
