@@ -8,10 +8,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nutriai.app.databinding.FragmentMealPlanningBinding
 import com.nutriai.app.utils.Resource
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 class MealPlanningFragment : Fragment() {
@@ -67,27 +69,27 @@ class MealPlanningFragment : Fragment() {
     
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                viewModel.mealPlansState.collect { state ->
-                    when (state) {
-                        is Resource.Loading -> {
-                            showLoading(true)
-                        }
-                        is Resource.Success -> {
-                            showLoading(false)
-                            state.data?.let { mealPlans ->
-                                updateMealPlansList(mealPlans)
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                try {
+                    viewModel.mealPlansState.collect { state ->
+                        when (state) {
+                            is Resource.Loading -> showLoading(true)
+                            is Resource.Success -> {
+                                showLoading(false)
+                                state.data?.let { updateMealPlansList(it) }
+                            }
+                            is Resource.Error -> {
+                                showLoading(false)
+                                showErrorMessage(state.message ?: "Failed to load meal plans")
                             }
                         }
-                        is Resource.Error -> {
-                            showLoading(false)
-                            showErrorMessage(state.message ?: "Failed to load meal plans")
-                        }
                     }
+                } catch (e: CancellationException) {
+                    // Lifecycle stopped; ignore
+                } catch (e: Exception) {
+                    android.util.Log.e("MealPlanningFragment", "❌ Error observing ViewModel: ${e.message}", e)
+                    showErrorMessage("Error loading meal plans")
                 }
-            } catch (e: Exception) {
-                android.util.Log.e("MealPlanningFragment", "❌ Error observing ViewModel: ${e.message}", e)
-                showErrorMessage("Error loading meal plans")
             }
         }
     }
@@ -149,8 +151,6 @@ class MealPlanningFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         try {
-            // Clean up resources
-            viewLifecycleOwner.lifecycleScope.coroutineContext.cancelChildren()
             _binding = null
             android.util.Log.d("MealPlanningFragment", "🧹 Cleaned up resources")
         } catch (e: Exception) {
