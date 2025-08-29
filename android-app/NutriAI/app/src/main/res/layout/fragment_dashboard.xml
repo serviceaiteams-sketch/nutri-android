@@ -34,27 +34,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="24dp">
 
                     <TextView
                         android:id="@+id/tvWelcome"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Welcome back!"
-                        android:textSize="28sp"
+                        android:textSize="26sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
-                        android:fontFamily="sans-serif-medium"/>
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
 
                     <TextView
                         android:id="@+id/tvUserName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="User"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="@color/text_secondary"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="sans-serif-light"/>
+                        android:layout_marginTop="6dp"
+                        android:fontFamily="sans-serif-light"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

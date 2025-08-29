@@ -3,6 +3,7 @@ package com.nutriai.app.presentation
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -46,8 +47,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Load default fragment
         if (savedInstanceState == null) {
             binding.navigationView.setCheckedItem(R.id.nav_dashboard)
-            // TODO: Load dashboard fragment
+            // Load dashboard fragment with animation
             supportFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.fade_in,
+                    R.anim.fade_in,
+                    R.anim.fade_in,
+                    R.anim.fade_in
+                )
                 .replace(R.id.fragmentContainer, DashboardFragment())
                 .commit()
         }
@@ -116,6 +123,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         
         binding.navigationView.setNavigationItemSelectedListener(this)
+        
+        // Add navigation drawer animations
+        setupNavigationAnimations()
+    }
+    
+    private fun setupNavigationAnimations() {
+        // Animate navigation items when drawer opens
+        binding.drawerLayout.addDrawerListener(object : androidx.drawerlayout.widget.DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: android.view.View, slideOffset: Float) {}
+            
+            override fun onDrawerOpened(drawerView: android.view.View) {
+                animateNavigationItems()
+            }
+            
+            override fun onDrawerClosed(drawerView: android.view.View) {}
+            
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
+    }
+    
+    private fun animateNavigationItems() {
+        val menu = binding.navigationView.menu
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            val view = binding.navigationView.findViewById<android.view.View>(item.itemId)
+            view?.let {
+                it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.nav_item_enter))
+            }
+        }
     }
     
     private fun loadUserInfo() {
@@ -139,45 +175,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_dashboard -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, DashboardFragment())
-                    .commit()
+                navigateToFragment(DashboardFragment())
             }
             R.id.nav_food_recognition -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, FoodRecognitionFragment())
-                    .addToBackStack(null)
-                    .commit()
+                navigateToFragment(FoodRecognitionFragment())
             }
             R.id.nav_meal_tracking -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, MealHistoryFragment())
-                    .addToBackStack(null)
-                    .commit()
+                navigateToFragment(MealHistoryFragment())
             }
             R.id.nav_health_reports -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, HealthReportsFragment())
-                    .addToBackStack(null)
-                    .commit()
+                navigateToFragment(HealthReportsFragment())
             }
             R.id.nav_meal_planning -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, com.nutriai.app.presentation.meals.MealPlanningFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
+                navigateToFragment(com.nutriai.app.presentation.meals.MealPlanningFragment.newInstance())
             }
             R.id.nav_profile -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, com.nutriai.app.presentation.profile.ProfileFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
+                navigateToFragment(com.nutriai.app.presentation.profile.ProfileFragment.newInstance())
             }
             R.id.nav_settings -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, com.nutriai.app.presentation.settings.SettingsFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
+                navigateToFragment(com.nutriai.app.presentation.settings.SettingsFragment.newInstance())
             }
             R.id.nav_logout -> {
                 logout()
@@ -186,6 +202,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+    
+    private fun navigateToFragment(fragment: androidx.fragment.app.Fragment) {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_right,
+                R.anim.slide_out_left
+            )
+            .replace(R.id.fragmentContainer, fragment)
+            .addToBackStack(null)
+            .commit()
     }
     
     private fun logout() {

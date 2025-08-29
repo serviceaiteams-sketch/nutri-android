@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Primary Colors - Healthify Style -->
-    <color name="primary">#0EA5E9</color>
-    <color name="primary_dark">#0284C7</color>
-    <color name="primary_light">#38BDF8</color>
+    <color name="primary">#06B6D4</color>
+    <color name="primary_dark">#0891B2</color>
+    <color name="primary_light">#22D3EE</color>
     
     <!-- Secondary Colors - Healthify Style -->
     <color name="secondary">#06B6D4</color>
@@ -34,7 +34,7 @@
     <color name="error">#EF4444</color>
     <color name="success">#10B981</color>
     <color name="warning">#F97316</color>
-    <color name="info">#0EA5E9</color>
+    <color name="info">#06B6D4</color>
     
     <!-- Other Colors -->
     <color name="divider">#E5E7EB</color>
@@ -47,19 +47,20 @@
     <color name="border_light">#E5E7EB</color>
     
     <!-- Material 3 Colors - Healthify Style -->
-    <color name="md_theme_primary">#0EA5E9</color>
+    <color name="md_theme_primary">#06B6D4</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#E0F2FE</color>
-    <color name="md_theme_onPrimaryContainer">#0284C7</color>
+    <color name="md_theme_primaryContainer">#CFFAFE</color>
+    <color name="md_theme_onPrimaryContainer">#0891B2</color>
     <color name="md_theme_secondary">#06B6D4</color>
     <color name="md_theme_onSecondary">#FFFFFF</color>
     <color name="md_theme_secondaryContainer">#CFFAFE</color>
     <color name="md_theme_onSecondaryContainer">#0891B2</color>
-    <color name="md_theme_background">#F8FAFC</color>
+    <color name="md_theme_background">#E8ECF0</color>
     <color name="md_theme_onBackground">#0F172A</color>
     <color name="md_theme_surface">#FFFFFF</color>
     <color name="md_theme_onSurface">#0F172A</color>
     <color name="md_theme_error">#EF4444</color>
     <color name="md_theme_onError">#FFFFFF</color>
 </resources>
+
 
