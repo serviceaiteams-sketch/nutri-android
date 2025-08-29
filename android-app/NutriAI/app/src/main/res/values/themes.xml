@@ -1,23 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Theme.NutriAI" parent="Theme.Material3.DynamicColors.DayNight">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">false</item>
-        <item name="material3:shapeAppearanceSmallComponent">@style/Shape.Round</item>
-        <item name="material3:shapeAppearanceMediumComponent">@style/Shape.Round</item>
-        <item name="material3:shapeAppearanceLargeComponent">@style/Shape.Round</item>
-        <item name="material3:motionDurationLong1">400</item>
-        <item name="material3:motionDurationMedium2">250</item>
-    </style>
-
-    <style name="Shape.Round" parent="ShapeAppearance.Material3.Small.Component">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">16dp</item>
-    </style>
-</resources>
-
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme -->
     <style name="Theme.NutriAI" parent="Theme.Material3.DayNight.NoActionBar">
@@ -43,9 +24,15 @@
         <item name="colorError">@color/md_theme_error</item>
         <item name="colorOnError">@color/md_theme_onError</item>
         
-        <!-- Status bar -->
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <!-- System bars / motion / shapes -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="shapeAppearanceSmallComponent">@style/Shape.Round</item>
+        <item name="shapeAppearanceMediumComponent">@style/Shape.Round</item>
+        <item name="shapeAppearanceLargeComponent">@style/Shape.Round</item>
+        <item name="motionDurationLong1">400</item>
+        <item name="motionDurationMedium2">250</item>
     </style>
     
     <!-- Theme with ActionBar -->
@@ -65,7 +52,7 @@
         <item name="colorOnSurface">@color/md_theme_onSurface</item>
         <item name="colorError">@color/md_theme_error</item>
         <item name="colorOnError">@color/md_theme_onError</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
     
@@ -99,5 +86,9 @@
         <item name="boxCornerRadiusBottomStart">8dp</item>
         <item name="boxCornerRadiusBottomEnd">8dp</item>
     </style>
-</resources>
 
+    <style name="Shape.Round" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+</resources>
