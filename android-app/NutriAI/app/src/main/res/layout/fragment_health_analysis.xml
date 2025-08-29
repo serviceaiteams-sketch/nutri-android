@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@drawable/background_gradient">
+    android:background="@color/background_primary">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,47 +12,68 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Header Section -->
+        <!-- Modern Header Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:orientation="vertical"
             android:layout_marginBottom="24dp"
-            android:background="@drawable/header_background"
-            android:padding="16dp"
+            android:background="@drawable/modern_header_background"
+            android:padding="24dp"
             android:layout_marginHorizontal="-20dp">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Health Report Analysis"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:fontFamily="sans-serif-medium"
-                android:shadowColor="@color/white"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:shadowRadius="2" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
 
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_notification"
-                android:tint="@color/black"
-                android:alpha="0.8" />
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_analytics"
+                    android:tint="@color/primary"
+                    android:background="@drawable/circle_background_primary"
+                    android:padding="8dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:text="Health Report Analysis"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:fontFamily="sans-serif-medium" />
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_notification"
+                    android:tint="@color/text_secondary"
+                    android:alpha="0.8" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AI-powered analysis of your health reports"
+                android:textSize="16sp"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="sans-serif" />
 
         </LinearLayout>
 
-        <!-- Health Score Card -->
+        <!-- Health Score Card - Modern Design -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/healthScoreCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            app:cardElevation="12dp"
+            app:cardElevation="8dp"
             app:cardCornerRadius="20dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="0dp">
@@ -64,21 +85,36 @@
                 android:padding="24dp"
                 android:gravity="center">
 
+                <LinearLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/circle_background_primary"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_heart"
+                        android:tint="@color/white" />
+
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Health Score"
+                    android:text="Your Health Score"
                     android:textSize="18sp"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_secondary"
                     android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:id="@+id/tvHealthScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:text="--"
-                    android:textSize="72sp"
+                    android:textSize="48sp"
                     android:textStyle="bold"
                     android:textColor="@color/primary"
                     android:fontFamily="sans-serif-light" />
@@ -87,9 +123,10 @@
                     android:id="@+id/tvHealthStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="Analyzing..."
-                    android:textSize="20sp"
-                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
                     android:fontFamily="sans-serif-medium" />
 
             </LinearLayout>
@@ -102,7 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            app:cardElevation="8dp"
+            app:cardElevation="6dp"
             app:cardCornerRadius="16dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="0dp">
@@ -113,20 +150,36 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Report Summary"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:fontFamily="sans-serif-medium" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_analytics"
+                        android:tint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="Report Summary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvReportSummary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:text="No analysis available yet"
                     android:textSize="16sp"
                     android:textColor="@color/text_secondary"
@@ -136,7 +189,7 @@
                     android:id="@+id/tvAnalysisTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:text=""
                     android:textSize="14sp"
                     android:textColor="@color/text_disabled" />
@@ -151,7 +204,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            app:cardElevation="8dp"
+            app:cardElevation="6dp"
             app:cardCornerRadius="16dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="0dp"
@@ -163,20 +216,37 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Analysis Details"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:fontFamily="sans-serif-medium" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_analytics"
+                        android:tint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="Analysis Details"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="8dp">
 
                     <!-- Reports Analyzed -->
                     <LinearLayout
@@ -185,14 +255,14 @@
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:background="@drawable/metric_card_background"
+                        android:background="@drawable/modern_metric_background"
                         android:padding="16dp"
                         android:layout_marginEnd="8dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Reports Analyzed"
+                            android:text="Reports"
                             android:textSize="14sp"
                             android:textColor="@color/text_secondary" />
 
@@ -204,7 +274,7 @@
                             android:text="0"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="@color/text_primary"
+                            android:textColor="@color/primary"
                             android:fontFamily="sans-serif-medium" />
 
                     </LinearLayout>
@@ -216,14 +286,14 @@
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:background="@drawable/metric_card_background"
+                        android:background="@drawable/modern_metric_background"
                         android:padding="16dp"
                         android:layout_marginHorizontal="4dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Tests"
+                            android:text="Tests"
                             android:textSize="14sp"
                             android:textColor="@color/text_secondary" />
 
@@ -235,7 +305,7 @@
                             android:text="0"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="@color/text_primary"
+                            android:textColor="@color/primary"
                             android:fontFamily="sans-serif-medium" />
 
                     </LinearLayout>
@@ -247,7 +317,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:background="@drawable/metric_card_background"
+                        android:background="@drawable/modern_metric_background"
                         android:padding="16dp"
                         android:layout_marginHorizontal="4dp">
 
@@ -278,7 +348,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:background="@drawable/metric_card_background"
+                        android:background="@drawable/modern_metric_background"
                         android:padding="16dp"
                         android:layout_marginStart="8dp">
 
@@ -314,7 +384,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            app:cardElevation="8dp"
+            app:cardElevation="6dp"
             app:cardCornerRadius="16dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="0dp">
@@ -325,20 +395,36 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Key Health Metrics"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:fontFamily="sans-serif-medium" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_analytics"
+                        android:tint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="Key Health Metrics"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvKeyMetrics"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
@@ -351,7 +437,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            app:cardElevation="8dp"
+            app:cardElevation="6dp"
             app:cardCornerRadius="16dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="0dp"
@@ -363,20 +449,36 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Risk Factors"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:fontFamily="sans-serif-medium" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_warning"
+                        android:tint="@color/warning" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="Risk Factors"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvRiskFactors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
@@ -389,7 +491,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            app:cardElevation="8dp"
+            app:cardElevation="6dp"
             app:cardCornerRadius="16dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="0dp">
@@ -400,20 +502,36 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Health Recommendations"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:fontFamily="sans-serif-medium" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_food"
+                        android:tint="@color/success" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="Health Recommendations"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvRecommendations"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
@@ -426,7 +544,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            app:cardElevation="8dp"
+            app:cardElevation="6dp"
             app:cardCornerRadius="16dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="0dp"
@@ -438,20 +556,37 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nutrition Guidance"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:fontFamily="sans-serif-medium" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_food"
+                        android:tint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="Nutrition Guidance"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="sans-serif-medium" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="8dp">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -522,21 +657,28 @@
             android:gravity="center"
             android:padding="40dp">
 
-            <ImageView
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:src="@drawable/ic_analytics"
-                android:tint="@color/white"
-                android:alpha="0.6" />
+            <LinearLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/circle_background_primary"
+                android:gravity="center"
+                android:layout_marginBottom="24dp">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_analytics"
+                    android:tint="@color/white" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
                 android:text="No Analysis Available"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/text_primary"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center" />
 
@@ -545,8 +687,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="Upload your health reports to get AI-powered analysis"
-                android:textColor="@color/white"
-                android:alpha="0.7"
+                android:textColor="@color/text_secondary"
                 android:gravity="center"
                 android:textSize="16sp" />
 
