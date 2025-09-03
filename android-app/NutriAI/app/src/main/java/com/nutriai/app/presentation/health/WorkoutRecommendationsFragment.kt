@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.nutriai.app.R
+import com.nutriai.app.data.models.FoodRecommendation
 import com.nutriai.app.domain.model.*
 import com.nutriai.app.domain.usecase.WorkoutRecommendationUseCase
 import java.time.DayOfWeek
@@ -232,28 +233,38 @@ class WorkoutRecommendationsFragment : Fragment() {
     private fun getMockCurrentNutrition(): List<FoodRecommendation> {
         return listOf(
             FoodRecommendation(
-                id = "food_1",
-                name = "Grilled Chicken Breast",
-                calories = 250,
-                protein = 45.0,
-                carbs = 0.0,
-                fat = 5.0,
-                description = "Lean protein source",
-                imageUrl = "chicken_breast.jpg",
+                food = "Grilled Chicken Breast",
+                reason = "Lean protein source for muscle building",
                 category = "protein",
-                isRecommended = true
+                priority = "high",
+                calories = 250f,
+                protein = 45.0f,
+                carbs = 0.0f,
+                fat = 5.0f,
+                nutrients = listOf("Protein", "B6", "B12"),
+                servingSize = "100g",
+                bestTime = "Post-workout",
+                preparationTips = "Grill with minimal oil",
+                alternatives = "Turkey breast, fish",
+                frequency = "Daily",
+                notes = "Excellent for weight loss and muscle gain"
             ),
             FoodRecommendation(
-                id = "food_2",
-                name = "Brown Rice",
-                calories = 150,
-                protein = 3.0,
-                carbs = 30.0,
-                fat = 1.0,
-                description = "Complex carbohydrates",
-                imageUrl = "brown_rice.jpg",
+                food = "Brown Rice",
+                reason = "Complex carbohydrates for sustained energy",
                 category = "carbs",
-                isRecommended = true
+                priority = "medium",
+                calories = 150f,
+                protein = 3.0f,
+                carbs = 30.0f,
+                fat = 1.0f,
+                nutrients = listOf("Fiber", "B vitamins", "Minerals"),
+                servingSize = "1 cup cooked",
+                bestTime = "Pre-workout",
+                preparationTips = "Cook with broth for flavor",
+                alternatives = "Quinoa, sweet potato",
+                frequency = "3-4 times per week",
+                notes = "Good source of complex carbs"
             )
         )
     }

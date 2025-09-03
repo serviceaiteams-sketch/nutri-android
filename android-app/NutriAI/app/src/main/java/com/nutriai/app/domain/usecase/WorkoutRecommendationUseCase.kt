@@ -1,9 +1,10 @@
 package com.nutriai.app.domain.usecase
 
+import com.nutriai.app.data.models.FoodRecommendation
 import com.nutriai.app.domain.model.*
-import com.nutriai.app.domain.model.FoodRecommendation
 import java.time.DayOfWeek
 import kotlin.math.abs
+import kotlin.math.min
 
 class WorkoutRecommendationUseCase {
     
@@ -82,10 +83,10 @@ class WorkoutRecommendationUseCase {
     }
     
     private fun analyzeNutrition(nutrition: List<FoodRecommendation>): NutritionAnalysis {
-        val totalCalories = nutrition.sumOf { it.calories }
-        val totalProtein = nutrition.sumOf { it.protein }
-        val totalCarbs = nutrition.sumOf { it.carbs }
-        val totalFat = nutrition.sumOf { it.fat }
+        val totalCalories = nutrition.sumOf { (it.calories ?: 0f).toInt() }
+        val totalProtein = nutrition.sumOf { it.protein ?: 0f }
+        val totalCarbs = nutrition.sumOf { it.carbs ?: 0f }
+        val totalFat = nutrition.sumOf { it.fat ?: 0f }
         
         return NutritionAnalysis(
             totalCalories = totalCalories,
@@ -130,7 +131,7 @@ class WorkoutRecommendationUseCase {
                 description = "High-intensity interval training for maximum calorie burn",
                 workoutType = WorkoutType.HIIT,
                 intensity = WorkoutIntensity.HIGH,
-                duration = minOf(availableTime, 45),
+                duration = min(availableTime, 45),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.HIGH, 45),
                 muscleGroups = listOf(MuscleGroup.FULL_BODY),
                 equipment = availableEquipment.filter { it in listOf(Equipment.NONE, Equipment.RESISTANCE_BANDS) },
@@ -156,7 +157,7 @@ class WorkoutRecommendationUseCase {
                 description = "Compound movements to build muscle and boost metabolism",
                 workoutType = WorkoutType.STRENGTH_TRAINING,
                 intensity = WorkoutIntensity.MODERATE,
-                duration = minOf(availableTime, 60),
+                duration = min(availableTime, 60),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.MODERATE, 60),
                 muscleGroups = listOf(MuscleGroup.FULL_BODY),
                 equipment = availableEquipment.filter { it in listOf(Equipment.DUMBBELLS, Equipment.RESISTANCE_BANDS, Equipment.NONE) },
@@ -193,7 +194,7 @@ class WorkoutRecommendationUseCase {
                 description = "Build muscle mass with progressive overload",
                 workoutType = WorkoutType.STRENGTH_TRAINING,
                 intensity = WorkoutIntensity.HIGH,
-                duration = minOf(availableTime, 75),
+                duration = min(availableTime, 75),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.HIGH, 75),
                 muscleGroups = listOf(MuscleGroup.CHEST, MuscleGroup.BACK, MuscleGroup.SHOULDERS),
                 equipment = availableEquipment.filter { it in listOf(Equipment.DUMBBELLS, Equipment.BARBELL, Equipment.WEIGHT_MACHINE) },
@@ -220,7 +221,7 @@ class WorkoutRecommendationUseCase {
                     description = "Build muscle using only bodyweight exercises",
                     workoutType = WorkoutType.BODYWEIGHT,
                     intensity = WorkoutIntensity.HIGH,
-                    duration = minOf(availableTime, 60),
+                    duration = min(availableTime, 60),
                     caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.HIGH, 60),
                     muscleGroups = listOf(MuscleGroup.FULL_BODY),
                     equipment = listOf(Equipment.NONE),
@@ -258,7 +259,7 @@ class WorkoutRecommendationUseCase {
                 description = "Improve cardiovascular endurance and heart health",
                 workoutType = WorkoutType.CARDIO,
                 intensity = WorkoutIntensity.MODERATE,
-                duration = minOf(availableTime, 45),
+                duration = min(availableTime, 45),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.MODERATE, 45),
                 muscleGroups = listOf(MuscleGroup.FULL_BODY),
                 equipment = availableEquipment.filter { it in listOf(Equipment.CARDIO_MACHINE, Equipment.NONE) },
@@ -295,7 +296,7 @@ class WorkoutRecommendationUseCase {
                 description = "Improve flexibility, balance, and mind-body connection",
                 workoutType = WorkoutType.YOGA,
                 intensity = WorkoutIntensity.LOW,
-                duration = minOf(availableTime, 60),
+                duration = min(availableTime, 60),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.LOW, 60),
                 muscleGroups = listOf(MuscleGroup.FULL_BODY),
                 equipment = listOf(Equipment.YOGA_MAT),
@@ -321,7 +322,7 @@ class WorkoutRecommendationUseCase {
                 description = "Strengthen core while improving flexibility",
                 workoutType = WorkoutType.PILATES,
                 intensity = WorkoutIntensity.MODERATE,
-                duration = minOf(availableTime, 45),
+                duration = min(availableTime, 45),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.MODERATE, 45),
                 muscleGroups = listOf(MuscleGroup.CORE, MuscleGroup.GLUTES),
                 equipment = listOf(Equipment.YOGA_MAT),
@@ -358,7 +359,7 @@ class WorkoutRecommendationUseCase {
                 description = "Gentle yoga sequences to reduce stress and anxiety",
                 workoutType = WorkoutType.YOGA,
                 intensity = WorkoutIntensity.LOW,
-                duration = minOf(availableTime, 45),
+                duration = min(availableTime, 45),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.LOW, 45),
                 muscleGroups = listOf(MuscleGroup.FULL_BODY),
                 equipment = listOf(Equipment.YOGA_MAT),
@@ -395,7 +396,7 @@ class WorkoutRecommendationUseCase {
                 description = "Light movement to promote recovery and reduce soreness",
                 workoutType = WorkoutType.FLEXIBILITY,
                 intensity = WorkoutIntensity.LOW,
-                duration = minOf(availableTime, 30),
+                duration = min(availableTime, 30),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.LOW, 30),
                 muscleGroups = listOf(MuscleGroup.FULL_BODY),
                 equipment = listOf(Equipment.FOAM_ROLLER, Equipment.YOGA_MAT),
@@ -432,7 +433,7 @@ class WorkoutRecommendationUseCase {
                 description = "Improve overall fitness with functional movements",
                 workoutType = WorkoutType.FUNCTIONAL_TRAINING,
                 intensity = WorkoutIntensity.MODERATE,
-                duration = minOf(availableTime, 50),
+                duration = min(availableTime, 50),
                 caloriesBurn = calculateCaloriesBurn(userProfile, WorkoutIntensity.MODERATE, 50),
                 muscleGroups = listOf(MuscleGroup.FULL_BODY),
                 equipment = availableEquipment.filter { it in listOf(Equipment.DUMBBELLS, Equipment.RESISTANCE_BANDS, Equipment.NONE) },
@@ -478,9 +479,18 @@ class WorkoutRecommendationUseCase {
             }
         }
         
-        // Mark top recommendations
-        personalized.take(3).forEach { workout ->
-            workout.copy(isRecommended = true)
+        // Mark top recommendations safely
+        if (personalized.isNotEmpty()) {
+            val topCount = min(3, personalized.size)
+            val topRecommendations = personalized.take(topCount).map { workout ->
+                workout.copy(isRecommended = true)
+            }
+            
+            // Replace the first items with the modified ones
+            if (topCount > 0) {
+                personalized.subList(0, topCount).clear()
+                personalized.addAll(0, topRecommendations)
+            }
         }
         
         return personalized

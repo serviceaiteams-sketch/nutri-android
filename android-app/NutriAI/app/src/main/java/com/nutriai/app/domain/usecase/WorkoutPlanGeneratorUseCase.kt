@@ -1,11 +1,14 @@
 package com.nutriai.app.domain.usecase
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.nutriai.app.domain.model.*
 import java.time.DayOfWeek
 import java.time.LocalDate
 
 class WorkoutPlanGeneratorUseCase {
     
+    @RequiresApi(Build.VERSION_CODES.O)
     fun generateWorkoutPlan(
         userProfile: UserProfile,
         workoutRecommendations: List<WorkoutRecommendation>,
@@ -37,6 +40,7 @@ class WorkoutPlanGeneratorUseCase {
         )
     }
     
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun generateWeeklyWorkout(
         weekNumber: Int,
         workoutRecommendations: List<WorkoutRecommendation>,
@@ -72,6 +76,7 @@ class WorkoutPlanGeneratorUseCase {
         )
     }
     
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun selectWorkoutsForDay(
         day: DayOfWeek,
         weekNumber: Int,
