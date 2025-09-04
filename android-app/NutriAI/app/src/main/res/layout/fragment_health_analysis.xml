@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="32dp"
-                android:background="@drawable/header_background">
+                android:background="@drawable/health_score_gradient">
 
                 <!-- Health Score Header -->
                 <LinearLayout
@@ -274,7 +274,7 @@
                         android:text="Blood Pressure"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginBottom="4dp" />
 
@@ -337,7 +337,7 @@
                         android:text="Heart Rate"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginBottom="4dp" />
 
@@ -418,7 +418,7 @@
                         android:text="AI Health Insights"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:fontFamily="sans-serif-medium" />
 
                 </LinearLayout>
@@ -491,7 +491,7 @@
                         android:text="Personalized Recommendations"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:fontFamily="sans-serif-medium" />
 
                 </LinearLayout>
@@ -569,7 +569,7 @@
                             android:text="Upload Health Reports"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:fontFamily="sans-serif-medium" />
 
                         <TextView
