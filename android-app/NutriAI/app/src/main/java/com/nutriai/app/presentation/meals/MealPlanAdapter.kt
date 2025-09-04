@@ -20,7 +20,7 @@ class MealPlanAdapter(
             parent,
             false
         )
-        return MealPlanViewHolder(binding)
+        return MealPlanViewHolder(binding, onViewPlan, onStartPlan, onSharePlan, onMoreOptions)
     }
     
     override fun onBindViewHolder(holder: MealPlanViewHolder, position: Int) {
@@ -33,7 +33,11 @@ class MealPlanAdapter(
     }
     
     class MealPlanViewHolder(
-        private val binding: ItemMealPlanBinding
+        private val binding: ItemMealPlanBinding,
+        private val onViewPlan: (MealPlan) -> Unit,
+        private val onStartPlan: (MealPlan) -> Unit,
+        private val onSharePlan: (MealPlan) -> Unit,
+        private val onMoreOptions: (MealPlan) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         
         fun bind(mealPlan: MealPlan) {
