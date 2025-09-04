@@ -78,7 +78,7 @@ class HealthUploadFragment : Fragment() {
         filesAdapter = SelectedFilesAdapter { uri ->
             viewModel.removeFile(uri)
         }
-        binding.rvSelectedFiles.apply {
+        binding.recyclerViewSelectedFiles.apply {
             adapter = filesAdapter
             layoutManager = LinearLayoutManager(context)
         }
@@ -87,7 +87,7 @@ class HealthUploadFragment : Fragment() {
         conditionsAdapter = HealthConditionsAdapter { condition ->
             viewModel.removeHealthCondition(condition)
         }
-        binding.rvHealthConditions.apply {
+        binding.recyclerViewHealthConditions.apply {
             adapter = conditionsAdapter
             layoutManager = LinearLayoutManager(context)
         }
@@ -112,7 +112,7 @@ class HealthUploadFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uploadedFiles.collect { files ->
                 filesAdapter.submitList(files)
-                binding.rvSelectedFiles.isVisible = files.isNotEmpty()
+                binding.recyclerViewSelectedFiles.isVisible = files.isNotEmpty()
                 binding.btnAnalyze.isEnabled = files.isNotEmpty()
             }
         }
@@ -120,7 +120,8 @@ class HealthUploadFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.healthConditions.collect { conditions ->
                 conditionsAdapter.submitList(conditions)
-                binding.tvNoConditions.isVisible = conditions.isEmpty()
+                // No conditions text view doesn't exist in new layout
+                // binding.tvNoConditions.isVisible = conditions.isEmpty()
             }
         }
         
@@ -129,10 +130,12 @@ class HealthUploadFragment : Fragment() {
                 when (state) {
                     is Resource.Loading -> {
                         binding.btnAnalyze.isEnabled = false
-                        binding.progressBar.isVisible = true
+                        // Progress bar doesn't exist in new layout
+                        // binding.progressBar.isVisible = true
                     }
                     is Resource.Success -> {
-                        binding.progressBar.isVisible = false
+                        // Progress bar doesn't exist in new layout
+                        // binding.progressBar.isVisible = false
                         Toast.makeText(context, "Reports uploaded successfully!", Toast.LENGTH_SHORT).show()
                         // Switch to analysis tab safely
                         try {
@@ -145,7 +148,8 @@ class HealthUploadFragment : Fragment() {
                     }
                     is Resource.Error -> {
                         binding.btnAnalyze.isEnabled = true
-                        binding.progressBar.isVisible = false
+                        // Progress bar doesn't exist in new layout
+                        // binding.progressBar.isVisible = false
                         Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
                     }
                     null -> {}
