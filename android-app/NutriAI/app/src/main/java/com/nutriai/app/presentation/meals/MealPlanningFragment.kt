@@ -174,7 +174,7 @@ class MealPlanningFragment : Fragment() {
     private fun showLoading(show: Boolean) {
         try {
             binding.progressBar.isVisible = show
-            binding.contentGroup.isVisible = !show
+            binding.recyclerViewMealPlans.isVisible = !show
         } catch (e: Exception) {
             android.util.Log.e("MealPlanningFragment", "❌ Error showing loading: ${e.message}", e)
         }
