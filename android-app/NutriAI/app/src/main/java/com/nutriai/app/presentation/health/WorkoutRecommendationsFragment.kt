@@ -188,6 +188,7 @@ class WorkoutRecommendationsFragment : Fragment() {
             WorkoutType.YOGA -> chipYoga.setChipBackgroundColorResource(R.color.primary)
             WorkoutType.HIIT -> chipHiit.setChipBackgroundColorResource(R.color.primary)
             WorkoutType.FLEXIBILITY -> chipFlexibility.setChipBackgroundColorResource(R.color.primary)
+            else -> chipAll.setChipBackgroundColorResource(R.color.primary)
         }
     }
 

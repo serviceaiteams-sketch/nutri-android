@@ -29,6 +29,46 @@
     <color name="warning">#FFFF9800</color>
     <color name="error">#FFF44336</color>
     <color name="info">#FF2196F3</color>
+    
+    <!-- Material Design 3 Theme Colors -->
+    <color name="md_theme_primary">#FF2196F3</color>
+    <color name="md_theme_onPrimary">#FFFFFFFF</color>
+    <color name="md_theme_primaryContainer">#FFBBDEFB</color>
+    <color name="md_theme_onPrimaryContainer">#FF1976D2</color>
+    
+    <color name="md_theme_secondary">#FF2196F3</color>
+    <color name="md_theme_onSecondary">#FFFFFFFF</color>
+    <color name="md_theme_secondaryContainer">#FFBBDEFB</color>
+    <color name="md_theme_onSecondaryContainer">#FF1976D2</color>
+    
+    <color name="md_theme_background">#FFF5F5F5</color>
+    <color name="md_theme_onBackground">#FF212121</color>
+    <color name="md_theme_surface">#FFFFFFFF</color>
+    <color name="md_theme_onSurface">#FF212121</color>
+    
+    <color name="md_theme_error">#FFF44336</color>
+    <color name="md_theme_onError">#FFFFFFFF</color>
+    
+    <!-- Additional Material Design 3 colors -->
+    <color name="md_theme_surfaceVariant">#FFF0F0F0</color>
+    <color name="md_theme_onSurfaceVariant">#FF757575</color>
+    <color name="md_theme_outline">#FFBDBDBD</color>
+    <color name="md_theme_outlineVariant">#FFE0E0E0</color>
+    <color name="md_theme_inverseSurface">#FF212121</color>
+    <color name="md_theme_inverseOnSurface">#FFFFFFFF</color>
+    <color name="md_theme_inversePrimary">#FF90CAF9</color>
+    <color name="md_theme_shadow">#FF000000</color>
+    <color name="md_theme_scrim">#FF000000</color>
+    
+    <!-- Additional Missing Colors -->
+    <color name="surface_light">#FFF8F9FA</color>
+    <color name="border_light">#FFE9ECEF</color>
+    <color name="divider">#FFE0E0E0</color>
+    <color name="text_disabled">#FFBDBDBD</color>
+    <color name="secondary_light">#FFE3F2FD</color>
+    <color name="warning_light">#FFFFF3E0</color>
+    <color name="background">#FFF5F5F5</color>
+    <color name="secondary">#FF2196F3</color>
 </resources>
 
 

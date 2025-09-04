@@ -84,9 +84,9 @@ class WorkoutRecommendationUseCase {
     
     private fun analyzeNutrition(nutrition: List<FoodRecommendation>): NutritionAnalysis {
         val totalCalories = nutrition.sumOf { (it.calories ?: 0f).toInt() }
-        val totalProtein = nutrition.sumOf { it.protein ?: 0f }
-        val totalCarbs = nutrition.sumOf { it.carbs ?: 0f }
-        val totalFat = nutrition.sumOf { it.fat ?: 0f }
+        val totalProtein = nutrition.sumOf { (it.protein ?: 0f).toDouble() }
+        val totalCarbs = nutrition.sumOf { (it.carbs ?: 0f).toDouble() }
+        val totalFat = nutrition.sumOf { (it.fat ?: 0f).toDouble() }
         
         return NutritionAnalysis(
             totalCalories = totalCalories,
