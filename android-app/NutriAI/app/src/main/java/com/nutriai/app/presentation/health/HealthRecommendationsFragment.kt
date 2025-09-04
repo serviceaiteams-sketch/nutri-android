@@ -45,6 +45,7 @@ class HealthRecommendationsFragment : Fragment() {
             }
             
             setupUI()
+            initializeContent()
             observeViewModel()
             
         } catch (e: Exception) {
@@ -55,6 +56,15 @@ class HealthRecommendationsFragment : Fragment() {
     private fun setupUI() {
         // Set up any UI interactions if needed
         // The new layout is mostly static with text views
+    }
+    
+    private fun initializeContent() {
+        // Initialize the content with default values to ensure visibility
+        updateNutritionScore()
+        updateActivityScore()
+        updateFoodRecommendations()
+        updateLifestyleRecommendations()
+        updateHealthTips()
     }
     
     private fun observeViewModel() {
