@@ -94,12 +94,13 @@ class RecognizedFoodAdapter(
                 tvConfidence.setTextColor(root.context.getColor(confidenceColor))
                 
                 // Set selected state
-                (root as MaterialCardView).isChecked = isSelected
+                val cardView = root as MaterialCardView
+                cardView.isChecked = isSelected
                 if (isSelected) {
-                    root.strokeWidth = root.context.resources.getDimensionPixelSize(R.dimen.card_stroke_width)
-                    root.strokeColor = root.context.getColor(R.color.primary)
+                    cardView.strokeWidth = cardView.context.resources.getDimensionPixelSize(R.dimen.card_stroke_width)
+                    cardView.strokeColor = cardView.context.getColor(R.color.primary)
                 } else {
-                    root.strokeWidth = 0
+                    cardView.strokeWidth = 0
                 }
             }
         }
