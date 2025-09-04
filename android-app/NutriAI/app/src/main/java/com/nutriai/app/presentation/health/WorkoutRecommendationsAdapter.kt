@@ -30,7 +30,7 @@ class WorkoutRecommendationsAdapter(
         notifyDataSetChanged()
     }
 
-    private fun getFilteredWorkouts(): List<WorkoutRecommendation> {
+    fun getFilteredWorkouts(): List<WorkoutRecommendation> {
         return if (selectedCategory == null) {
             workouts
         } else {

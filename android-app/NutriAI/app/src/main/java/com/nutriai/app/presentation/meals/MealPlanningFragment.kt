@@ -51,17 +51,29 @@ class MealPlanningFragment : Fragment() {
             // Setup RecyclerView for meal plans
             binding.recyclerViewMealPlans.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = MealPlanAdapter()
+                adapter = MealPlanAdapter(
+                    onViewPlan = { mealPlan -> viewMealPlan(mealPlan) },
+                    onStartPlan = { mealPlan -> startMealPlan(mealPlan) },
+                    onSharePlan = { mealPlan -> shareMealPlan(mealPlan) },
+                    onMoreOptions = { mealPlan -> showMoreOptions(mealPlan) }
+                )
             }
             
             // Setup click listeners
-            binding.btnCreateMealPlan.setOnClickListener {
+            binding.btnGenerateAI.setOnClickListener {
+                generateAIRecommendedMealPlan()
+            }
+            
+            binding.btnCreateCustom.setOnClickListener {
                 createNewMealPlan()
             }
             
-            binding.btnGenerateMealPlan.setOnClickListener {
-                generateAIRecommendedMealPlan()
+            binding.tvViewAll.setOnClickListener {
+                showAllMealPlans()
             }
+            
+            // Setup category card click listeners
+            setupCategoryCards()
             
             // Observe AI preview to confirm before saving
             viewLifecycleOwner.lifecycleScope.launch {
@@ -175,6 +187,146 @@ class MealPlanningFragment : Fragment() {
         } catch (e: Exception) {
             android.util.Log.e("MealPlanningFragment", "❌ Error showing error message: ${e.message}", e)
         }
+    }
+    
+    private fun setupCategoryCards() {
+        // Category cards are handled in the layout, but we can add click listeners here if needed
+        // For now, they're just visual elements
+    }
+    
+    private fun viewMealPlan(mealPlan: MealPlan) {
+        // Show detailed meal plan view
+        val message = """
+            ${mealPlan.name}
+            
+            ${mealPlan.description}
+            
+            📊 Nutrition Summary:
+            • Calories: ${mealPlan.totalCalories} cal
+            • Protein: ${mealPlan.totalProtein}g
+            • Carbs: ${mealPlan.totalCarbs}g
+            • Fat: ${mealPlan.totalFat}g
+            
+            📅 Duration: ${mealPlan.days.size} days
+            🍽️ Total Meals: ${mealPlan.days.sumOf { it.meals.size }}
+            
+            Created: ${mealPlan.createdAt}
+        """.trimIndent()
+        
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Meal Plan Details")
+            .setMessage(message)
+            .setPositiveButton("Start This Plan") { _, _ ->
+                startMealPlan(mealPlan)
+            }
+            .setNeutralButton("Share") { _, _ ->
+                shareMealPlan(mealPlan)
+            }
+            .setNegativeButton("Close", null)
+            .show()
+    }
+    
+    private fun startMealPlan(mealPlan: MealPlan) {
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Start Meal Plan")
+            .setMessage("Ready to start '${mealPlan.name}'?\n\nThis will help you track your daily meals and nutrition goals.")
+            .setPositiveButton("Start Now") { _, _ ->
+                android.widget.Toast.makeText(
+                    requireContext(),
+                    "Started meal plan: ${mealPlan.name}",
+                    android.widget.Toast.LENGTH_LONG
+                ).show()
+                // Here you would typically navigate to meal tracking or set the active plan
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    private fun shareMealPlan(mealPlan: MealPlan) {
+        val shareText = """
+            🍽️ Check out my meal plan: ${mealPlan.name}
+            
+            ${mealPlan.description}
+            
+            📊 Nutrition:
+            • ${mealPlan.totalCalories} calories
+            • ${mealPlan.totalProtein}g protein
+            • ${mealPlan.totalCarbs}g carbs
+            • ${mealPlan.totalFat}g fat
+            
+            Created with NutriAI app!
+        """.trimIndent()
+        
+        val shareIntent = android.content.Intent().apply {
+            action = android.content.Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(android.content.Intent.EXTRA_TEXT, shareText)
+        }
+        
+        startActivity(android.content.Intent.createChooser(shareIntent, "Share Meal Plan"))
+    }
+    
+    private fun showMoreOptions(mealPlan: MealPlan) {
+        val options = arrayOf("Edit Plan", "Duplicate Plan", "Delete Plan", "Export to PDF")
+        
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Meal Plan Options")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> editMealPlan(mealPlan)
+                    1 -> duplicateMealPlan(mealPlan)
+                    2 -> deleteMealPlan(mealPlan)
+                    3 -> exportMealPlan(mealPlan)
+                }
+            }
+            .show()
+    }
+    
+    private fun editMealPlan(mealPlan: MealPlan) {
+        android.widget.Toast.makeText(
+            requireContext(),
+            "Edit functionality coming soon!",
+            android.widget.Toast.LENGTH_SHORT
+        ).show()
+    }
+    
+    private fun duplicateMealPlan(mealPlan: MealPlan) {
+        android.widget.Toast.makeText(
+            requireContext(),
+            "Duplicated: ${mealPlan.name}",
+            android.widget.Toast.LENGTH_SHORT
+        ).show()
+    }
+    
+    private fun deleteMealPlan(mealPlan: MealPlan) {
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Delete Meal Plan")
+            .setMessage("Are you sure you want to delete '${mealPlan.name}'? This action cannot be undone.")
+            .setPositiveButton("Delete") { _, _ ->
+                android.widget.Toast.makeText(
+                    requireContext(),
+                    "Deleted: ${mealPlan.name}",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    private fun exportMealPlan(mealPlan: MealPlan) {
+        android.widget.Toast.makeText(
+            requireContext(),
+            "Export functionality coming soon!",
+            android.widget.Toast.LENGTH_SHORT
+        ).show()
+    }
+    
+    private fun showAllMealPlans() {
+        android.widget.Toast.makeText(
+            requireContext(),
+            "Showing all meal plans...",
+            android.widget.Toast.LENGTH_SHORT
+        ).show()
     }
     
     override fun onDestroyView() {

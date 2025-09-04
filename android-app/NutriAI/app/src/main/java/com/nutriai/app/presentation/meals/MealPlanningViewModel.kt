@@ -45,30 +45,179 @@ class MealPlanningViewModel : ViewModel() {
                 val mockMealPlans = listOf(
                     MealPlan(
                         id = "1",
-                        name = "Balanced Weekly Plan",
-                        description = "A balanced meal plan for the entire week",
+                        name = "🔥 Weight Loss Plan",
+                        description = "AI-optimized meal plan for healthy weight loss",
                         days = listOf(
                             MealPlanDay(
                                 day = "Monday",
                                 meals = listOf(
                                     MealPlanMeal(
                                         type = "breakfast",
-                                        name = "Oatmeal with Berries",
-                                        calories = 320,
-                                        protein = 12,
-                                        carbs = 45,
+                                        name = "Greek Yogurt Parfait",
+                                        calories = 280,
+                                        protein = 20,
+                                        carbs = 25,
+                                        fat = 8,
+                                        ingredients = listOf("Greek yogurt", "Berries", "Granola", "Honey"),
+                                        instructions = "Layer yogurt, berries, and granola in a glass"
+                                    ),
+                                    MealPlanMeal(
+                                        type = "lunch",
+                                        name = "Grilled Chicken Salad",
+                                        calories = 350,
+                                        protein = 35,
+                                        carbs = 15,
                                         fat = 12,
-                                        ingredients = listOf("Oats", "Berries", "Honey", "Nuts"),
-                                        instructions = "Cook oats with water, top with berries and nuts"
+                                        ingredients = listOf("Chicken breast", "Mixed greens", "Tomatoes", "Cucumber", "Olive oil"),
+                                        instructions = "Grill chicken, chop vegetables, mix with olive oil dressing"
+                                    ),
+                                    MealPlanMeal(
+                                        type = "dinner",
+                                        name = "Baked Salmon with Vegetables",
+                                        calories = 420,
+                                        protein = 40,
+                                        carbs = 20,
+                                        fat = 18,
+                                        ingredients = listOf("Salmon fillet", "Broccoli", "Sweet potato", "Lemon"),
+                                        instructions = "Bake salmon with lemon, roast vegetables"
+                                    )
+                                )
+                            ),
+                            MealPlanDay(
+                                day = "Tuesday",
+                                meals = listOf(
+                                    MealPlanMeal(
+                                        type = "breakfast",
+                                        name = "Avocado Toast",
+                                        calories = 320,
+                                        protein = 15,
+                                        carbs = 30,
+                                        fat = 18,
+                                        ingredients = listOf("Whole grain bread", "Avocado", "Egg", "Salt", "Pepper"),
+                                        instructions = "Toast bread, mash avocado, top with poached egg"
+                                    ),
+                                    MealPlanMeal(
+                                        type = "lunch",
+                                        name = "Quinoa Buddha Bowl",
+                                        calories = 380,
+                                        protein = 18,
+                                        carbs = 45,
+                                        fat = 14,
+                                        ingredients = listOf("Quinoa", "Chickpeas", "Kale", "Tahini", "Lemon"),
+                                        instructions = "Cook quinoa, roast chickpeas, massage kale, drizzle with tahini"
+                                    ),
+                                    MealPlanMeal(
+                                        type = "dinner",
+                                        name = "Turkey Meatballs with Zoodles",
+                                        calories = 400,
+                                        protein = 35,
+                                        carbs = 25,
+                                        fat = 16,
+                                        ingredients = listOf("Ground turkey", "Zucchini", "Marinara sauce", "Parmesan"),
+                                        instructions = "Make turkey meatballs, spiralize zucchini, simmer in sauce"
                                     )
                                 )
                             )
                         ),
-                        totalCalories = 2000,
+                        totalCalories = 1400,
                         totalProtein = 120,
-                        totalCarbs = 250,
-                        totalFat = 65,
+                        totalCarbs = 130,
+                        totalFat = 55,
                         createdAt = "2024-01-15"
+                    ),
+                    MealPlan(
+                        id = "2",
+                        name = "💪 Muscle Gain Plan",
+                        description = "High-protein meal plan for muscle building",
+                        days = listOf(
+                            MealPlanDay(
+                                day = "Monday",
+                                meals = listOf(
+                                    MealPlanMeal(
+                                        type = "breakfast",
+                                        name = "Protein Pancakes",
+                                        calories = 450,
+                                        protein = 35,
+                                        carbs = 40,
+                                        fat = 15,
+                                        ingredients = listOf("Protein powder", "Oats", "Banana", "Eggs", "Almond milk"),
+                                        instructions = "Blend ingredients, cook as pancakes"
+                                    ),
+                                    MealPlanMeal(
+                                        type = "lunch",
+                                        name = "Chicken & Rice Bowl",
+                                        calories = 550,
+                                        protein = 45,
+                                        carbs = 60,
+                                        fat = 12,
+                                        ingredients = listOf("Chicken breast", "Brown rice", "Broccoli", "Soy sauce"),
+                                        instructions = "Grill chicken, cook rice, steam broccoli, season with soy sauce"
+                                    ),
+                                    MealPlanMeal(
+                                        type = "dinner",
+                                        name = "Beef Stir Fry",
+                                        calories = 520,
+                                        protein = 40,
+                                        carbs = 35,
+                                        fat = 20,
+                                        ingredients = listOf("Lean beef", "Bell peppers", "Onions", "Brown rice", "Ginger"),
+                                        instructions = "Stir fry beef and vegetables, serve over rice"
+                                    )
+                                )
+                            )
+                        ),
+                        totalCalories = 2200,
+                        totalProtein = 180,
+                        totalCarbs = 200,
+                        totalFat = 80,
+                        createdAt = "2024-01-14"
+                    ),
+                    MealPlan(
+                        id = "3",
+                        name = "🥗 Vegetarian Delight",
+                        description = "Plant-based meal plan with complete nutrition",
+                        days = listOf(
+                            MealPlanDay(
+                                day = "Monday",
+                                meals = listOf(
+                                    MealPlanMeal(
+                                        type = "breakfast",
+                                        name = "Smoothie Bowl",
+                                        calories = 380,
+                                        protein = 15,
+                                        carbs = 50,
+                                        fat = 12,
+                                        ingredients = listOf("Frozen berries", "Banana", "Spinach", "Almond butter", "Chia seeds"),
+                                        instructions = "Blend fruits and spinach, top with almond butter and chia seeds"
+                                    ),
+                                    MealPlanMeal(
+                                        type = "lunch",
+                                        name = "Lentil Curry",
+                                        calories = 420,
+                                        protein = 20,
+                                        carbs = 55,
+                                        fat = 10,
+                                        ingredients = listOf("Red lentils", "Coconut milk", "Curry spices", "Rice"),
+                                        instructions = "Cook lentils in coconut milk with spices, serve over rice"
+                                    ),
+                                    MealPlanMeal(
+                                        type = "dinner",
+                                        name = "Stuffed Bell Peppers",
+                                        calories = 350,
+                                        protein = 18,
+                                        carbs = 40,
+                                        fat = 12,
+                                        ingredients = listOf("Bell peppers", "Quinoa", "Black beans", "Cheese", "Herbs"),
+                                        instructions = "Hollow peppers, stuff with quinoa and beans, bake"
+                                    )
+                                )
+                            )
+                        ),
+                        totalCalories = 1800,
+                        totalProtein = 100,
+                        totalCarbs = 220,
+                        totalFat = 60,
+                        createdAt = "2024-01-13"
                     )
                 )
                 

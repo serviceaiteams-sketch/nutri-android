@@ -57,7 +57,7 @@ class HealthDashboardFragment : Fragment() {
         binding.btnStartWorkout.setOnClickListener {
             // Navigate to workout screen
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, WorkoutFragment())
+                .replace(R.id.fragmentContainer, WorkoutRecommendationsFragment())
                 .addToBackStack(null)
                 .commit()
         }

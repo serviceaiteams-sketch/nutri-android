@@ -74,6 +74,23 @@ class WorkoutRecommendationsFragment : Fragment() {
         chipYoga = view.findViewById(R.id.chipYoga)
         chipHiit = view.findViewById(R.id.chipHiit)
         chipFlexibility = view.findViewById(R.id.chipFlexibility)
+        
+        // Set up top recommendation card button click listeners
+        view.findViewById<android.widget.Button>(R.id.btnStartWorkout).setOnClickListener {
+            // Get the top recommendation and start it
+            val topWorkout = getTopRecommendation()
+            if (topWorkout != null) {
+                startWorkoutSession(topWorkout)
+            }
+        }
+        
+        view.findViewById<android.widget.Button>(R.id.btnViewDetails).setOnClickListener {
+            // Get the top recommendation and show details
+            val topWorkout = getTopRecommendation()
+            if (topWorkout != null) {
+                showWorkoutDetails(topWorkout)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -205,15 +222,54 @@ class WorkoutRecommendationsFragment : Fragment() {
     }
 
     private fun showWorkoutDetails(workout: WorkoutRecommendation) {
-        // Show workout details dialog or navigate to details screen
-        // For now, just show a simple message
-        // You can implement this based on your app's navigation pattern
+        // Show workout details dialog
+        val message = """
+            ${workout.name}
+            
+            Description: ${workout.description}
+            Type: ${workout.workoutType.name}
+            Duration: ${workout.duration} minutes
+            Calories: ${workout.caloriesBurn} cal
+            Intensity: ${workout.intensity.name}
+            Difficulty: ${workout.difficulty.name}
+            
+            AI Reasoning: ${workout.reasoning}
+            
+            Muscle Groups: ${workout.muscleGroups.joinToString(", ")}
+            Equipment: ${workout.equipment.joinToString(", ")}
+        """.trimIndent()
+        
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Workout Details")
+            .setMessage(message)
+            .setPositiveButton("Start Workout") { _, _ ->
+                startWorkoutSession(workout)
+            }
+            .setNegativeButton("Close", null)
+            .show()
     }
 
     private fun startWorkoutSession(workout: WorkoutRecommendation) {
-        // Start workout session
-        // This would typically open a workout timer/exercise screen
-        // You can implement this based on your app's workout flow
+        // Show workout start confirmation
+        android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Start Workout")
+            .setMessage("Ready to start ${workout.name}?\n\nDuration: ${workout.duration} minutes\nCalories: ${workout.caloriesBurn} cal")
+            .setPositiveButton("Start") { _, _ ->
+                // Here you would typically navigate to a workout timer/exercise screen
+                // For now, show a success message
+                android.widget.Toast.makeText(
+                    requireContext(),
+                    "Starting ${workout.name} workout!",
+                    android.widget.Toast.LENGTH_LONG
+                ).show()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    private fun getTopRecommendation(): WorkoutRecommendation? {
+        // Get the first workout from the current recommendations
+        return workoutAdapter.getFilteredWorkouts().firstOrNull()
     }
 
     // Mock data methods - replace with actual data from your repository

@@ -7,7 +7,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nutriai.app.databinding.ItemMealPlanBinding
 
-class MealPlanAdapter : ListAdapter<MealPlan, MealPlanAdapter.MealPlanViewHolder>(MealPlanDiffCallback()) {
+class MealPlanAdapter(
+    private val onViewPlan: (MealPlan) -> Unit = {},
+    private val onStartPlan: (MealPlan) -> Unit = {},
+    private val onSharePlan: (MealPlan) -> Unit = {},
+    private val onMoreOptions: (MealPlan) -> Unit = {}
+) : ListAdapter<MealPlan, MealPlanAdapter.MealPlanViewHolder>(MealPlanDiffCallback()) {
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealPlanViewHolder {
         val binding = ItemMealPlanBinding.inflate(
@@ -34,18 +39,33 @@ class MealPlanAdapter : ListAdapter<MealPlan, MealPlanAdapter.MealPlanViewHolder
         fun bind(mealPlan: MealPlan) {
             try {
                 binding.apply {
+                    // Basic info
                     tvMealPlanName.text = mealPlan.name
                     tvMealPlanDescription.text = mealPlan.description
-                    tvTotalCalories.text = "${mealPlan.totalCalories} cal"
+                    tvCreatedAt.text = "Created: ${mealPlan.createdAt}"
+                    
+                    // Nutrition stats
+                    tvTotalCalories.text = mealPlan.totalCalories.toString()
                     tvTotalProtein.text = "${mealPlan.totalProtein}g"
                     tvTotalCarbs.text = "${mealPlan.totalCarbs}g"
                     tvTotalFat.text = "${mealPlan.totalFat}g"
-                    tvCreatedAt.text = "Created: ${mealPlan.createdAt}"
                     
-                    // Set click listener
+                    // Plan details
+                    tvDuration.text = "${mealPlan.days.size} days"
+                    tvMealCount.text = "${mealPlan.days.sumOf { it.meals.size }} meals"
+                    
+                    // Plan type badge
+                    tvPlanType.text = "AI Generated" // You can make this dynamic based on mealPlan properties
+                    
+                    // Set click listeners
+                    btnViewPlan.setOnClickListener { onViewPlan(mealPlan) }
+                    btnStartPlan.setOnClickListener { onStartPlan(mealPlan) }
+                    btnShare.setOnClickListener { onSharePlan(mealPlan) }
+                    btnMore.setOnClickListener { onMoreOptions(mealPlan) }
+                    
+                    // Root click for general selection
                     root.setOnClickListener {
-                        // Handle meal plan selection
-                        android.util.Log.d("MealPlanAdapter", "📋 Selected meal plan: ${mealPlan.name}")
+                        onViewPlan(mealPlan)
                     }
                 }
             } catch (e: Exception) {
