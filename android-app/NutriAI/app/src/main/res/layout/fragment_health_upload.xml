@@ -148,7 +148,7 @@
                             android:layout_height="wrap_content"
                             android:text="PDF, JPG, PNG files (Max 10MB each)"
                             android:textSize="14sp"
-                            android:textColor="@color/text_secondary"
+                            android:textColor="@color/text_primary"
                             android:layout_marginTop="2dp" />
 
                     </LinearLayout>
@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:text="Supported formats: PDF, JPG, PNG, DOC, DOCX"
                     android:textSize="12sp"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_primary"
                     android:gravity="center" />
 
             </LinearLayout>
@@ -338,7 +338,7 @@
                         android:layout_height="wrap_content"
                         android:text="Your data is encrypted and secure"
                         android:textSize="12sp"
-                        android:textColor="@color/text_secondary" />
+                        android:textColor="@color/text_primary" />
 
                 </LinearLayout>
 

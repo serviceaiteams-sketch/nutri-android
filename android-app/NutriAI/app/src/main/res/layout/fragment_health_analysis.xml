@@ -293,7 +293,7 @@
                         android:layout_height="wrap_content"
                         android:text="mmHg"
                         android:textSize="12sp"
-                        android:textColor="@color/text_secondary" />
+                        android:textColor="@color/text_primary" />
 
                 </LinearLayout>
 
@@ -356,7 +356,7 @@
                         android:layout_height="wrap_content"
                         android:text="BPM"
                         android:textSize="12sp"
-                        android:textColor="@color/text_secondary" />
+                        android:textColor="@color/text_primary" />
 
                 </LinearLayout>
 
@@ -429,7 +429,7 @@
                     android:layout_height="wrap_content"
                     android:text="Based on your health data, our AI has identified several positive trends in your health metrics. Your cardiovascular health is excellent, and your lifestyle choices are contributing to overall wellness."
                     android:textSize="16sp"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_primary"
                     android:lineSpacingExtra="4dp"
                     android:fontFamily="sans-serif" />
 
@@ -502,7 +502,7 @@
                     android:layout_height="wrap_content"
                     android:text="• Continue your current exercise routine\n• Maintain a balanced diet with more vegetables\n• Get 7-8 hours of sleep nightly\n• Consider stress management techniques"
                     android:textSize="16sp"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_primary"
                     android:lineSpacingExtra="4dp"
                     android:fontFamily="sans-serif" />
 
@@ -577,7 +577,7 @@
                             android:layout_height="wrap_content"
                             android:text="PDF, images, or lab results"
                             android:textSize="14sp"
-                            android:textColor="@color/text_secondary"
+                            android:textColor="@color/text_primary"
                             android:layout_marginTop="2dp" />
 
                     </LinearLayout>
