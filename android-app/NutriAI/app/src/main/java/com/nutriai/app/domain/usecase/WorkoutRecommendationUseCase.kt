@@ -21,7 +21,6 @@ class WorkoutRecommendationUseCase {
         val recommendations = mutableListOf<WorkoutRecommendation>()
         
         // Analyze current nutrition and health status
-        val nutritionAnalysis = analyzeNutrition(currentNutrition)
         val healthAnalysis = analyzeHealthStatus(userProfile, healthReport)
         
         // Generate recommendations based on analysis
